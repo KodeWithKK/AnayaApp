@@ -1,0 +1,7 @@
+https://dribbble.com/shots/25099467-Jewelry-Mobile-App
+
+https://dribbble.com/shots/24981777-Jewelry-App
+
+https://dribbble.com/shots/24932275-Jewelry-App-Design
+
+BRAND NAMES - Luxmi,
