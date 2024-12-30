@@ -1,7 +1,8 @@
-import { memo, useState } from "react";
-import { FlatList, Image } from "react-native";
+import { memo } from "react";
+import { FlatList, Image, ImageBackground } from "react-native";
 
 import { Button, Text, View } from "~/components/core";
+import { HeartOutlineIcon } from "~/lib/icons";
 import { cn } from "~/lib/utils";
 
 import { earrings } from "~/data/earrings";
@@ -43,11 +44,15 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <View className="flex-1">
-            <Image
+            <ImageBackground
               source={{ uri: item.images[0] }}
-              className="aspect-square w-full rounded-lg border border-border/50"
+              className="aspect-square w-full overflow-hidden rounded-lg border border-border/50"
               resizeMode="cover"
-            />
+            >
+              <View className="ml-auto mr-1.5 mt-1.5 rounded-full bg-white p-1">
+                <HeartOutlineIcon className="h-6 text-primary" />
+              </View>
+            </ImageBackground>
             <Text className="mt-2 text-left">{item.name}</Text>
             <Text className="font-semibold">{item.price}</Text>
           </View>

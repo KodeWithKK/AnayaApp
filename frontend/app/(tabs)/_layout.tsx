@@ -1,7 +1,8 @@
 import { Tabs } from "expo-router";
 
+import { Text, View } from "~/components/core";
 import { ThemeToggle } from "~/components/features/ThemeToggle";
-import { BrandIcon, HomeIcon, SettingIcon } from "~/lib/icons";
+import { HomeIcon, SettingIcon } from "~/lib/icons";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function TabLayout() {
@@ -33,11 +34,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Acme",
+          title: "Home",
+          headerTitle: "Acme",
           headerTitleAlign: "left",
           headerTitleStyle: {
             fontSize: 24,
             fontFamily: "Poppins-Medium",
+            shadowColor: "black",
           },
           tabBarIcon: ({ color }) => (
             <HomeIcon className="h-9 w-9" color={color} />

@@ -8,7 +8,7 @@ import {
   XIcon,
 } from "lucide-react-native";
 
-import BrandIcon from "~/assets/icons/brand-text.svg";
+import HeartOutlineIcon from "~/assets/icons/heart-outline.svg";
 import HomeIcon from "~/assets/icons/home.svg";
 import InfoIcon from "~/assets/icons/info.svg";
 import LoaderIcon from "~/assets/icons/loader.svg";
@@ -25,12 +25,12 @@ iconWithClassName(MoonStar);
 iconWithClassName(Info);
 iconWithClassName(Sun);
 iconWithClassName(HomeIcon);
+iconWithClassName(HeartOutlineIcon);
 iconWithClassName(SettingIcon);
 iconWithClassName(MissingPersonIcon);
 iconWithClassName(FoundedPersonIcon);
 iconWithClassName(ReportIcon);
 iconWithClassName(SOSIcon);
-iconWithClassName(BrandIcon);
 iconWithClassName(UploadIcon);
 iconWithClassName(Check);
 iconWithClassName(ChevronDown);
@@ -44,12 +44,12 @@ export {
   Info,
   Sun,
   HomeIcon,
+  HeartOutlineIcon,
   SettingIcon,
   MissingPersonIcon,
   FoundedPersonIcon,
   ReportIcon,
   SOSIcon,
-  BrandIcon,
   UploadIcon,
   Check,
   ChevronDown,
