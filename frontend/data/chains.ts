@@ -1,6 +1,6 @@
 import { type Product } from "~/types/product";
 
-const chains: Product[] = [
+export const chains: Product[] = [
   {
     id: "83ccd004-2ed9-46fb-9841-a1873a1c0aca",
     name: "Classic Cable Gold Chain",

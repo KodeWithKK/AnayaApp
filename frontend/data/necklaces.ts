@@ -1,6 +1,6 @@
 import { type Product } from "~/types/product";
 
-export const necklace: Product[] = [
+export const necklaces: Product[] = [
   {
     id: "204ce394-061d-4287-8c51-88443ba435d2",
     name: "Sparkling Hearts Diamond Necklace",
