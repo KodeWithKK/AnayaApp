@@ -19,7 +19,10 @@ module.exports = {
         black: ["Poppins-Black", "sans-serif"],
       },
       colors: {
-        border: "hsl(var(--border))",
+        border: {
+          DEFAULT: "hsl(var(--border))",
+          darker: "hsl(var(--border-darker))",
+        },
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

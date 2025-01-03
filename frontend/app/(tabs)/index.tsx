@@ -61,7 +61,7 @@ const HomeScreen = () => {
                 <View className="mb-3 flex-1">
                   <ImageBackground
                     source={{
-                      uri: item.images[Math.floor(item.images.length / 2)],
+                      uri: item.images[0],
                     }}
                     className="aspect-square w-full overflow-hidden rounded-lg border border-border/50"
                     resizeMode="cover"

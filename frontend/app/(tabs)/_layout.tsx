@@ -2,7 +2,12 @@ import { Tabs } from "expo-router";
 
 import { Text, View } from "~/components/core";
 import { ThemeToggle } from "~/components/features/ThemeToggle";
-import { HomeIcon, SettingIcon } from "~/lib/icons";
+import {
+  HomeIcon,
+  NotificationIcon,
+  SearchIcon,
+  SettingIcon,
+} from "~/lib/icons";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function TabLayout() {
@@ -40,8 +45,17 @@ export default function TabLayout() {
           headerTitleStyle: {
             fontSize: 24,
             fontFamily: "Poppins-Medium",
-            shadowColor: "black",
           },
+          headerRight: () => (
+            <View className="mr-4 flex-row gap-3">
+              <View className="border-border-darker rounded-full border p-2">
+                <SearchIcon className="h-6 w-6 text-foreground" />
+              </View>
+              <View className="border-border-darker rounded-full border p-2">
+                <NotificationIcon className="h-6 w-6 text-foreground" />
+              </View>
+            </View>
+          ),
           tabBarIcon: ({ color }) => (
             <HomeIcon className="h-9 w-9" color={color} />
           ),

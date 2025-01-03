@@ -9,14 +9,14 @@ import {
 } from "lucide-react-native";
 
 import HeartOutlineIcon from "~/assets/icons/heart-outline.svg";
-import HomeIcon from "~/assets/icons/home.svg";
+import HomeIcon from "~/assets/icons/home-outline.svg";
 import InfoIcon from "~/assets/icons/info.svg";
 import LoaderIcon from "~/assets/icons/loader.svg";
-import MissingPersonIcon from "~/assets/icons/missing-person.svg";
+import NotificationIcon from "~/assets/icons/notification.svg";
 import FoundedPersonIcon from "~/assets/icons/person-search.svg";
 import ReportIcon from "~/assets/icons/report.svg";
+import SearchIcon from "~/assets/icons/search.svg";
 import SettingIcon from "~/assets/icons/setting.svg";
-import SOSIcon from "~/assets/icons/SOS.svg";
 import UploadIcon from "~/assets/icons/upload.svg";
 
 import { iconWithClassName } from "./iconWithClassName";
@@ -25,12 +25,12 @@ iconWithClassName(MoonStar);
 iconWithClassName(Info);
 iconWithClassName(Sun);
 iconWithClassName(HomeIcon);
+iconWithClassName(SearchIcon);
+iconWithClassName(NotificationIcon);
 iconWithClassName(HeartOutlineIcon);
 iconWithClassName(SettingIcon);
-iconWithClassName(MissingPersonIcon);
 iconWithClassName(FoundedPersonIcon);
 iconWithClassName(ReportIcon);
-iconWithClassName(SOSIcon);
 iconWithClassName(UploadIcon);
 iconWithClassName(Check);
 iconWithClassName(ChevronDown);
@@ -44,12 +44,12 @@ export {
   Info,
   Sun,
   HomeIcon,
+  SearchIcon,
+  NotificationIcon,
   HeartOutlineIcon,
   SettingIcon,
-  MissingPersonIcon,
   FoundedPersonIcon,
   ReportIcon,
-  SOSIcon,
   UploadIcon,
   Check,
   ChevronDown,
