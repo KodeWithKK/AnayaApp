@@ -1,5 +1,12 @@
 import { memo } from "react";
-import { FlatList, Image, ImageBackground, SectionList } from "react-native";
+import {
+  FlatList,
+  Image,
+  ImageBackground,
+  Pressable,
+  SectionList,
+} from "react-native";
+import { Href, useRouter } from "expo-router";
 
 import { Text, View } from "~/components/core";
 import { HeartOutlineIcon } from "~/lib/icons";
@@ -9,19 +16,24 @@ import { bestSellers, expertChoices, newArrivals } from "~/data";
 const sectionListData = [
   {
     title: "New Arrivals",
+    slug: "new-arrivals",
     data: newArrivals.slice(0, 4),
   },
   {
     title: "Best Sellers",
+    slug: "best-sellers",
     data: bestSellers.slice(0, 4),
   },
   {
     title: "Expert Choices",
+    slug: "expert-choices",
     data: expertChoices.slice(0, 4),
   },
 ];
 
 const HomeScreen = () => {
+  const router = useRouter();
+
   return (
     <View className="flex-1 bg-background px-4">
       <SectionList
@@ -46,12 +58,15 @@ const HomeScreen = () => {
             </View>
           </View>
         )}
-        renderSectionHeader={({ section: { title, data } }) => (
+        renderSectionHeader={({ section: { title, slug, data } }) => (
           <View className="mt-5">
-            <View className="mb-3 flex-row items-center justify-between">
+            <Pressable
+              onPress={() => router.push(`/category/${slug}` as Href<string>)}
+              className="mb-3 flex-row items-center justify-between"
+            >
               <Text className="font-semibold text-xl">{title}</Text>
               <Text className="font-semibold text-primary">See all</Text>
-            </View>
+            </Pressable>
             <FlatList
               data={data}
               keyExtractor={(item) => item.id}
