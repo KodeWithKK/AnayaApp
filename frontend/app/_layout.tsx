@@ -11,6 +11,9 @@ import ContextProviders from "~/context";
 
 import "~/global.css";
 
+import { Text, View } from "~/components/core";
+import { ShareIcon } from "~/lib/icons";
+
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from "expo-router";
 
@@ -43,7 +46,27 @@ export default function RootLayout() {
           <Stack.Screen
             name="category/[name]"
             options={({ route }: any) => ({
-              title: (categoryTitleMap as any)[route.params.name],
+              headerTitle: () => (
+                <Text className="mt-0.5 font-semibold text-xl">
+                  {(categoryTitleMap as any)[route.params.name]}
+                </Text>
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="product/[id]"
+            options={() => ({
+              title: "Product Details",
+              headerTitle: () => (
+                <Text className="mt-0.5 font-semibold text-xl">
+                  Products Details
+                </Text>
+              ),
+              headerRight: () => (
+                <View className="rounded-full border border-border-darker p-2 pl-1.5">
+                  <ShareIcon className="h-6 w-6 text-foreground" />
+                </View>
+              ),
             })}
           />
           <Stack.Screen name="+not-found" />

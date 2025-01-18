@@ -1,8 +1,8 @@
-import { FlatList, ImageBackground } from "react-native";
+import { FlatList } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
-import { Text, View } from "~/components/core";
-import { HeartOutlineIcon } from "~/lib/icons";
+import { Text } from "~/components/core";
+import ProductCard from "~/components/features/product-card";
 
 import { bestSellers, expertChoices, newArrivals } from "~/data";
 
@@ -12,7 +12,7 @@ const categoryDataMap = {
   "expert-choices": expertChoices,
 };
 
-const Category: React.FC = () => {
+const CategoryScreen: React.FC = () => {
   const { name } = useLocalSearchParams() as {
     name: keyof typeof categoryDataMap;
   };
@@ -31,23 +31,9 @@ const Category: React.FC = () => {
           {categoryDataMap[name].length} Products found
         </Text>
       )}
-      renderItem={({ item }) => (
-        <View className="flex-1">
-          <ImageBackground
-            source={{ uri: item.images[0] }}
-            className="aspect-square w-full overflow-hidden rounded-lg border border-border/50"
-            resizeMode="cover"
-          >
-            <View className="ml-auto mr-1.5 mt-1.5 rounded-full bg-white p-1">
-              <HeartOutlineIcon className="h-6 text-primary" />
-            </View>
-          </ImageBackground>
-          <Text className="mt-2 text-left">{item.name}</Text>
-          <Text className="font-semibold">{item.price}</Text>
-        </View>
-      )}
+      renderItem={({ item }) => <ProductCard item={item} />}
     />
   );
 };
 
-export default Category;
+export default CategoryScreen;

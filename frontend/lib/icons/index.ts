@@ -8,6 +8,7 @@ import {
   XIcon,
 } from "lucide-react-native";
 
+import CalenderIcon from "~/assets/icons/calender.svg";
 import HeartOutlineIcon from "~/assets/icons/heart-outline.svg";
 import HomeIcon from "~/assets/icons/home-outline.svg";
 import InfoIcon from "~/assets/icons/info.svg";
@@ -17,7 +18,10 @@ import FoundedPersonIcon from "~/assets/icons/person-search.svg";
 import ReportIcon from "~/assets/icons/report.svg";
 import SearchIcon from "~/assets/icons/search.svg";
 import SettingIcon from "~/assets/icons/setting.svg";
+import ShareIcon from "~/assets/icons/share.svg";
 import UploadIcon from "~/assets/icons/upload.svg";
+import VideoIcon from "~/assets/icons/video.svg";
+import WhatsAppIcon from "~/assets/icons/whatsapp.svg";
 
 import { iconWithClassName } from "./iconWithClassName";
 
@@ -27,6 +31,7 @@ iconWithClassName(Sun);
 iconWithClassName(HomeIcon);
 iconWithClassName(SearchIcon);
 iconWithClassName(NotificationIcon);
+iconWithClassName(ShareIcon);
 iconWithClassName(HeartOutlineIcon);
 iconWithClassName(SettingIcon);
 iconWithClassName(FoundedPersonIcon);
@@ -38,6 +43,9 @@ iconWithClassName(ChevronUp);
 iconWithClassName(LoaderIcon);
 iconWithClassName(XIcon);
 iconWithClassName(InfoIcon);
+iconWithClassName(WhatsAppIcon);
+iconWithClassName(CalenderIcon);
+iconWithClassName(VideoIcon);
 
 export {
   MoonStar,
@@ -46,6 +54,7 @@ export {
   HomeIcon,
   SearchIcon,
   NotificationIcon,
+  ShareIcon,
   HeartOutlineIcon,
   SettingIcon,
   FoundedPersonIcon,
@@ -57,4 +66,7 @@ export {
   LoaderIcon,
   XIcon,
   InfoIcon,
+  WhatsAppIcon,
+  CalenderIcon,
+  VideoIcon,
 };

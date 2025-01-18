@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 
 import { Text, View } from "~/components/core";
-import { ThemeToggle } from "~/components/features/ThemeToggle";
+import { ThemeToggle } from "~/components/features/theme-toggle";
 import {
   HomeIcon,
   NotificationIcon,
@@ -48,10 +48,10 @@ export default function TabLayout() {
           },
           headerRight: () => (
             <View className="mr-4 flex-row gap-3">
-              <View className="border-border-darker rounded-full border p-2">
+              <View className="rounded-full border border-border-darker p-2">
                 <SearchIcon className="h-6 w-6 text-foreground" />
               </View>
-              <View className="border-border-darker rounded-full border p-2">
+              <View className="rounded-full border border-border-darker p-2">
                 <NotificationIcon className="h-6 w-6 text-foreground" />
               </View>
             </View>
