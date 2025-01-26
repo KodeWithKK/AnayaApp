@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { ImageBackground, TouchableOpacity, ViewProps } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 import { Text, View } from "~/components/core";

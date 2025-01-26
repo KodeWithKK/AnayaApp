@@ -1,12 +1,10 @@
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-
 import { PortalHost } from "@rn-primitives/portal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { categoryTitleMap } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
-
 import ContextProviders from "~/context";
 
 import "~/global.css";
@@ -59,7 +57,7 @@ export default function RootLayout() {
               title: "Product Details",
               headerTitle: () => (
                 <Text className="mt-0.5 font-semibold text-xl">
-                  Products Details
+                  Product Details
                 </Text>
               ),
               headerRight: () => (

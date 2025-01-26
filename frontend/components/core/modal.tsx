@@ -1,5 +1,4 @@
 import { Pressable, TouchableOpacity } from "react-native";
-
 import { Portal } from "@rn-primitives/portal";
 import { XIcon } from "lucide-react-native";
 

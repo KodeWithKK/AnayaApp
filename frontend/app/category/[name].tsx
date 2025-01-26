@@ -3,7 +3,6 @@ import { useLocalSearchParams } from "expo-router";
 
 import { Text } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
-
 import { bestSellers, expertChoices, newArrivals } from "~/data";
 
 const categoryDataMap = {

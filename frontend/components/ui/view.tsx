@@ -1,6 +1,5 @@
 import * as React from "react";
 import { View as RNView } from "react-native";
-
 import * as Slot from "@rn-primitives/slot";
 import type { SlottableViewProps, ViewRef } from "@rn-primitives/types";
 

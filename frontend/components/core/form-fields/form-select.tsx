@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FlatList } from "react-native";
-
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

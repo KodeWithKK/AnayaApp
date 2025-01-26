@@ -3,7 +3,6 @@ import { Href, useRouter } from "expo-router";
 
 import { Text, View } from "~/components/core";
 import { HeartOutlineIcon } from "~/lib/icons";
-
 import { Product } from "~/types/product";
 
 interface ProductCardProps {

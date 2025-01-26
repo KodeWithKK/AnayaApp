@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import * as SystemUI from "expo-system-ui";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 

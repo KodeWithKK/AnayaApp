@@ -13,7 +13,7 @@ export const newArrivals: Product[] = [
     ],
     details: {
       description:
-        "Reflecting nature�s seamless flow, this 18 Karat yellow and white gold Finger ring features Diamonds arranged in illusion and micro-pave settings. We pay homage to your uniqueness through this Finger Ring. It features Diamonds set in round illusion and micro-pave settings, create a radiant focal point that embodies the beauty of change. Perfect for cocktail parties or special evenings, this ring is a testament to timeless elegance and grace.",
+        "Reflecting nature's seamless flow, this 18 Karat yellow and white gold Finger ring features Diamonds arranged in illusion and micro-pave settings. We pay homage to your uniqueness through this Finger Ring. It features Diamonds set in round illusion and micro-pave settings, create a radiant focal point that embodies the beauty of change. Perfect for cocktail parties or special evenings, this ring is a testament to timeless elegance and grace.",
       metal: [
         {
           key: "Karatage",

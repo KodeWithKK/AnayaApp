@@ -1,14 +1,12 @@
 import { memo } from "react";
 import { FlatList, Image, Pressable, SectionList } from "react-native";
 import { Href, useRouter } from "expo-router";
-
 import { SvgProps } from "react-native-svg";
 
 import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import { CalenderIcon, VideoIcon, WhatsAppIcon } from "~/lib/icons";
 import { cn } from "~/lib/utils";
-
 import { bestSellers, expertChoices, newArrivals } from "~/data";
 
 const sectionListData = [

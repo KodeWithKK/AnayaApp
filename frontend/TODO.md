@@ -4,4 +4,7 @@ https://dribbble.com/shots/24981777-Jewelry-App
 
 https://dribbble.com/shots/24932275-Jewelry-App-Design
 
-BRAND NAMES - Luxmi,
+BRAND NAMES
+
+Svarna (स्वर्ण) – Sanskrit for "gold."
+Anaya (अनया) – Meaning "unique" or "incomparable" in Sanskrit.

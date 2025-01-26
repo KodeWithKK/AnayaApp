@@ -10,6 +10,7 @@ import {
 
 import CalenderIcon from "~/assets/icons/calender.svg";
 import HeartOutlineIcon from "~/assets/icons/heart-outline.svg";
+import HeartSolidIcon from "~/assets/icons/heart-solid.svg";
 import HomeIcon from "~/assets/icons/home-outline.svg";
 import InfoIcon from "~/assets/icons/info.svg";
 import LoaderIcon from "~/assets/icons/loader.svg";
@@ -33,6 +34,7 @@ iconWithClassName(SearchIcon);
 iconWithClassName(NotificationIcon);
 iconWithClassName(ShareIcon);
 iconWithClassName(HeartOutlineIcon);
+iconWithClassName(HeartSolidIcon);
 iconWithClassName(SettingIcon);
 iconWithClassName(FoundedPersonIcon);
 iconWithClassName(ReportIcon);
@@ -56,6 +58,7 @@ export {
   NotificationIcon,
   ShareIcon,
   HeartOutlineIcon,
+  HeartSolidIcon,
   SettingIcon,
   FoundedPersonIcon,
   ReportIcon,

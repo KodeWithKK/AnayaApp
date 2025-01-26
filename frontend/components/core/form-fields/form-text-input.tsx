@@ -1,5 +1,4 @@
 import { TextInputProps } from "react-native";
-
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 import { View } from "..";

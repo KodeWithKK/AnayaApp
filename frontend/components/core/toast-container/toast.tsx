@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
-
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Easing,

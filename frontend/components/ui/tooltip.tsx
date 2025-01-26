@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Platform, StyleSheet } from "react-native";
-
 import * as TooltipPrimitive from "@rn-primitives/tooltip";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
