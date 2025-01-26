@@ -24,7 +24,7 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
   };
 
   return (
-    <View className="relative">
+    <View className="relative mb-12">
       <View className="overflow-hidden rounded-lg">
         <Carousel
           ref={carouselRef}
@@ -32,7 +32,9 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
           height={screenWidth}
           data={images}
           onProgressChange={handleProgressChange}
+          autoPlay={true}
           onSnapToItem={handleSnapToItem}
+          autoPlayInterval={3000}
           renderItem={({ item }) => (
             <Image source={{ uri: item }} className="aspect-square w-full" />
           )}

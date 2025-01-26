@@ -9,6 +9,7 @@ import {
 } from "lucide-react-native";
 
 import CalenderIcon from "~/assets/icons/calender.svg";
+import CartSolidIcon from "~/assets/icons/cart.svg";
 import HeartOutlineIcon from "~/assets/icons/heart-outline.svg";
 import HeartSolidIcon from "~/assets/icons/heart-solid.svg";
 import HomeIcon from "~/assets/icons/home-outline.svg";
@@ -35,6 +36,7 @@ iconWithClassName(NotificationIcon);
 iconWithClassName(ShareIcon);
 iconWithClassName(HeartOutlineIcon);
 iconWithClassName(HeartSolidIcon);
+iconWithClassName(CartSolidIcon);
 iconWithClassName(SettingIcon);
 iconWithClassName(FoundedPersonIcon);
 iconWithClassName(ReportIcon);
@@ -59,6 +61,7 @@ export {
   ShareIcon,
   HeartOutlineIcon,
   HeartSolidIcon,
+  CartSolidIcon,
   SettingIcon,
   FoundedPersonIcon,
   ReportIcon,
