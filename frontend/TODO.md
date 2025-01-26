@@ -8,3 +8,5 @@ BRAND NAMES
 
 Svarna (स्वर्ण) – Sanskrit for "gold."
 Anaya (अनया) – Meaning "unique" or "incomparable" in Sanskrit.
+
+Exquisite Jewellery Collection

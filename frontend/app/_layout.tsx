@@ -10,7 +10,7 @@ import ContextProviders from "~/context";
 import "~/global.css";
 
 import { Text, View } from "~/components/core";
-import { ShareIcon } from "~/lib/icons";
+import { ShareOutlineIcon } from "~/lib/icons";
 
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from "expo-router";
@@ -62,7 +62,7 @@ export default function RootLayout() {
               ),
               headerRight: () => (
                 <View className="rounded-full border border-border-darker p-2 pl-1.5">
-                  <ShareIcon className="h-6 w-6 text-foreground" />
+                  <ShareOutlineIcon className="h-6 w-6 text-foreground" />
                 </View>
               ),
             })}
