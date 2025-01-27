@@ -1,89 +1,113 @@
-import { memo } from "react";
-import { FlatList, Image, Pressable, SectionList } from "react-native";
+import { memo, useEffect, useRef } from "react";
+import { Animated, FlatList, Pressable, SectionList } from "react-native";
 import { Href, useRouter } from "expo-router";
-import { SvgProps } from "react-native-svg";
+import { setStatusBarStyle } from "expo-status-bar";
 
 import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
-import { CalenderIcon, VideoIcon, WhatsAppIcon } from "~/lib/icons";
-import { cn } from "~/lib/utils";
-import { bestSellers, expertChoices, newArrivals } from "~/data";
+import CategoryChip from "~/components/layout/category-chip";
+import { Input } from "~/components/ui/input";
+import { categoryListData, sectionListData } from "~/lib/constants/home-data";
+import {
+  ChevronDown,
+  LocationSolidIcon,
+  NotificationOutlineIcon,
+} from "~/lib/icons";
 
-const sectionListData = [
-  {
-    title: "New Arrivals",
-    slug: "new-arrivals",
-    data: newArrivals.slice(0, 4),
-  },
-  {
-    title: "Best Sellers",
-    slug: "best-sellers",
-    data: bestSellers.slice(0, 4),
-  },
-  {
-    title: "Expert Choices",
-    slug: "expert-choices",
-    data: expertChoices.slice(0, 4),
-  },
-];
+const HEADER_MAX_HEIGHT = 172; // Full header height
+const HEADER_MIN_HEIGHT = 62; // Height with only search bar
+const STATUS_BAR_HEIGHT = 40; // Status bar height (including safe area)
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-const HomeScreen = () => {
+const HomeScreen: React.FC = memo(() => {
   const router = useRouter();
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT + STATUS_BAR_HEIGHT],
+    extrapolate: "clamp",
+  });
+
+  const locationOpacity = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+
+  const searchBarTranslateY = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [
+      0,
+      -HEADER_MAX_HEIGHT + HEADER_MIN_HEIGHT + STATUS_BAR_HEIGHT,
+    ],
+    extrapolate: "clamp",
+  });
+
+  useEffect(() => {
+    setStatusBarStyle("light");
+  }, []);
 
   return (
-    <View className="flex-1 bg-background px-4">
+    <View className="flex-1 bg-background">
+      {/* Animated Header */}
+      <Animated.View
+        style={{ height: headerHeight }}
+        className="absolute left-0 right-0 top-0 z-[1000] bg-[hsl(350_89%_60%)] px-4 pt-12"
+      >
+        <Animated.View style={{ opacity: locationOpacity }}>
+          <View className="flex-row items-center justify-between">
+            <View>
+              <Text className="text-sm text-background">Location</Text>
+              <View className="mt-1 flex-row gap-2">
+                <LocationSolidIcon className="h-6 w-6 text-background" />
+                <Text className="text-background">Prayagraj, UP</Text>
+                <ChevronDown className="h-6 w-6 text-background" />
+              </View>
+            </View>
+            <View className="rounded-lg border border-border-darker p-2">
+              <NotificationOutlineIcon className="h-6 w-6 text-background" />
+            </View>
+          </View>
+        </Animated.View>
+      </Animated.View>
+
+      {/* Search Bar */}
+      <Animated.View
+        style={{ transform: [{ translateY: searchBarTranslateY }] }}
+        className="absolute left-0 right-0 top-[110px] z-[1000] h-[62px] justify-center bg-[hsl(350_89%_60%)] px-4"
+      >
+        <Input placeholder="Search" className="border bg-muted" />
+      </Animated.View>
+
+      {/* Section List */}
       <SectionList
         sections={sectionListData}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false },
+        )}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingTop: HEADER_MAX_HEIGHT }}
         ListHeaderComponent={() => (
-          <View className="gap-2">
-            <View className="mt-4 flex-row justify-between rounded-xl bg-primary px-4 py-4">
-              <View className="w-[55%]">
-                <Text className="font-bold text-2xl text-primary-foreground">
-                  Get 20% Off for all Items.
-                </Text>
-                <Text className="mt-5 text-muted">Promo until 20 Feb 2025</Text>
-              </View>
-              <Image
-                source={{
-                  uri: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dwe4bf267c/images/hi-res/510122FAAAA00_1.jpg?sw=640&sh=640",
-                }}
-                className="h-[96px] w-[96px] rounded-xl"
-              />
+          <View className="mb-3 mt-7 px-4">
+            <View className="mb-3 flex-row items-center justify-between">
+              <Text className="font-semibold text-xl">Categories</Text>
+              <Pressable>
+                <Text className="font-semibold text-primary">See all</Text>
+              </Pressable>
             </View>
-            <View className="mb-3 mt-5">
-              <View className="mb-3 flex-row items-center justify-between">
-                <Text className="font-semibold text-xl">Categories</Text>
-                <Pressable
-                // onPress={() => router.push(`/category/` as Href<string>)}
-                >
-                  <Text className="font-semibold text-primary">See all</Text>
-                </Pressable>
-              </View>
-              <View className="flex-row gap-3">
-                <CategoryChip
-                  title="Ear Rings"
-                  uri="https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw04122f7b/images/hi-res/50D3DTSRZABA10_1.jpg?sw=640&sh=640"
-                />
-                <CategoryChip
-                  title="Finger Rings"
-                  uri="https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw86fc2d04/images/hi-res/50D3I3FKBAA02_2.jpg?sw=640&sh=640"
-                />
-                <CategoryChip
-                  title="Chains"
-                  uri="https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw0dcb7a77/images/hi-res/51G4B1CAGAA00_1.jpg?sw=640&sh=640"
-                />
-                <CategoryChip
-                  title="Mangalsutra"
-                  uri="https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw4c8415bc/images/hi-res/51D3B2YCBAACZ_2.jpg?sw=640&sh=640"
-                />
-              </View>
+            <View className="flex-row justify-between">
+              {categoryListData.map((category, index) => (
+                <CategoryChip key={`category-chip-${index}`} {...category} />
+              ))}
             </View>
           </View>
         )}
         renderSectionHeader={({ section: { title, slug, data } }) => (
-          <View className="mt-5">
+          <View className="mt-5 px-4">
             <View className="mb-3 flex-row items-center justify-between">
               <Text className="font-semibold text-xl">{title}</Text>
               <Pressable
@@ -97,68 +121,15 @@ const HomeScreen = () => {
               keyExtractor={(item) => item.id}
               numColumns={2}
               columnWrapperClassName="justify-between gap-3"
+              scrollEnabled={false}
               renderItem={({ item }) => <ProductCard item={item} />}
             />
           </View>
         )}
         renderItem={() => null}
-        // ListFooterComponent={() => (
-        //   <View className="mt-5">
-        //     <View className="mb-3 flex-row items-center justify-between">
-        //       <Text className="font-semibold text-xl">Contact Us</Text>
-        //     </View>
-        //     <View className="mb-3 gap-2">
-        //       <ContactUsCard title="Connect on WhatsApp" Icon={WhatsAppIcon} />
-        //       <ContactUsCard title="Book an Appointment" Icon={CalenderIcon} />
-        //       <ContactUsCard title="Shedule a Video Call" Icon={VideoIcon} />
-        //     </View>
-        //   </View>
-        // )}
       />
     </View>
   );
-};
+});
 
-interface CateforyChipProps {
-  title: string;
-  uri: string;
-}
-
-const CategoryChip: React.FC<CateforyChipProps> = ({ title, uri }) => {
-  return (
-    <View className="w-[92px] items-center justify-center">
-      <Image
-        source={{ uri }}
-        className="h-20 w-20 rounded-full border border-border"
-      />
-      <Text className="">{title}</Text>
-    </View>
-  );
-};
-
-interface ContactUsCardProps {
-  title: string;
-  className?: string;
-  Icon: React.FC<SvgProps>;
-}
-
-const ContactUsCard: React.FC<ContactUsCardProps> = ({
-  title,
-  Icon,
-  className,
-}) => {
-  return (
-    <View
-      className={cn(
-        "flex-row items-center justify-between rounded-xl border border-border bg-gray-50 px-4 py-4",
-        className,
-      )}
-    >
-      <Text className="font-medium text-xl text-muted-foreground">{title}</Text>
-      <Icon className="h-20 w-20 text-muted-foreground" />
-    </View>
-  );
-};
-
-const PureHomeScreen = memo(HomeScreen);
-export default PureHomeScreen;
+export default HomeScreen;

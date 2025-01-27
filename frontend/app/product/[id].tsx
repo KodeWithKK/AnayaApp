@@ -120,9 +120,11 @@ const ProductScreen: React.FC = memo(() => {
       <View className="absolute bottom-0 w-full border-t border-border/50 bg-white px-4 py-3">
         <TouchableOpacity
           activeOpacity={0.75}
-          className="flex-1 flex-row items-center justify-center gap-2 rounded-full bg-primary py-3.5"
+          className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
         >
-          <CartSolidIcon className="h-7 w-7 text-white" />
+          <View className="-translate-y-0.5">
+            <CartSolidIcon className="h-7 w-7 text-white" />
+          </View>
           <Text className="text-center font-semibold text-lg text-white">
             Add to Cart
           </Text>

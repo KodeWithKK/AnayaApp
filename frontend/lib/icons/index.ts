@@ -23,6 +23,8 @@ import VideoOutlineIcon from "~/assets/icons/outline/video.svg";
 import CartSolidIcon from "~/assets/icons/solid/cart.svg";
 import HeartSolidIcon from "~/assets/icons/solid/heart.svg";
 import HomeSolidIcon from "~/assets/icons/solid/home.svg";
+import LocationSolidIcon from "~/assets/icons/solid/location.svg";
+import NotificationSolidIcon from "~/assets/icons/solid/notification.svg";
 import ProfileSolidIcon from "~/assets/icons/solid/profile.svg";
 import SearchSolidIcon from "~/assets/icons/solid/search.svg";
 import InfoIcon from "~/assets/icons/special/info.svg";
@@ -40,11 +42,13 @@ iconWithClassName(HomeSolidIcon);
 iconWithClassName(SearchOutlineIcon);
 iconWithClassName(SearchSolidIcon);
 iconWithClassName(NotificationOutlineIcon);
+iconWithClassName(NotificationSolidIcon);
 iconWithClassName(ShareOutlineIcon);
 iconWithClassName(HeartOutlineIcon);
 iconWithClassName(HeartSolidIcon);
 iconWithClassName(CartOutlineIcon);
 iconWithClassName(CartSolidIcon);
+iconWithClassName(LocationSolidIcon);
 iconWithClassName(CollectionOutlineIcon);
 iconWithClassName(ProfileOutlineIcon);
 iconWithClassName(ProfileSolidIcon);
@@ -70,11 +74,13 @@ export {
   SearchOutlineIcon,
   SearchSolidIcon,
   NotificationOutlineIcon,
+  NotificationSolidIcon,
   ShareOutlineIcon,
   HeartOutlineIcon,
   HeartSolidIcon,
   CartOutlineIcon,
   CartSolidIcon,
+  LocationSolidIcon,
   CollectionOutlineIcon,
   ProfileOutlineIcon,
   ProfileSolidIcon,

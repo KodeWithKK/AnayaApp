@@ -47,22 +47,23 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          headerTitle: "Anaya",
-          headerTitleAlign: "left",
-          headerTitleStyle: {
-            fontSize: 24,
-            fontFamily: "Poppins-Medium",
-          },
-          headerRight: () => (
-            <View className="mr-4 flex-row gap-3">
-              <View className="rounded-full border border-border-darker p-2">
-                <SearchOutlineIcon className="h-6 w-6 text-foreground" />
-              </View>
-              <View className="rounded-full border border-border-darker p-2">
-                <NotificationOutlineIcon className="h-6 w-6 text-foreground" />
-              </View>
-            </View>
-          ),
+          headerShown: false,
+          // headerTitle: "Anaya",
+          // headerTitleAlign: "left",
+          // headerTitleStyle: {
+          //   fontSize: 24,
+          //   fontFamily: "Poppins-Medium",
+          // },
+          // headerRight: () => (
+          //   <View className="mr-4 flex-row gap-3">
+          //     <View className="rounded-full border border-border-darker p-2">
+          //       <SearchOutlineIcon className="h-6 w-6 text-foreground" />
+          //     </View>
+          //     <View className="rounded-full border border-border-darker p-2">
+          //       <NotificationOutlineIcon className="h-6 w-6 text-foreground" />
+          //     </View>
+          //   </View>
+          // ),
           tabBarIcon: ({ color, focused }) => {
             if (focused)
               return <HomeSolidIcon className="h-9 w-9" color={color} />;
