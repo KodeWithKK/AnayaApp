@@ -1,7 +1,6 @@
 import { FlatList } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
-import { Text } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import { bestSellers, expertChoices, newArrivals } from "~/data";
 
@@ -21,15 +20,10 @@ const CategoryScreen: React.FC = () => {
       data={categoryDataMap[name]}
       keyExtractor={(item) => item.id}
       numColumns={2}
-      className="px-4"
+      className="px-4 py-5"
       columnWrapperClassName="justify-between gap-3"
       contentContainerClassName="gap-2 pb-4"
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={() => (
-        <Text className="mb-2 mt-4">
-          {categoryDataMap[name].length} Products found
-        </Text>
-      )}
       renderItem={({ item }) => <ProductCard item={item} />}
     />
   );

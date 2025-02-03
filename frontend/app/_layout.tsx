@@ -1,13 +1,14 @@
-import { SplashScreen, Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { SplashScreen, Stack, usePathname } from "expo-router";
+import { setStatusBarStyle, StatusBar } from "expo-status-bar";
 import { PortalHost } from "@rn-primitives/portal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { categoryTitleMap } from "~/lib/constants";
-import { useColorScheme } from "~/lib/useColorScheme";
 import ContextProviders from "~/context";
 
 import "~/global.css";
+
+import { useEffect } from "react";
 
 import { Text, View } from "~/components/core";
 import { ShareOutlineIcon } from "~/lib/icons";
@@ -26,7 +27,12 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { isDarkColorScheme } = useColorScheme();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (["/", "/profile"].includes(pathname)) setStatusBarStyle("light");
+    else setStatusBarStyle("dark");
+  }, [pathname]);
 
   return (
     <GestureHandlerRootView>
@@ -70,7 +76,7 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
         <PortalHost />
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        {/* <StatusBar style={isDarkColorScheme ? "light" : "dark"} /> */}
       </ContextProviders>
     </GestureHandlerRootView>
   );

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, Image, TouchableOpacity, View } from "react-native";
-import Carousel from "react-native-reanimated-carousel";
+import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 
 import { cn } from "~/lib/utils";
 
@@ -12,15 +12,11 @@ interface ProductCarouselProps {
 
 const ProductCarousel = ({ images }: ProductCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const carouselRef = useRef<any>(null);
+  const carouselRef = useRef<ICarouselInstance>(null);
 
   const handleProgressChange = (_: number, absoluteProgress: number) => {
     const index = Math.round(absoluteProgress) % images.length;
     setActiveIndex(index < 0 ? images.length + index : index);
-  };
-
-  const handleSnapToItem = (index: number) => {
-    setActiveIndex(index);
   };
 
   return (
@@ -33,8 +29,7 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
           data={images}
           onProgressChange={handleProgressChange}
           autoPlay={true}
-          onSnapToItem={handleSnapToItem}
-          autoPlayInterval={3000}
+          autoPlayInterval={2000}
           renderItem={({ item }) => (
             <Image source={{ uri: item }} className="aspect-square w-full" />
           )}
@@ -47,8 +42,13 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
           <TouchableOpacity
             key={imageUri}
             onPress={() => {
-              setActiveIndex(idx);
-              carouselRef.current?.scrollTo({ index: idx });
+              carouselRef.current?.scrollTo({
+                index: idx,
+                animated: true,
+                onFinished: () => {
+                  setActiveIndex(idx);
+                },
+              });
             }}
             activeOpacity={0.75}
           >

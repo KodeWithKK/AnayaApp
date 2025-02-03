@@ -1,9 +1,14 @@
 import {
+  ArrowLeft,
   Check,
   ChevronDown,
   ChevronUp,
+  Clipboard,
   Info,
+  LogOut,
   MoonStar,
+  Plus,
+  Settings,
   Sun,
   XIcon,
 } from "lucide-react-native";
@@ -16,6 +21,7 @@ import HomeOutlineIcon from "~/assets/icons/outline/home.svg";
 import NotificationOutlineIcon from "~/assets/icons/outline/notification.svg";
 import FindPersonOutlineIcon from "~/assets/icons/outline/person-search.svg";
 import ProfileOutlineIcon from "~/assets/icons/outline/profile.svg";
+import RecentOutlineIcon from "~/assets/icons/outline/recent.svg";
 import ReportOutlineIcon from "~/assets/icons/outline/report.svg";
 import SearchOutlineIcon from "~/assets/icons/outline/search.svg";
 import ShareOutlineIcon from "~/assets/icons/outline/share.svg";
@@ -37,6 +43,11 @@ import { iconWithClassName } from "./iconWithClassName";
 iconWithClassName(MoonStar);
 iconWithClassName(Info);
 iconWithClassName(Sun);
+iconWithClassName(Plus);
+iconWithClassName(LogOut);
+iconWithClassName(Clipboard);
+iconWithClassName(ArrowLeft);
+iconWithClassName(Settings);
 iconWithClassName(HomeOutlineIcon);
 iconWithClassName(HomeSolidIcon);
 iconWithClassName(SearchOutlineIcon);
@@ -52,6 +63,7 @@ iconWithClassName(LocationSolidIcon);
 iconWithClassName(CollectionOutlineIcon);
 iconWithClassName(ProfileOutlineIcon);
 iconWithClassName(ProfileSolidIcon);
+iconWithClassName(RecentOutlineIcon);
 iconWithClassName(FindPersonOutlineIcon);
 iconWithClassName(ReportOutlineIcon);
 iconWithClassName(UploadIcon);
@@ -69,6 +81,11 @@ export {
   MoonStar,
   Info,
   Sun,
+  Plus,
+  Clipboard,
+  LogOut,
+  Settings,
+  ArrowLeft,
   HomeOutlineIcon,
   HomeSolidIcon,
   SearchOutlineIcon,
@@ -84,6 +101,7 @@ export {
   CollectionOutlineIcon,
   ProfileOutlineIcon,
   ProfileSolidIcon,
+  RecentOutlineIcon,
   FindPersonOutlineIcon,
   ReportOutlineIcon,
   UploadIcon,

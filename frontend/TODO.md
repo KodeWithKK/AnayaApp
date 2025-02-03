@@ -6,6 +6,7 @@ https://dribbble.com/shots/24932275-Jewelry-App-Design
 
 BRAND NAMES
 
+Ratnavi - "gem" or "jewel" in Hindi
 Svarna (स्वर्ण) – Sanskrit for "gold."
 Anaya (अनया) – Meaning "unique" or "incomparable" in Sanskrit.
 

@@ -35,9 +35,9 @@ const ProductScreen: React.FC = memo(() => {
   }
 
   return (
-    <View>
+    <>
       <ScrollView className="mb-16 px-4">
-        <View className="relative mt-5">
+        <View className="relative mt-3">
           <ProductCarousel images={product.images} />
           <View className="absolute right-2.5 top-2.5 rounded-full border border-border bg-white p-2.5">
             <HeartOutlineIcon className="h-8 w-8 text-primary" />
@@ -130,7 +130,7 @@ const ProductScreen: React.FC = memo(() => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 });
 

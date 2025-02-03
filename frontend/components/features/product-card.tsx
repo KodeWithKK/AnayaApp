@@ -18,9 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
       className="mb-3 flex-1"
     >
       <ImageBackground
-        source={{
-          uri: item.images[0],
-        }}
+        source={{ uri: item.images[0] }}
         className="aspect-square w-full overflow-hidden rounded-lg border border-border/50"
         resizeMode="cover"
       >
