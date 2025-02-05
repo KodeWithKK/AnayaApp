@@ -29,16 +29,16 @@ const RootProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false);
 
   const [loadedFonts, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
-    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
-    "Poppins-ExtraLight": require("../assets/fonts/Poppins-ExtraLight.ttf"),
-    "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
-    "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
-    "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
+    "Poppins-Light": require("../assets/fonts/poppins/Poppins-Light.ttf"),
+    "Poppins-Regular": require("../assets/fonts/poppins/Poppins-Regular.ttf"),
+    "Poppins-Medium": require("../assets/fonts/poppins/Poppins-Medium.ttf"),
+    "Poppins-SemiBold": require("../assets/fonts/poppins/Poppins-SemiBold.ttf"),
+    "Poppins-Bold": require("../assets/fonts/poppins/Poppins-Bold.ttf"),
+    "NotoSerif-Light": require("../assets/fonts/noto-serif/NotoSerif-Light.ttf"),
+    "NotoSerif-Regular": require("../assets/fonts/noto-serif/NotoSerif-Regular.ttf"),
+    "NotoSerif-Medium": require("../assets/fonts/noto-serif/NotoSerif-Medium.ttf"),
+    "NotoSerif-SemiBold": require("../assets/fonts/noto-serif/NotoSerif-SemiBold.ttf"),
+    "NotoSerif-Bold": require("../assets/fonts/noto-serif/NotoSerif-Bold.ttf"),
   });
 
   useEffect(() => {

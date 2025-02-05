@@ -1,17 +1,14 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text, View } from "~/components/core";
-import { Input } from "~/components/ui/input";
+import SearchInput from "~/components/layout/search-input";
 import { ChevronDown, RecentOutlineIcon, XIcon } from "~/lib/icons";
 
 const SearchScreen: React.FC = () => {
   return (
     <SafeAreaView>
       <View className="px-4 py-2">
-        <Input
-          placeholder="Search"
-          className="border border-border/60 bg-muted"
-        />
+        <SearchInput inputClassname="border" />
       </View>
       <View className="px-4">
         {/* RECENT SEARCHES */}

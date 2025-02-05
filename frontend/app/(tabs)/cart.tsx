@@ -2,10 +2,23 @@ import { Image, Pressable, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 
 import { Button, Text, View } from "~/components/core";
+import { Input } from "~/components/ui/input";
 import { sectionListData } from "~/lib/constants/home-data";
 import { XIcon } from "~/lib/icons";
 
 const products = sectionListData[1]["data"];
+
+const totalPrice = products.reduce(
+  (acc, product) =>
+    acc + parseInt(product.price.replace("₹", "").replace(" ", "")),
+  0,
+);
+
+const totalPriceString = `₹ ${new Intl.NumberFormat("en-IN", {
+  maximumSignificantDigits: 3,
+})
+  .format(totalPrice)
+  .replaceAll(",", " ")}`;
 
 const Cart: React.FC = () => {
   const router = useRouter();
@@ -15,7 +28,7 @@ const Cart: React.FC = () => {
       <ScrollView className="px-4 pt-3">
         <Text className="text-muted-foreground">4 items in cart</Text>
 
-        <View className="mb-[92px] mt-5 gap-3">
+        <View className="mt-5 gap-3">
           {products.map((p) => (
             <Pressable
               key={`wishlist-${p.id}`}
@@ -54,6 +67,36 @@ const Cart: React.FC = () => {
               </View>
             </Pressable>
           ))}
+        </View>
+        <View className="mt-4 flex-row gap-2">
+          <Input placeholder="Enter promo code" className="flex-1" />
+          <Button size={"sm"} className="rounded-lg px-4">
+            <Text className="text-background">Apply</Text>
+          </Button>
+        </View>
+        <View className="mb-[92px] mt-4 gap-2">
+          <Text className="font-semibold text-lg">Order Summary</Text>
+          <View className="flex-row justify-between">
+            <Text className="text-muted-foreground">Subtotal</Text>
+            <Text className="text-muted-foreground">{totalPriceString}</Text>
+          </View>
+          <View className="flex-row justify-between">
+            <Text className="text-muted-foreground">Shipping</Text>
+            <View className="flex-row gap-2">
+              <Text className="text-muted-foreground line-through">₹ 80</Text>
+              <Text className="text-muted-foreground">FREE</Text>
+            </View>
+          </View>
+          {/* <View className="flex-row justify-between">
+            <Text className="text-muted-foreground">Tax</Text>
+            <Text className="text-muted-foreground">₹ 43.96</Text>
+          </View> */}
+          <View className="flex-row justify-between">
+            <Text className="font-semibold">Total</Text>
+            <Text className="font-semibold text-primary">
+              {totalPriceString}
+            </Text>
+          </View>
         </View>
       </ScrollView>
 

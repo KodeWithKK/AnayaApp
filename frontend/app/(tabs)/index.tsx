@@ -6,6 +6,7 @@ import { setStatusBarStyle } from "expo-status-bar";
 import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import CategoryChip from "~/components/layout/category-chip";
+import SearchInput from "~/components/layout/search-input";
 import { Input } from "~/components/ui/input";
 import { categoryListData, sectionListData } from "~/lib/constants/home-data";
 import {
@@ -77,7 +78,7 @@ const HomeScreen: React.FC = memo(() => {
         style={{ transform: [{ translateY: searchBarTranslateY }] }}
         className="absolute left-0 right-0 top-[110px] z-[1000] h-[62px] justify-center bg-[hsl(350_89%_60%)] px-4"
       >
-        <Input placeholder="Search" className="border bg-muted" />
+        <SearchInput />
       </Animated.View>
 
       {/* Section List */}

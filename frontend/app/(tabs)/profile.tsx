@@ -4,12 +4,12 @@ import { SvgProps } from "react-native-svg";
 import { Text, View } from "~/components/core";
 import {
   ChevronDown,
-  Clipboard,
+  ClipboardOutlineIcon,
   HomeOutlineIcon,
-  LogOut,
-  Plus,
+  LogoutOutlineIcon,
+  PaymentOutlineIcon,
   ProfileOutlineIcon,
-  Settings,
+  SettingOutlineIcon,
 } from "~/lib/icons";
 import { cn } from "~/lib/utils";
 
@@ -50,11 +50,15 @@ export default function SettingScreen() {
 
       <View className="-translate-y-6 px-4">
         <SettingItem label="Edit Profile" Icon={ProfileOutlineIcon} />
-        <SettingItem label="My Orders" Icon={Clipboard} />
+        <SettingItem label="My Orders" Icon={ClipboardOutlineIcon} />
         <SettingItem label="Shipping Address" Icon={HomeOutlineIcon} />
-        <SettingItem label="Payment Methods" Icon={Plus} />
-        <SettingItem label="Settings" Icon={Settings} />
-        <SettingItem label="Logout" Icon={LogOut} isADangerAction={true} />
+        <SettingItem label="Payment Methods" Icon={PaymentOutlineIcon} />
+        <SettingItem label="Settings" Icon={SettingOutlineIcon} />
+        <SettingItem
+          label="Logout"
+          Icon={LogoutOutlineIcon}
+          isADangerAction={true}
+        />
       </View>
     </View>
   );
@@ -72,7 +76,7 @@ const SettingItem: React.FC<SettingItemProps> = ({
   isADangerAction = false,
 }) => {
   return (
-    <View className="flex-row items-center gap-3 border-b border-border/60 px-3 py-4">
+    <View className="flex-row items-center gap-3.5 border-b border-border/60 px-3 py-4">
       <View className="rounded-full bg-primary/10 p-2.5">
         <Icon className="h-5 w-5 text-primary" />
       </View>

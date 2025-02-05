@@ -3,27 +3,29 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
-  Clipboard,
   Info,
-  LogOut,
   MoonStar,
-  Plus,
-  Settings,
   Sun,
   XIcon,
 } from "lucide-react-native";
 
 import CalenderOutlineIcon from "~/assets/icons/outline/calender.svg";
 import CartOutlineIcon from "~/assets/icons/outline/cart.svg";
+import ClipboardOutlineIcon from "~/assets/icons/outline/clipboard.svg";
 import CollectionOutlineIcon from "~/assets/icons/outline/collection.svg";
 import HeartOutlineIcon from "~/assets/icons/outline/heart.svg";
 import HomeOutlineIcon from "~/assets/icons/outline/home.svg";
+import LogoutOutlineIcon from "~/assets/icons/outline/logout.svg";
 import NotificationOutlineIcon from "~/assets/icons/outline/notification.svg";
+import OptionsOutlineIcon from "~/assets/icons/outline/options.svg";
+import PaymentOutlineIcon from "~/assets/icons/outline/payment.svg";
 import FindPersonOutlineIcon from "~/assets/icons/outline/person-search.svg";
+import PlusOutlineIcon from "~/assets/icons/outline/plus.svg";
 import ProfileOutlineIcon from "~/assets/icons/outline/profile.svg";
 import RecentOutlineIcon from "~/assets/icons/outline/recent.svg";
 import ReportOutlineIcon from "~/assets/icons/outline/report.svg";
 import SearchOutlineIcon from "~/assets/icons/outline/search.svg";
+import SettingOutlineIcon from "~/assets/icons/outline/setting.svg";
 import ShareOutlineIcon from "~/assets/icons/outline/share.svg";
 import VideoOutlineIcon from "~/assets/icons/outline/video.svg";
 import CartSolidIcon from "~/assets/icons/solid/cart.svg";
@@ -40,14 +42,16 @@ import WhatsAppIcon from "~/assets/icons/special/whatsapp.svg";
 
 import { iconWithClassName } from "./iconWithClassName";
 
+iconWithClassName(PaymentOutlineIcon);
+iconWithClassName(OptionsOutlineIcon);
 iconWithClassName(MoonStar);
 iconWithClassName(Info);
 iconWithClassName(Sun);
-iconWithClassName(Plus);
-iconWithClassName(LogOut);
-iconWithClassName(Clipboard);
+iconWithClassName(PlusOutlineIcon);
+iconWithClassName(LogoutOutlineIcon);
+iconWithClassName(ClipboardOutlineIcon);
 iconWithClassName(ArrowLeft);
-iconWithClassName(Settings);
+iconWithClassName(SettingOutlineIcon);
 iconWithClassName(HomeOutlineIcon);
 iconWithClassName(HomeSolidIcon);
 iconWithClassName(SearchOutlineIcon);
@@ -78,13 +82,15 @@ iconWithClassName(CalenderOutlineIcon);
 iconWithClassName(VideoOutlineIcon);
 
 export {
+  PaymentOutlineIcon,
+  OptionsOutlineIcon,
   MoonStar,
   Info,
   Sun,
-  Plus,
-  Clipboard,
-  LogOut,
-  Settings,
+  PlusOutlineIcon,
+  ClipboardOutlineIcon,
+  LogoutOutlineIcon,
+  SettingOutlineIcon,
   ArrowLeft,
   HomeOutlineIcon,
   HomeSolidIcon,
