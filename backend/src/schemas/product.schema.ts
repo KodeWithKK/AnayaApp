@@ -9,11 +9,12 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 
 // brands table
 export const brands = pgTable("brands", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   description: text("description"),
 });
 
@@ -146,3 +147,6 @@ export const offers = pgTable(
       .onUpdate("cascade"),
   ],
 );
+
+export const productsInsertSchema = createInsertSchema(products);
+export const brandsInsertSchema = createInsertSchema(brands);

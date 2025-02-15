@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 
 import BrandRouter from "./routes/brand.routes";
+import DatasetRouter from "./routes/dataset.routes";
 import ProductRouter from "./routes/product.routes";
 import { ApiResponse } from "./utils/api-response";
 
@@ -25,6 +26,7 @@ app.use(
 
 app.use("/api/v1/product", ProductRouter);
 app.use("/api/v1/brand", BrandRouter);
+app.use("/api/v1/dataset", DatasetRouter);
 
 // Health check route
 app.get("/", (req: Request, res: Response) => {
