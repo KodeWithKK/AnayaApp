@@ -7,6 +7,7 @@ import {
   brandsInsertSchema,
   media,
   mediaInsertSchema,
+  MediaType,
   products,
   productsInsertSchema,
   sizes,
@@ -55,7 +56,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
       specifications: p.productDetails.specification,
     },
     productImages: p.images.map((url) => ({
-      type: "image",
+      type: "image" as MediaType,
       url: url,
     })),
     productSizes: p.sizes.map((s) => ({
@@ -85,35 +86,39 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
       .values(parsedProduct)
       .returning();
 
-    for (const s of productSizes) {
-      const { data: parsedSize, success } = sizesInsertSchema.safeParse({
-        ...s,
-        productId: insertedProduct.id,
-      });
+    const updatedProductSizes = productSizes.map((s) => ({
+      ...s,
+      productId: insertedProduct.id,
+    }));
+
+    for (const s of updatedProductSizes) {
+      const { success } = sizesInsertSchema.safeParse(s);
 
       if (!success) {
         return res
           .status(500)
           .json(new ApiResponse(500, {}, "Invalid sizes dateset"));
       }
-
-      await db.insert(sizes).values(parsedSize);
     }
 
-    for (const m of productImages) {
-      const { data: parsedMedia, success } = mediaInsertSchema.safeParse({
-        ...m,
-        productId: insertedProduct.id,
-      });
+    await db.insert(sizes).values(updatedProductSizes);
+
+    const updatedProductImages = productImages.map((i) => ({
+      ...i,
+      productId: insertedProduct.id,
+    }));
+
+    for (const i of updatedProductImages) {
+      const { success } = mediaInsertSchema.safeParse(i);
 
       if (!success) {
         return res
           .status(500)
           .json(new ApiResponse(500, {}, "Invalid images dateset"));
       }
-
-      await db.insert(media).values(parsedMedia);
     }
+
+    await db.insert(media).values(updatedProductImages);
   }
 
   return res

@@ -135,4 +135,5 @@ export const offers = pgTable(
 export const brandsInsertSchema = createInsertSchema(brands);
 export const productsInsertSchema = createInsertSchema(products);
 export const sizesInsertSchema = createInsertSchema(sizes);
+export type MediaType = "image" | "video" | "animated_gif";
 export const mediaInsertSchema = createInsertSchema(media);
