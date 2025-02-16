@@ -15,6 +15,13 @@
       "when": 1739595496262,
       "tag": "0001_parched_viper",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1739692396540,
+      "tag": "0002_empty_loa",
+      "breakpoints": true
     }
   ]
 }

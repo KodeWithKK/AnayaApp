@@ -28,6 +28,7 @@ export const products = pgTable(
     manufacturer: text("manufacturer"),
     countryOfOrigin: text("country_of_origin"),
     baseColour: text("base_colour"),
+    discountPercentage: integer("discount_percentage"),
     brandId: integer("brand_id").notNull(),
     description: text("description"),
     materialAndCare: text("material_and_care"),
@@ -68,7 +69,6 @@ export const sizes = pgTable(
     id: serial("id").primaryKey(),
     productId: integer("product_id").notNull(),
     label: text("label").notNull(),
-    skuId: integer("sku_id").notNull(),
     available: boolean("available").notNull(),
     price: integer("price"),
     measurements: jsonb("measurements"),
@@ -116,22 +116,6 @@ export const ratings = pgTable(
   ],
 );
 
-// Discounts Table
-export const discounts = pgTable(
-  "discounts",
-  {
-    id: serial("id").primaryKey(),
-    productId: integer("product_id").notNull(),
-    label: text("label"),
-    percent: integer("percent"),
-  },
-  (table) => [
-    foreignKey({ columns: [table.productId], foreignColumns: [products.id] })
-      .onDelete("cascade")
-      .onUpdate("cascade"),
-  ],
-);
-
 // Offers Table
 export const offers = pgTable(
   "offers",
@@ -148,5 +132,7 @@ export const offers = pgTable(
   ],
 );
 
-export const productsInsertSchema = createInsertSchema(products);
 export const brandsInsertSchema = createInsertSchema(brands);
+export const productsInsertSchema = createInsertSchema(products);
+export const sizesInsertSchema = createInsertSchema(sizes);
+export const mediaInsertSchema = createInsertSchema(media);
