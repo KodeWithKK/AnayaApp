@@ -17,6 +17,7 @@ import { ApiResponse } from "../utils/api-response";
 import { asyncHandler } from "../utils/async-handler";
 
 export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
+  // Create Brands
   const uniqueBrands = Array.from(
     new Set(productsDataset.data.map((p) => p.brand.name)),
   );
@@ -41,6 +42,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     .values(requiredBrandsDataset)
     .returning();
 
+  // Making the dataset structured
   const structuredDataset = productsDataset.data.map((p) => ({
     productData: {
       name: p.name,
@@ -67,6 +69,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     })),
   }));
 
+  // Adding Products
   for (const {
     productData,
     productSizes,
@@ -86,6 +89,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
       .values(parsedProduct)
       .returning();
 
+    // product sizes
     const updatedProductSizes = productSizes.map((s) => ({
       ...s,
       productId: insertedProduct.id,
@@ -103,6 +107,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
 
     await db.insert(sizes).values(updatedProductSizes);
 
+    // products medias
     const updatedProductImages = productImages.map((i) => ({
       ...i,
       productId: insertedProduct.id,
