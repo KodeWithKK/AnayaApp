@@ -20,11 +20,9 @@ export function convertToFormData(
           type: value?.type || "application/octet-stream",
         } as any);
       } else {
-        // Nested object
         convertToFormData(value, formData, formKey);
       }
     } else if (value !== undefined && value !== null) {
-      // Primitive values
       formData.append(formKey, value);
     }
   });

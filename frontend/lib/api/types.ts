@@ -1,22 +1,45 @@
-export interface StandardResponse<TData, TError = string[]> {
-  isSuccess: boolean;
-  message: string;
+export type DefaultRecord = Record<string, any>;
+export class ApiResponse<TData = DefaultRecord, TError = DefaultRecord> {
+  statusCode: number;
   data: TData;
-  errors: TError;
-}
-
-export class APIError<TError = string[]> extends Error {
+  error: TError;
   message: string;
-  errors: TError;
+  isSuccess: boolean;
 
-  constructor(message: string, errors: TError) {
-    super(message);
+  constructor(
+    statusCode: number = 200,
+    data: TData | TError = {} as TData,
+    message: string = "Success",
+  ) {
+    this.isSuccess = statusCode < 400;
+    this.statusCode = statusCode;
+    this.data = this.isSuccess ? (data as TData) : ({} as TData);
+    this.error = this.isSuccess ? ({} as TError) : (data as TError);
     this.message = message;
-    this.errors = errors;
   }
 }
 
-export interface APIResponse<TData = {}> {
-  message: string;
+export class ApiError<
+  TData = DefaultRecord,
+  TError = DefaultRecord,
+> extends Error {
+  statusCode: number;
   data: TData;
+  error: TError;
+  isSuccess: boolean;
+
+  constructor(
+    statusCode: number = 400,
+    data: TData | TError = {} as TData | TError,
+    message: string = "Error",
+  ) {
+    super(message);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+    this.isSuccess = statusCode < 400;
+    this.statusCode = statusCode;
+    this.data = this.isSuccess ? (data as TData) : ({} as TData);
+    this.error = this.isSuccess ? ({} as TError) : (data as TError);
+  }
 }
