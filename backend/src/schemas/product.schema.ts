@@ -14,6 +14,7 @@ import { createInsertSchema } from "drizzle-zod";
 
 /* ENUMS */
 const mediaType = pgEnum("media_type", ["image", "video", "animated_gif"]);
+const genderType = pgEnum("gender", ["men", "women", "unisex"]);
 
 /* TABLES */
 export const brands = pgTable("brands", {
@@ -130,14 +131,31 @@ export const offers = pgTable(
   ],
 );
 
+export const analytics = pgTable(
+  "analytics",
+  {
+    id: serial("id").primaryKey(),
+    productId: integer("product_id").notNull(),
+    articleType: text("article_type").notNull(),
+    gender: genderType().notNull(),
+    category: text("category").notNull(),
+  },
+  (table) => [
+    foreignKey({ columns: [table.productId], foreignColumns: [products.id] })
+      .onDelete("cascade")
+      .onUpdate("cascade"),
+  ],
+);
+
 /* RELATIONS */
 export const productsRelations = relations(products, ({ one, many }) => ({
   sizes: many(sizes),
+  medias: many(media),
   brand: one(brands, {
     fields: [products.brandId],
     references: [brands.id],
   }),
-  media: many(media),
+  analytic: one(analytics),
 }));
 
 export const brandsRelations = relations(brands, ({ many }) => ({
@@ -152,15 +170,24 @@ export const sizesRelations = relations(sizes, ({ one }) => ({
 }));
 
 export const mediaRelations = relations(media, ({ one }) => ({
-  products: one(products, {
+  product: one(products, {
     fields: [media.productId],
     references: [products.id],
   }),
 }));
 
-/* TYPES */
+export const analyticsRelations = relations(analytics, ({ one }) => ({
+  product: one(products, {
+    fields: [analytics.productId],
+    references: [products.id],
+  }),
+}));
+
+/* SCHEMA & TYPES */
 export const brandsInsertSchema = createInsertSchema(brands);
 export const productsInsertSchema = createInsertSchema(products);
 export const sizesInsertSchema = createInsertSchema(sizes);
-export type MediaType = "image" | "video" | "animated_gif";
 export const mediaInsertSchema = createInsertSchema(media);
+export const analyticsInsertSchema = createInsertSchema(analytics);
+export type MediaType = "image" | "video" | "animated_gif";
+export type GenderType = "men" | "women" | "unisex";

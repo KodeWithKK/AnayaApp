@@ -1,13 +1,13 @@
-import { memo, useEffect, useRef } from "react";
+import { memo } from "react";
 import { Animated, FlatList, Pressable, SectionList } from "react-native";
 import { Href, useRouter } from "expo-router";
-import { setStatusBarStyle } from "expo-status-bar";
+import { useQuery } from "@tanstack/react-query";
 
 import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import CategoryChip from "~/components/layout/category-chip";
 import SearchInput from "~/components/layout/search-input";
-import { Input } from "~/components/ui/input";
+import useHomePageHeader from "~/hooks/use-home-page-header";
 import { categoryListData, sectionListData } from "~/lib/constants/home-data";
 import {
   ChevronDown,
@@ -15,39 +15,20 @@ import {
   NotificationOutlineIcon,
 } from "~/lib/icons";
 
-const HEADER_MAX_HEIGHT = 172; // Full header height
-const HEADER_MIN_HEIGHT = 62; // Height with only search bar
-const STATUS_BAR_HEIGHT = 40; // Status bar height (including safe area)
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
 const HomeScreen: React.FC = memo(() => {
   const router = useRouter();
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const {
+    scrollY,
+    headerHeight,
+    locationOpacity,
+    searchBarTranslateY,
+    HEADER_MAX_HEIGHT,
+  } = useHomePageHeader();
 
-  const headerHeight = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT + STATUS_BAR_HEIGHT],
-    extrapolate: "clamp",
-  });
-
-  const locationOpacity = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
-
-  const searchBarTranslateY = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [
-      0,
-      -HEADER_MAX_HEIGHT + HEADER_MIN_HEIGHT + STATUS_BAR_HEIGHT,
-    ],
-    extrapolate: "clamp",
-  });
-
-  useEffect(() => {
-    setStatusBarStyle("light");
-  }, []);
+  // const { data } = useQuery({
+  //   queryKey: ["products"],
+  //   queryFn: () => {},
+  // });
 
   return (
     <View className="flex-1 bg-background">

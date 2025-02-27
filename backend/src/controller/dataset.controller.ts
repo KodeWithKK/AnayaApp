@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { db } from "../config/db";
 import productsDataset from "../data/products.json";
 import {
+  analytics,
+  analyticsInsertSchema,
   brands,
   brandsInsertSchema,
   media,
@@ -67,6 +69,11 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
       price: s.price,
       measurements: s.measurements,
     })),
+    productAnalytics: {
+      gender: p.analytics.gender.toLowerCase(),
+      articleType: p.analytics.articleType,
+      category: p.analytics.subCategory,
+    },
   }));
 
   // Adding Products
@@ -74,11 +81,12 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     productData,
     productSizes,
     productImages,
+    productAnalytics,
   } of structuredDataset) {
-    const { data: parsedProduct, success } =
+    const { data: parsedProduct, success: isProductParseSuccess } =
       productsInsertSchema.safeParse(productData);
 
-    if (!success) {
+    if (!isProductParseSuccess) {
       return res
         .status(500)
         .json(new ApiResponse(500, {}, "Invalid brand dateset"));
@@ -124,6 +132,24 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     }
 
     await db.insert(media).values(updatedProductImages);
+
+    // products analytics
+    const {
+      data: updatedProductAnalytics,
+      success: isAnalyticParseSuccess,
+      error,
+    } = analyticsInsertSchema.safeParse({
+      ...productAnalytics,
+      productId: insertedProduct.id,
+    });
+
+    if (!isAnalyticParseSuccess) {
+      return res
+        .status(500)
+        .json(new ApiResponse(500, error, "Invalid Product Analytic dataset"));
+    }
+
+    await db.insert(analytics).values(updatedProductAnalytics);
   }
 
   return res
@@ -137,6 +163,7 @@ export const clearDataset = asyncHandler(
     await db.delete(products);
     await db.delete(sizes);
     await db.delete(media);
+    await db.delete(analytics);
 
     return res
       .status(200)

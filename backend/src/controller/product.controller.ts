@@ -1,8 +1,13 @@
-import { ilike } from "drizzle-orm";
+import { and, eq, ilike, inArray } from "drizzle-orm";
 import { Request, Response } from "express";
 
 import { db } from "../config/db";
-import { products, productsInsertSchema } from "../schemas";
+import {
+  analytics,
+  GenderType,
+  products,
+  productsInsertSchema,
+} from "../schemas";
 import { ApiResponse } from "../utils/api-response";
 import { asyncHandler } from "../utils/async-handler";
 
@@ -30,24 +35,44 @@ export const addProduct = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getProducts = asyncHandler(async (req: Request, res: Response) => {
-  let { o = 0, l = 20 } = req.query;
+  let { o = 0, l = 20, category, articleType, gender } = req.query;
 
-  o = parseInt(o as string);
-  l = parseInt(l as string);
+  o = parseInt(o as string, 10);
+  l = parseInt(l as string, 10);
+
+  const analyticsSubquery = db
+    .select({ productId: analytics.productId })
+    .from(analytics)
+    .where(
+      and(
+        category ? eq(analytics.category, category as string) : undefined,
+        articleType
+          ? eq(analytics.articleType, articleType as string)
+          : undefined,
+        gender ? eq(analytics.gender, gender as GenderType) : undefined,
+      ),
+    );
 
   const allProducts = await db.query.products.findMany({
     with: {
-      sizes: {
-        columns: {
-          productId: false,
-        },
-      },
       brand: {
         columns: {
           name: true,
         },
       },
-      media: {
+      analytic: {
+        columns: {
+          productId: false,
+          category: true,
+          articleType: true,
+        },
+      },
+      sizes: {
+        columns: {
+          productId: false,
+        },
+      },
+      medias: {
         columns: {
           productId: false,
         },
@@ -55,6 +80,7 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
     },
     offset: o,
     limit: l,
+    where: inArray(products.id, analyticsSubquery),
   });
 
   return res
@@ -66,7 +92,7 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
 
 export const searchProducts = asyncHandler(
   async (req: Request, res: Response) => {
-    let { o = 0, l = 20, q } = req.query;
+    let { o = 0, l = 20, q, category, articleType } = req.query;
 
     o = parseInt(o as string);
     l = parseInt(l as string);
@@ -77,19 +103,36 @@ export const searchProducts = asyncHandler(
         .json(new ApiResponse(400, {}, "Search query not found"));
     }
 
+    const analyticsSubquery = db
+      .select({ productId: analytics.productId })
+      .from(analytics)
+      .where(
+        and(
+          category ? eq(analytics.category, category as string) : undefined,
+          articleType
+            ? eq(analytics.articleType, articleType as string)
+            : undefined,
+        ),
+      );
+
     const allProducts = await db.query.products.findMany({
       with: {
-        sizes: {
-          columns: {
-            productId: false,
-          },
-        },
         brand: {
           columns: {
             name: true,
           },
         },
-        media: {
+        analytic: {
+          columns: {
+            productId: false,
+          },
+        },
+        sizes: {
+          columns: {
+            productId: false,
+          },
+        },
+        medias: {
           columns: {
             productId: false,
           },
@@ -97,7 +140,10 @@ export const searchProducts = asyncHandler(
       },
       offset: o,
       limit: l,
-      where: ilike(products.name, `%${q}%`),
+      where: and(
+        ilike(products.name, `%${q}%`),
+        inArray(products.id, analyticsSubquery),
+      ),
     });
 
     return res
@@ -129,7 +175,7 @@ export const getProduct = asyncHandler(async (req: Request, res: Response) => {
           name: true,
         },
       },
-      media: {
+      medias: {
         columns: {
           productId: false,
         },
