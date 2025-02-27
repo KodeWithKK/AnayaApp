@@ -7,7 +7,7 @@ class ApiResponse {
 
   constructor(
     statusCode: number = 200,
-    data = {},
+    data: Record<string, any> = {},
     message: string = "Success",
   ) {
     this.isSuccess = statusCode < 400;

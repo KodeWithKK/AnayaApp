@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -11,14 +12,16 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
-// brands table
+/* ENUMS */
+const mediaType = pgEnum("media_type", ["image", "video", "animated_gif"]);
+
+/* TABLES */
 export const brands = pgTable("brands", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
   description: text("description"),
 });
 
-// products table
 export const products = pgTable(
   "products",
   {
@@ -34,6 +37,7 @@ export const products = pgTable(
     materialAndCare: text("material_and_care"),
     specifications: jsonb("specifications"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => [
     foreignKey({ columns: [table.brandId], foreignColumns: [brands.id] })
@@ -45,7 +49,6 @@ export const products = pgTable(
   ],
 );
 
-// Colours Table
 export const colours = pgTable(
   "colours",
   {
@@ -62,7 +65,6 @@ export const colours = pgTable(
   ],
 );
 
-// Sizes Table
 export const sizes = pgTable(
   "sizes",
   {
@@ -80,9 +82,6 @@ export const sizes = pgTable(
   ],
 );
 
-const mediaType = pgEnum("media_type", ["image", "video", "animated_gif"]);
-
-// Media Table
 export const media = pgTable(
   "media",
   {
@@ -98,7 +97,6 @@ export const media = pgTable(
   ],
 );
 
-// Ratings Table
 export const ratings = pgTable(
   "ratings",
   {
@@ -108,6 +106,7 @@ export const ratings = pgTable(
     rating: integer("rating").notNull(),
     review: text("review"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => [
     foreignKey({ columns: [table.productId], foreignColumns: [products.id] })
@@ -116,7 +115,6 @@ export const ratings = pgTable(
   ],
 );
 
-// Offers Table
 export const offers = pgTable(
   "offers",
   {
@@ -132,6 +130,35 @@ export const offers = pgTable(
   ],
 );
 
+/* RELATIONS */
+export const productsRelations = relations(products, ({ one, many }) => ({
+  sizes: many(sizes),
+  brand: one(brands, {
+    fields: [products.brandId],
+    references: [brands.id],
+  }),
+  media: many(media),
+}));
+
+export const brandsRelations = relations(brands, ({ many }) => ({
+  products: many(products),
+}));
+
+export const sizesRelations = relations(sizes, ({ one }) => ({
+  product: one(products, {
+    fields: [sizes.productId],
+    references: [products.id],
+  }),
+}));
+
+export const mediaRelations = relations(media, ({ one }) => ({
+  products: one(products, {
+    fields: [media.productId],
+    references: [products.id],
+  }),
+}));
+
+/* TYPES */
 export const brandsInsertSchema = createInsertSchema(brands);
 export const productsInsertSchema = createInsertSchema(products);
 export const sizesInsertSchema = createInsertSchema(sizes);

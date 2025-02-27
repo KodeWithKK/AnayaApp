@@ -12,7 +12,7 @@ import {
   productsInsertSchema,
   sizes,
   sizesInsertSchema,
-} from "../schemas/product.schema";
+} from "../schemas";
 import { ApiResponse } from "../utils/api-response";
 import { asyncHandler } from "../utils/async-handler";
 
