@@ -177,7 +177,6 @@ const HomeScreen: React.FC = memo(() => {
           <RefreshControl
             refreshing={sectionListData.some((s) => s.isFetching)}
             onRefresh={() => {
-              console.log("Refreshing...");
               sectionListData.forEach((s) => s.refetch());
             }}
             tintColor="#000" // iOS

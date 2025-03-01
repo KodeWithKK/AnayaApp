@@ -1,11 +1,18 @@
 import { memo, useState } from "react";
-import { FlatList, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { Text, View } from "~/components/core";
-import ExpandableText from "~/components/features/expandable-text";
+import HTMLViewer from "~/components/core/html-viewer";
 import ProductCarousel from "~/components/features/products-carousel";
+import Loader from "~/components/layout/loader";
 import { api } from "~/lib/api";
 import { CartSolidIcon, HeartOutlineIcon } from "~/lib/icons";
 import { findDiscountedPrice } from "~/lib/price";
@@ -15,16 +22,21 @@ import { Product } from "~/types/product";
 import NotFoundScreen from "../+not-found";
 
 const ProductScreen: React.FC = memo(() => {
-  const [activeSize, setActiveSize] = useState(6);
+  const [activeSizeIdx, setActiveSizeIdx] = useState<number>(0);
   const { id } = useLocalSearchParams() as { id: string };
 
-  const { data: product, isLoading } = useQuery({
+  const {
+    data: product,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["product", id],
     queryFn: () => api.get<Product>(`/product/${id}`).then((r) => r.data),
   });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Loader />;
   }
 
   if (!product) {
@@ -33,7 +45,19 @@ const ProductScreen: React.FC = memo(() => {
 
   return (
     <>
-      <ScrollView className="mb-16 px-4">
+      <ScrollView
+        className="mb-16 px-4"
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={refetch}
+            tintColor="#000" // iOS
+            colors={["#000"]} // Android
+            progressViewOffset={0}
+          />
+        }
+        contentInsetAdjustmentBehavior="automatic"
+      >
         <View className="relative mt-3">
           <ProductCarousel images={product.medias.map((p) => p.url)} />
           <View className="absolute right-2.5 top-2.5 rounded-full border border-border bg-white p-2.5">
@@ -69,28 +93,32 @@ const ProductScreen: React.FC = memo(() => {
           <View className="mt-2">
             <Text className="mb-2 font-semibold text-lg">Size</Text>
             <View className="flex-row gap-2">
-              {new Array(4).fill(0).map((_, i) => (
+              {product.sizes.map((size, i) => (
                 <TouchableOpacity
                   key={`size-${i}`}
                   activeOpacity={0.75}
-                  onPress={() => setActiveSize(i + 1 + 4)}
+                  onPress={() => setActiveSizeIdx(i)}
                   className={cn(
                     "h-14 w-14 items-center justify-center rounded-full border p-2",
-                    activeSize === i + 1 + 4
+                    activeSizeIdx === i
                       ? "border-primary bg-primary/10"
                       : "border-border",
                   )}
                 >
-                  <Text>{i + 1 + 4}</Text>
+                  <Text>{size.label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
           </View>
           <View className="mt-4">
             <Text className="mb-2 font-semibold text-lg">Description</Text>
-            <ExpandableText className="text-muted-foreground">
-              {product.description || ""}
-            </ExpandableText>
+            <HTMLViewer source={{ html: product.description || "" }} />
+          </View>
+          <View className="mt-4">
+            <Text className="mb-2 font-semibold text-lg">
+              Material and Care
+            </Text>
+            <HTMLViewer source={{ html: product.materialAndCare || "" }} />
           </View>
           {/* <View className="mt-4">
             <Text className="mb-2 font-semibold text-lg">Metal Details</Text>
