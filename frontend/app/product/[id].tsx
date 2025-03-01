@@ -1,14 +1,16 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useState } from "react";
 import { FlatList, ScrollView, TouchableOpacity } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
 
 import { Text, View } from "~/components/core";
 import ExpandableText from "~/components/features/expandable-text";
 import ProductCarousel from "~/components/features/products-carousel";
+import { api } from "~/lib/api";
 import { CartSolidIcon, HeartOutlineIcon } from "~/lib/icons";
+import { findDiscountedPrice } from "~/lib/price";
 import { cn } from "~/lib/utils";
 import { Product } from "~/types/product";
-import * as productsData from "~/data";
 
 import NotFoundScreen from "../+not-found";
 
@@ -16,19 +18,14 @@ const ProductScreen: React.FC = memo(() => {
   const [activeSize, setActiveSize] = useState(6);
   const { id } = useLocalSearchParams() as { id: string };
 
-  const product: Product | null = useMemo(() => {
-    for (const products of Object.values(productsData)) {
-      const existingProduct = products.find((p) => p.id == id);
-      if (existingProduct) return existingProduct;
-    }
-    return null;
-  }, []);
+  const { data: product, isLoading } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => api.get<Product>(`/product/${id}`).then((r) => r.data),
+  });
 
-  const listedPrice = useMemo(() => {
-    if (!product) return null;
-    const currPrice = parseInt(product.price.replace(/\D/g, ""));
-    return `₹${Math.trunc(currPrice * 1.11).toLocaleString("en-IN")}`;
-  }, []);
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
   if (!product) {
     return <NotFoundScreen />;
@@ -38,24 +35,29 @@ const ProductScreen: React.FC = memo(() => {
     <>
       <ScrollView className="mb-16 px-4">
         <View className="relative mt-3">
-          <ProductCarousel images={product.images} />
+          <ProductCarousel images={product.medias.map((p) => p.url)} />
           <View className="absolute right-2.5 top-2.5 rounded-full border border-border bg-white p-2.5">
             <HeartOutlineIcon className="h-8 w-8 text-primary" />
           </View>
         </View>
 
-        <View className="mb-5 mt-2">
+        <View className="mb-5 mt-4">
           <Text className="w-[88%] font-semibold text-2xl leading-[1.6]">
             {product.name}
           </Text>
           <View className="mt-2 flex-row items-center justify-between">
             <View className="flex-row items-baseline gap-3">
               <Text className="font-semibold text-xl text-primary">
-                {product.price.replace(/ /g, ",")}
+                ₹{" "}
+                {product.discountPercentage
+                  ? findDiscountedPrice(product.mrp, product.discountPercentage)
+                  : product.mrp}
               </Text>
-              <Text className="font-semibold text-base text-muted-foreground line-through">
-                {listedPrice}
-              </Text>
+              {product.mrp && (
+                <Text className="font-semibold text-base text-muted-foreground line-through">
+                  ₹ {product.mrp}
+                </Text>
+              )}
             </View>
             <View className="flex-row items-center gap-1">
               <Text className="font-medium text-sm">⭐️ 4.8</Text>
@@ -87,10 +89,10 @@ const ProductScreen: React.FC = memo(() => {
           <View className="mt-4">
             <Text className="mb-2 font-semibold text-lg">Description</Text>
             <ExpandableText className="text-muted-foreground">
-              {product.details.description}
+              {product.description || ""}
             </ExpandableText>
           </View>
-          <View className="mt-4">
+          {/* <View className="mt-4">
             <Text className="mb-2 font-semibold text-lg">Metal Details</Text>
             <View className="flex-row justify-start gap-1">
               <FlatList
@@ -113,7 +115,7 @@ const ProductScreen: React.FC = memo(() => {
                 )}
               />
             </View>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
 

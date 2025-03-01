@@ -20,24 +20,24 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
   };
 
   return (
-    <View className="relative mb-12">
+    <View className="relative">
       <View className="overflow-hidden rounded-lg">
         <Carousel
           ref={carouselRef}
           width={screenWidth}
-          height={screenWidth}
+          height={screenWidth * (639 / 478)}
           data={images}
           onProgressChange={handleProgressChange}
           autoPlay={true}
           autoPlayInterval={2000}
           renderItem={({ item }) => (
-            <Image source={{ uri: item }} className="aspect-square w-full" />
+            <Image source={{ uri: item }} className="aspect-[478/639] w-full" />
           )}
           loop={true}
         />
       </View>
 
-      <View className="absolute bottom-[-30px] w-full flex-row justify-center gap-2">
+      <View className="absolute bottom-3 w-full flex-row justify-center gap-2">
         {images.map((imageUri, idx) => (
           <TouchableOpacity
             key={imageUri}
@@ -51,15 +51,11 @@ const ProductCarousel = ({ images }: ProductCarouselProps) => {
               });
             }}
             activeOpacity={0.75}
-          >
-            <Image
-              source={{ uri: imageUri }}
-              className={cn(
-                "h-[60px] w-[60px] rounded-full border-2 border-white",
-                activeIndex === idx && "border-primary/60",
-              )}
-            />
-          </TouchableOpacity>
+            className={cn(
+              "h-2 w-5 rounded-full border border-primary/20 bg-white",
+              activeIndex === idx && "border-0 bg-primary",
+            )}
+          />
         ))}
       </View>
     </View>

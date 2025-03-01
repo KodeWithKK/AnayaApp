@@ -63,8 +63,6 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
       analytic: {
         columns: {
           productId: false,
-          category: true,
-          articleType: true,
         },
       },
       sizes: {

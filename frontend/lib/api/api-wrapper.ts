@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { convertToFormData } from "./helpers";
 import { ApiError, ApiResponse, DefaultRecord } from "./types";
 
-const BASE_URL = "http://localhost:8000/api/v1";
+const BASE_URL = "http://192.168.29.138:8000/api/v1";
 
 // Axios instance
 const axiosInstance = axios.create({
@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 3000,
 });
 
 // Axios Request Wrapper
@@ -41,7 +42,7 @@ async function request<TData, TError>(
     const { isSuccess } = response.data;
     if (!isSuccess) throw response.data;
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     let apiResponse: ApiResponse<TData, TError> | undefined;
 
     if (axios.isAxiosError(error)) {
@@ -58,7 +59,7 @@ async function request<TData, TError>(
     throw new ApiError<TData, TError>(
       400,
       {} as TError,
-      "An unexpected error occurred",
+      error?.message || "An unexpected error occurred",
     );
   }
 }

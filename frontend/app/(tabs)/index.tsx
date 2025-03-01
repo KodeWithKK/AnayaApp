@@ -1,22 +1,60 @@
 import { memo } from "react";
-import { Animated, FlatList, Pressable, SectionList } from "react-native";
+import {
+  Animated,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  SectionList,
+} from "react-native";
 import { Href, useRouter } from "expo-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 
 import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import CategoryChip from "~/components/layout/category-chip";
+import ProductSkelton from "~/components/layout/product-skelton";
 import SearchInput from "~/components/layout/search-input";
 import useHomePageHeader from "~/hooks/use-home-page-header";
-import { categoryListData, sectionListData } from "~/lib/constants/home-data";
+import { api } from "~/lib/api";
+import { categoryListData } from "~/lib/constants/home-data";
 import {
   ChevronDown,
   LocationSolidIcon,
   NotificationOutlineIcon,
 } from "~/lib/icons";
+import { range } from "~/lib/range";
+import { Product } from "~/types/product";
+
+const sectionQueryList = [
+  {
+    title: "New Arrivals",
+    slug: "new-arrivals",
+    apiUrl: "/product/all?l=4&o=8",
+  },
+  {
+    title: "Topwear",
+    slug: "topwear",
+    apiUrl: "/product/all?l=4&category=Topwear",
+  },
+  {
+    title: "Bottomwear",
+    slug: "bottomwear",
+    apiUrl: "/product/all?l=4&category=Bottomwear",
+  },
+];
+
+interface SectionData {
+  title: string;
+  slug: string;
+  data: Product[];
+  isLoading: boolean;
+  isFetching: boolean;
+  refetch: () => void;
+}
 
 const HomeScreen: React.FC = memo(() => {
   const router = useRouter();
+
   const {
     scrollY,
     headerHeight,
@@ -25,10 +63,22 @@ const HomeScreen: React.FC = memo(() => {
     HEADER_MAX_HEIGHT,
   } = useHomePageHeader();
 
-  // const { data } = useQuery({
-  //   queryKey: ["products"],
-  //   queryFn: () => {},
-  // });
+  const sectionListData: SectionData[] = useQueries({
+    queries: sectionQueryList.map((section) => ({
+      queryKey: ["products", section.slug],
+      queryFn: () => api.get<Product[]>(section.apiUrl),
+    })),
+    combine: (results) => {
+      return sectionQueryList.map((section, index) => ({
+        title: section.title,
+        slug: section.slug,
+        data: results[index].data?.data || [],
+        isLoading: results[index].isLoading,
+        isFetching: results[index].isFetching,
+        refetch: results[index].refetch,
+      }));
+    },
+  });
 
   return (
     <View className="flex-1 bg-background">
@@ -65,7 +115,7 @@ const HomeScreen: React.FC = memo(() => {
       {/* Section List */}
       <SectionList
         sections={sectionListData}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -98,17 +148,43 @@ const HomeScreen: React.FC = memo(() => {
                 <Text className="font-semibold text-primary">See all</Text>
               </Pressable>
             </View>
-            <FlatList
-              data={data}
-              keyExtractor={(item) => item.id}
-              numColumns={2}
-              columnWrapperClassName="justify-between gap-3"
-              scrollEnabled={false}
-              renderItem={({ item }) => <ProductCard item={item} />}
-            />
+            {sectionListData.some((s) => s.isLoading || s.isFetching) && (
+              <FlatList
+                data={range(4)}
+                keyExtractor={(item) => `${title}-${item}`}
+                numColumns={2}
+                columnWrapperClassName="justify-between gap-3"
+                scrollEnabled={false}
+                nestedScrollEnabled={true}
+                renderItem={() => <ProductSkelton />}
+              />
+            )}
+            {!sectionListData.some((s) => s.isLoading || s.isFetching) && (
+              <FlatList
+                data={data}
+                keyExtractor={(item) => item.id.toString()}
+                numColumns={2}
+                columnWrapperClassName="justify-between gap-3"
+                scrollEnabled={false}
+                nestedScrollEnabled={true}
+                renderItem={({ item }) => <ProductCard item={item} />}
+              />
+            )}
           </View>
         )}
         renderItem={() => null}
+        refreshControl={
+          <RefreshControl
+            refreshing={sectionListData.some((s) => s.isFetching)}
+            onRefresh={() => {
+              console.log("Refreshing...");
+              sectionListData.forEach((s) => s.refetch());
+            }}
+            tintColor="#000" // iOS
+            colors={["#000"]} // Android
+            progressViewOffset={HEADER_MAX_HEIGHT}
+          />
+        }
       />
     </View>
   );

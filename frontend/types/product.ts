@@ -1,19 +1,49 @@
-interface ProductDetail {
-  key: string;
+interface Measurement {
+  name: string;
+  unit: string;
   value: string;
 }
 
-interface ProductDetails {
-  description: string;
-  metal: ProductDetail[];
-  diamond: ProductDetail[] | null;
-  general: ProductDetail[];
+interface Size {
+  id: number;
+  label: string;
+  available: boolean;
+  price: number;
+  measurements: Measurement[];
+}
+
+interface Media {
+  id: number;
+  type: string;
+  url: string;
+}
+
+interface Brand {
+  name: string;
+}
+
+interface Analytic {
+  category: string;
+  articleType: string;
+  gender: "men" | "women" | "unisex";
 }
 
 export interface Product {
-  id: string;
+  id: number;
   name: string;
-  price: string;
-  images: string[];
-  details: ProductDetails;
+  mrp: number;
+  manufacturer: string | null;
+  countryOfOrigin: string | null;
+  baseColour: string | null;
+  discountPercentage: number | null;
+  brandId: number;
+  description: string | null;
+  materialAndCare: string | null;
+  specifications: Record<string, any>;
+  brand: Brand;
+  analytic: Analytic;
+  sizes: Size[];
+  medias: Media[];
+  createdAt: string;
+  updatedAt: string;
 }
