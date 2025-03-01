@@ -39,7 +39,7 @@ export interface Product {
   brandId: number;
   description: string | null;
   materialAndCare: string | null;
-  specifications: Record<string, any>;
+  specifications: Record<string, string>;
   brand: Brand;
   analytic: Analytic;
   sizes: Size[];

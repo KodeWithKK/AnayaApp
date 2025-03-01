@@ -23,6 +23,8 @@ import NotFoundScreen from "../+not-found";
 
 const ProductScreen: React.FC = memo(() => {
   const [activeSizeIdx, setActiveSizeIdx] = useState<number>(0);
+  const [showFullSpecification, setShowSpecification] = useState(false);
+
   const { id } = useLocalSearchParams() as { id: string };
 
   const {
@@ -120,30 +122,43 @@ const ProductScreen: React.FC = memo(() => {
             </Text>
             <HTMLViewer source={{ html: product.materialAndCare || "" }} />
           </View>
-          {/* <View className="mt-4">
-            <Text className="mb-2 font-semibold text-lg">Metal Details</Text>
+          <View className="mt-4">
+            <View className="mb-2 flex-row justify-between">
+              <Text className="font-semibold text-lg">Specifications</Text>
+              <TouchableOpacity
+                onPress={() => setShowSpecification((prev) => !prev)}
+                activeOpacity={0.6}
+              >
+                <Text className="font-bold text-muted-foreground">
+                  {showFullSpecification ? "Show less" : "See all"}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <View className="flex-row justify-start gap-1">
               <FlatList
-                data={product.details.metal}
-                keyExtractor={(item) => item.key}
+                data={Object.entries(product.specifications).slice(
+                  0,
+                  showFullSpecification ? undefined : 6,
+                )}
+                keyExtractor={(item) => `specification-${item[0]}`}
                 numColumns={2}
                 columnWrapperClassName="justify-between gap-2 mb-2"
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <View
-                    key={item.key + item.value}
+                    key={item[0] + item[1]}
                     className="w-1/2 rounded-lg bg-muted p-3"
                   >
                     <Text className="mb-0.5 text-sm text-muted-foreground">
-                      {item.key}
+                      {item[0]}
                     </Text>
-                    <Text>{item.value}</Text>
+                    <Text>{item[1] || "NA"}</Text>
                   </View>
                 )}
               />
             </View>
-          </View> */}
+          </View>
         </View>
       </ScrollView>
 
