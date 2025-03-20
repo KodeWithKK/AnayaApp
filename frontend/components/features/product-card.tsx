@@ -2,7 +2,7 @@ import { ImageBackground, Pressable } from "react-native";
 import { Href, useRouter } from "expo-router";
 
 import { Text, View } from "~/components/core";
-import { HeartOutlineIcon } from "~/lib/icons";
+import { IconHeart } from "~/lib/icons";
 import { findDiscountedPrice } from "~/lib/price";
 import { Product } from "~/types/product";
 
@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
         resizeMode="cover"
       >
         <View className="ml-auto mr-1.5 mt-1.5 rounded-full border border-border/50 bg-white p-1">
-          <HeartOutlineIcon className="h-6 w-6 text-primary" />
+          <IconHeart className="h-6 w-6 text-primary" />
         </View>
       </ImageBackground>
       <Text className="my-1 text-left">{item.name}</Text>

@@ -1,33 +1,57 @@
 {
   "expo": {
-    "name": "Acme",
-    "slug": "acme",
-    "scheme": "acme",
+    "name": "K3 Project",
+    "slug": "k3project",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "scheme": "k3project",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash-light.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kodewithkk.k3project",
+      "icon": {
+        "light": "./assets/images/icon.png",
+        "dark": "./assets/images/icon.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kodewithkk.k3project"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/icon.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      "react-native-bottom-tabs",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "todoist",
+          "organization": "kodewithkk"
+        }
+      ],
+      "expo-font",
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }

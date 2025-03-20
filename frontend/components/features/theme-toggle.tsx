@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { MoonStar, Sun } from "~/lib/icons";
-import { useColorScheme } from "~/lib/useColorScheme";
+import { useColorScheme } from "~/lib/use-color-scheme";
 import { cn } from "~/lib/utils";
 
 export function ThemeToggle() {

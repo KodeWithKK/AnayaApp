@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TextInput, type TextInputProps } from "react-native";
 
-import { useColorScheme } from "~/lib/useColorScheme";
+import { useColorScheme } from "~/lib/use-color-scheme";
 import { cn } from "~/lib/utils";
 
 const Input = React.forwardRef<

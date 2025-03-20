@@ -7,117 +7,103 @@ import {
   MoonStar,
   Sun,
   XIcon,
+  type LucideIcon,
 } from "lucide-react-native";
+import { SvgProps } from "react-native-svg";
 
-import CalenderOutlineIcon from "~/assets/icons/outline/calender.svg";
-import CartOutlineIcon from "~/assets/icons/outline/cart.svg";
-import ClipboardOutlineIcon from "~/assets/icons/outline/clipboard.svg";
-import CollectionOutlineIcon from "~/assets/icons/outline/collection.svg";
-import HeartOutlineIcon from "~/assets/icons/outline/heart.svg";
-import HomeOutlineIcon from "~/assets/icons/outline/home.svg";
-import LogoutOutlineIcon from "~/assets/icons/outline/logout.svg";
-import NotificationOutlineIcon from "~/assets/icons/outline/notification.svg";
-import OptionsOutlineIcon from "~/assets/icons/outline/options.svg";
-import PaymentOutlineIcon from "~/assets/icons/outline/payment.svg";
-import FindPersonOutlineIcon from "~/assets/icons/outline/person-search.svg";
-import PlusOutlineIcon from "~/assets/icons/outline/plus.svg";
-import ProfileOutlineIcon from "~/assets/icons/outline/profile.svg";
-import RecentOutlineIcon from "~/assets/icons/outline/recent.svg";
-import ReportOutlineIcon from "~/assets/icons/outline/report.svg";
-import SearchOutlineIcon from "~/assets/icons/outline/search.svg";
-import SettingOutlineIcon from "~/assets/icons/outline/setting.svg";
-import ShareOutlineIcon from "~/assets/icons/outline/share.svg";
-import VideoOutlineIcon from "~/assets/icons/outline/video.svg";
-import CartSolidIcon from "~/assets/icons/solid/cart.svg";
-import HeartSolidIcon from "~/assets/icons/solid/heart.svg";
-import HomeSolidIcon from "~/assets/icons/solid/home.svg";
-import LocationSolidIcon from "~/assets/icons/solid/location.svg";
-import NotificationSolidIcon from "~/assets/icons/solid/notification.svg";
-import ProfileSolidIcon from "~/assets/icons/solid/profile.svg";
-import SearchSolidIcon from "~/assets/icons/solid/search.svg";
-import InfoIcon from "~/assets/icons/special/info.svg";
-import LoaderIcon from "~/assets/icons/special/loader.svg";
-import UploadIcon from "~/assets/icons/special/upload.svg";
-import WhatsAppIcon from "~/assets/icons/special/whatsapp.svg";
+import IconCartFilled from "~/assets/icons/filled/cart.svg";
+import IconHomeFilled from "~/assets/icons/filled/home.svg";
+import IconLocationFilled from "~/assets/icons/filled/location.svg";
+import IconProfileFilled from "~/assets/icons/filled/profile.svg";
+import IconSearchFilled from "~/assets/icons/filled/search.svg";
+import IconBottomwear from "~/assets/icons/outline/bottomwear.svg";
+import IconCart from "~/assets/icons/outline/cart.svg";
+import IconClipboard from "~/assets/icons/outline/clipboard.svg";
+import IconHeart from "~/assets/icons/outline/heart.svg";
+import IconHome from "~/assets/icons/outline/home.svg";
+import IconLogout from "~/assets/icons/outline/logout.svg";
+import IconMen from "~/assets/icons/outline/men.svg";
+import IconNotification from "~/assets/icons/outline/notification.svg";
+import IconOptions from "~/assets/icons/outline/options.svg";
+import IconPayment from "~/assets/icons/outline/payment.svg";
+import IconProfile from "~/assets/icons/outline/profile.svg";
+import IconSearch from "~/assets/icons/outline/search.svg";
+import IconSetting from "~/assets/icons/outline/setting.svg";
+import IconShare from "~/assets/icons/outline/share.svg";
+import IconTopwear from "~/assets/icons/outline/topwear.svg";
+import IconWomen from "~/assets/icons/outline/women.svg";
+import IconLoader from "~/assets/icons/special/loader.svg";
+import IconUpload from "~/assets/icons/special/upload.svg";
 
 import { iconWithClassName } from "./iconWithClassName";
 
-iconWithClassName(PaymentOutlineIcon);
-iconWithClassName(OptionsOutlineIcon);
 iconWithClassName(MoonStar);
 iconWithClassName(Info);
 iconWithClassName(Sun);
-iconWithClassName(PlusOutlineIcon);
-iconWithClassName(LogoutOutlineIcon);
-iconWithClassName(ClipboardOutlineIcon);
 iconWithClassName(ArrowLeft);
-iconWithClassName(SettingOutlineIcon);
-iconWithClassName(HomeOutlineIcon);
-iconWithClassName(HomeSolidIcon);
-iconWithClassName(SearchOutlineIcon);
-iconWithClassName(SearchSolidIcon);
-iconWithClassName(NotificationOutlineIcon);
-iconWithClassName(NotificationSolidIcon);
-iconWithClassName(ShareOutlineIcon);
-iconWithClassName(HeartOutlineIcon);
-iconWithClassName(HeartSolidIcon);
-iconWithClassName(CartOutlineIcon);
-iconWithClassName(CartSolidIcon);
-iconWithClassName(LocationSolidIcon);
-iconWithClassName(CollectionOutlineIcon);
-iconWithClassName(ProfileOutlineIcon);
-iconWithClassName(ProfileSolidIcon);
-iconWithClassName(RecentOutlineIcon);
-iconWithClassName(FindPersonOutlineIcon);
-iconWithClassName(ReportOutlineIcon);
-iconWithClassName(UploadIcon);
 iconWithClassName(Check);
 iconWithClassName(ChevronDown);
 iconWithClassName(ChevronUp);
-iconWithClassName(LoaderIcon);
 iconWithClassName(XIcon);
-iconWithClassName(InfoIcon);
-iconWithClassName(WhatsAppIcon);
-iconWithClassName(CalenderOutlineIcon);
-iconWithClassName(VideoOutlineIcon);
+
+iconWithClassName(IconCartFilled);
+iconWithClassName(IconHomeFilled);
+iconWithClassName(IconProfileFilled);
+iconWithClassName(IconSearchFilled);
+iconWithClassName(IconLocationFilled);
+
+iconWithClassName(IconShare);
+iconWithClassName(IconUpload);
+iconWithClassName(IconHome);
+iconWithClassName(IconOptions);
+iconWithClassName(IconSearch);
+iconWithClassName(IconHeart);
+iconWithClassName(IconCart);
+iconWithClassName(IconProfile);
+iconWithClassName(IconNotification);
+iconWithClassName(IconClipboard);
+iconWithClassName(IconLogout);
+iconWithClassName(IconPayment);
+iconWithClassName(IconMen);
+iconWithClassName(IconWomen);
+iconWithClassName(IconTopwear);
+iconWithClassName(IconBottomwear);
+
+iconWithClassName(IconSetting);
+iconWithClassName(IconLoader);
 
 export {
-  PaymentOutlineIcon,
-  OptionsOutlineIcon,
   MoonStar,
   Info,
   Sun,
-  PlusOutlineIcon,
-  ClipboardOutlineIcon,
-  LogoutOutlineIcon,
-  SettingOutlineIcon,
   ArrowLeft,
-  HomeOutlineIcon,
-  HomeSolidIcon,
-  SearchOutlineIcon,
-  SearchSolidIcon,
-  NotificationOutlineIcon,
-  NotificationSolidIcon,
-  ShareOutlineIcon,
-  HeartOutlineIcon,
-  HeartSolidIcon,
-  CartOutlineIcon,
-  CartSolidIcon,
-  LocationSolidIcon,
-  CollectionOutlineIcon,
-  ProfileOutlineIcon,
-  ProfileSolidIcon,
-  RecentOutlineIcon,
-  FindPersonOutlineIcon,
-  ReportOutlineIcon,
-  UploadIcon,
   Check,
   ChevronDown,
   ChevronUp,
-  LoaderIcon,
   XIcon,
-  InfoIcon,
-  WhatsAppIcon,
-  CalenderOutlineIcon,
-  VideoOutlineIcon,
+  IconCartFilled,
+  IconHomeFilled,
+  IconProfileFilled,
+  IconSearchFilled,
+  IconLocationFilled,
+  IconShare,
+  IconUpload,
+  IconHome,
+  IconOptions,
+  IconSearch,
+  IconHeart,
+  IconCart,
+  IconProfile,
+  IconNotification,
+  IconClipboard,
+  IconLogout,
+  IconPayment,
+  IconMen,
+  IconWomen,
+  IconTopwear,
+  IconBottomwear,
+  IconSetting,
+  IconLoader,
 };
+
+export type IconFC = React.FC<SvgProps> | LucideIcon;

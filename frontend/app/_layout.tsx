@@ -1,83 +1,125 @@
-import { SplashScreen, Stack, usePathname } from "expo-router";
+import { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
+import {
+  SplashScreen,
+  Stack,
+  useNavigationContainerRef,
+  usePathname,
+  useRouter,
+  useSegments,
+} from "expo-router";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
-import { PortalHost } from "@rn-primitives/portal";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useAuth } from "@clerk/clerk-expo";
+import * as Sentry from "@sentry/react-native";
 
-import { categoryTitleMap } from "~/lib/constants";
-import ContextProviders from "~/context";
+import { View } from "~/components/core";
+import { useColorScheme } from "~/lib/use-color-scheme";
+import RootProvider from "~/context";
 
 import "~/global.css";
 
-import { useEffect } from "react";
+const navigationIntegration = Sentry.reactNavigationIntegration({
+  enableTimeToInitialDisplay: true, // Only in native builds, not in Expo Go.
+});
 
-import { Text, View } from "~/components/core";
-import { ShareOutlineIcon } from "~/lib/icons";
+Sentry.init({
+  dsn: "https://0c7faf3b446a6801a9048a83ec62f984@o4508993843429376.ingest.de.sentry.io/4508993853325392",
+  attachScreenshot: true,
+  debug: false,
+  tracesSampleRate: 1.0, // Adjust this value in production
+  _experiments: {
+    profilesSampleRate: 1.0, // Only during debugging, change to lower value in production
+    replaysSessionSampleRate: 1.0, // Only during debugging, change to lower value in production
+    replaysOnErrorSampleRate: 1.0,
+  },
+  integrations: [
+    Sentry.mobileReplayIntegration({
+      maskAllText: false,
+      maskAllImages: false,
+      maskAllVectors: false,
+    }),
+    Sentry.spotlightIntegration(),
+    navigationIntegration,
+  ],
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // spotlight: __DEV__,
+});
 
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from "expo-router";
 
-// Ensure that reloading on `/modal`
-// keeps a back button present.
+// Ensure that reloading keeps a back button present.
 export const unstable_settings = {
-  initialRouteName: "(tabs)",
+  initialRouteName: "index",
 };
 
 // Prevent the splash screen from auto-hiding
 // before getting the color scheme.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function InitialLayout() {
+  const router = useRouter();
+  const { colors } = useColorScheme();
+  const { isLoaded, isSignedIn } = useAuth();
+  const segments = useSegments();
   const pathname = usePathname();
 
   useEffect(() => {
+    if (!isLoaded) return;
+    const inAuthGroup = segments[0] === "(authenticated)";
+
+    if (isSignedIn && !inAuthGroup) {
+      router.replace("/(authenticated)/(tabs)/home");
+    } else if (!isSignedIn && pathname !== "/") {
+      router.replace("/");
+    }
+  }, [isLoaded, isSignedIn]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
     if (["/", "/profile"].includes(pathname)) setStatusBarStyle("light");
     else setStatusBarStyle("dark");
-  }, [pathname]);
+  }, [isLoaded, pathname]);
+
+  if (!isLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
 
   return (
-    <GestureHandlerRootView>
-      <ContextProviders>
-        <Stack
-          screenOptions={{
-            headerTitleStyle: {
-              fontFamily: "Poppins-SemiBold",
-              fontSize: 18,
-            },
-            headerTitleAlign: "center",
-          }}
-        >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="category/[name]"
-            options={({ route }: any) => ({
-              headerTitle: () => (
-                <Text className="mt-0.5 font-semibold text-xl">
-                  {(categoryTitleMap as any)[route.params.name]}
-                </Text>
-              ),
-            })}
-          />
-          <Stack.Screen
-            name="product/[id]"
-            options={() => ({
-              title: "Product Details",
-              headerTitle: () => (
-                <Text className="mt-0.5 font-semibold text-xl">
-                  Product Details
-                </Text>
-              ),
-              headerRight: () => (
-                <View className="rounded-full border border-border-darker p-2 pl-1.5">
-                  <ShareOutlineIcon className="h-6 w-6 text-foreground" />
-                </View>
-              ),
-            })}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <PortalHost />
-        {/* <StatusBar style={isDarkColorScheme ? "light" : "dark"} /> */}
-      </ContextProviders>
-    </GestureHandlerRootView>
+    <Stack
+      screenOptions={{
+        headerTitleStyle: {
+          fontFamily: "Poppins-SemiBold",
+          fontSize: 18,
+        },
+        headerTitleAlign: "center",
+      }}
+    >
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(authenticated)" options={{ headerShown: false }} />
+      <Stack.Screen name="+not-found" />
+    </Stack>
   );
 }
+
+function RootNavLayout() {
+  const ref = useNavigationContainerRef();
+
+  useEffect(() => {
+    if (ref?.current) {
+      navigationIntegration.registerNavigationContainer(ref);
+    }
+  }, [ref]);
+
+  return (
+    <RootProvider>
+      <InitialLayout />
+    </RootProvider>
+  );
+}
+
+export default Sentry.wrap(RootNavLayout);

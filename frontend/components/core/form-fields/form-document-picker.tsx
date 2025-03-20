@@ -4,7 +4,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 import { Text, View } from "~/components/core";
-import { UploadIcon } from "~/lib/icons";
+import { IconUpload } from "~/lib/icons";
 import { cn } from "~/lib/utils";
 
 import FormErrorMessage from "./form-error-message";
@@ -73,7 +73,7 @@ const FormDocumentPicker = <T extends FieldValues>({
           imageClassName="rounded-md opacity-40 dark:opacity-30"
         >
           <View className="-mt-4 items-center">
-            <UploadIcon
+            <IconUpload
               className={cn(
                 "text-bg h-24 w-24 text-muted-foreground",
                 value && "text-gray-200",

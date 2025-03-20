@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions } from "react-native";
 import RenderHTML from "react-native-render-html";
 
-import { NAV_THEME } from "~/lib/constants";
+import { NAV_THEME } from "~/lib/constants/nav-theme";
 
 interface HTMLViewerProps extends React.ComponentProps<typeof RenderHTML> {
   paddingX?: number;

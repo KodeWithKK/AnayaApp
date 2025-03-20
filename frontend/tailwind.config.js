@@ -3,7 +3,11 @@ const { hairlineWidth } = require("nativewind/theme");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./context/**/*.{ts,tsx}",
+  ],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
@@ -13,16 +17,11 @@ module.exports = {
         medium: ["Poppins-Medium", "sans-serif"],
         semibold: ["Poppins-SemiBold", "sans-serif"],
         bold: ["Poppins-Bold", "sans-serif"],
-        "serif-light": ["NotoSerif-Light", "serif"],
-        "serif-regular": ["NotoSerif-Regular", "serif"],
-        "serif-medium": ["NotoSerif-Medium", "serif"],
-        "serif-semibold": ["NotoSerif-SemiBold", "serif"],
-        "serif-bold": ["NotoSerif-Bold", "serif"],
       },
       colors: {
         border: {
           DEFAULT: "hsl(var(--border))",
-          darker: "hsl(var(--border-darker))",
+          // darker: "hsl(var(--border-darker))",
         },
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -76,5 +75,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 };

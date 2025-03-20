@@ -1,8 +1,8 @@
-import type { LucideIcon } from "lucide-react-native";
 import { cssInterop } from "nativewind";
-import { SvgProps } from "react-native-svg";
 
-export function iconWithClassName(Icon: LucideIcon | React.FC<SvgProps>) {
+import { IconFC } from ".";
+
+export function iconWithClassName(Icon: IconFC) {
   cssInterop(Icon, {
     className: {
       target: "style", // Map className -> style

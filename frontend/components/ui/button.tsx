@@ -2,7 +2,7 @@ import * as React from "react";
 import { TouchableHighlight } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { useColorScheme } from "~/lib/useColorScheme";
+import { useColorScheme } from "~/lib/use-color-scheme";
 import { cn } from "~/lib/utils";
 
 const buttonVariants = cva(

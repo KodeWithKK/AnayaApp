@@ -2,9 +2,8 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["*"]
+      "~/*": ["./*"]
     }
   },
   "include": [
@@ -12,6 +11,8 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts"
+    "declarations.d.ts",
+    "nativewind-env.d.ts",
+    "tailwind.config.js"
   ]
 }

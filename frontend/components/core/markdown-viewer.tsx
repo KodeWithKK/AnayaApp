@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import Markdown from "react-native-markdown-display";
 
-import { NAV_THEME } from "~/lib/constants";
+import { NAV_THEME } from "~/lib/constants/constants";
 
 const styles = StyleSheet.create({
   heading1: {

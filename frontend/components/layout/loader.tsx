@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { View } from "~/components/core";
-import { LoaderIcon } from "~/lib/icons";
+import { IconLoader } from "~/lib/icons";
 
 const Loader: React.FC = memo(() => {
   const rotation = useSharedValue(0);
@@ -31,12 +31,11 @@ const Loader: React.FC = memo(() => {
   return (
     <View className="w-full flex-1 items-center justify-center">
       <Animated.View style={[animatedStyle]}>
-        <LoaderIcon className="h-12 w-12 text-primary" />
+        <IconLoader className="h-12 w-12 text-primary" />
       </Animated.View>
     </View>
   );
 });
 
 Loader.displayName = "Loader";
-
 export default Loader;
