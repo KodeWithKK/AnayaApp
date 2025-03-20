@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { useAuth } from "@clerk/clerk-expo";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button, Text, View } from "~/components/core";
@@ -16,6 +17,7 @@ import { findDiscountedPrice, formatPrice } from "~/lib/price";
 import { Product } from "~/types/product";
 
 const wishlist: React.FC = () => {
+  const { getToken } = useAuth();
   const router = useRouter();
 
   const {
@@ -84,6 +86,10 @@ const wishlist: React.FC = () => {
         <TouchableOpacity
           activeOpacity={0.75}
           className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
+          onPress={async () => {
+            const token = await getToken();
+            console.log({ token });
+          }}
         >
           <Text className="text-center font-semibold text-lg text-white">
             Add all to Cart

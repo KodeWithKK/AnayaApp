@@ -12,11 +12,15 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
-/* ENUMS */
+/**
+ * ENUMS
+ **/
 const mediaType = pgEnum("media_type", ["image", "video", "animated_gif"]);
 const genderType = pgEnum("gender", ["men", "women", "unisex"]);
 
-/* TABLES */
+/**
+ * TABLES
+ **/
 export const brands = pgTable("brands", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
@@ -147,7 +151,9 @@ export const analytics = pgTable(
   ],
 );
 
-/* RELATIONS */
+/**
+ * RELATIONS
+ **/
 export const productsRelations = relations(products, ({ one, many }) => ({
   sizes: many(sizes),
   medias: many(media),
@@ -183,7 +189,9 @@ export const analyticsRelations = relations(analytics, ({ one }) => ({
   }),
 }));
 
-/* SCHEMA & TYPES */
+/**
+ * SCHMEAS & TYPES
+ **/
 export const brandsInsertSchema = createInsertSchema(brands);
 export const productsInsertSchema = createInsertSchema(products);
 export const sizesInsertSchema = createInsertSchema(sizes);

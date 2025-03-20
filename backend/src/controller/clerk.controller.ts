@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { Webhook } from "svix";
 
 import { db } from "../config/db";
-import { users } from "../schemas/user.schema";
+import { users } from "../schemas";
 import { asyncHandler } from "../utils/async-handler";
 
 export const syncUserData = asyncHandler(
