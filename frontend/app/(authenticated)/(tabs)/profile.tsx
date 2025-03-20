@@ -1,5 +1,6 @@
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import { SvgProps } from "react-native-svg";
 
 import { Text, View } from "~/components/core";
@@ -14,7 +15,10 @@ import {
 } from "~/lib/icons";
 import { cn } from "~/lib/utils";
 
-export default function SettingScreen() {
+export default function ProfileScreen() {
+  const { user } = useUser();
+  const { signOut } = useAuth();
+
   return (
     <View className="flex-1">
       <StatusBar style="light" />
@@ -22,15 +26,20 @@ export default function SettingScreen() {
         <View className="flex-row items-center gap-4">
           <View className="rounded-full bg-white p-1">
             <Image
-              source={{ uri: "https://avatar.iran.liara.run/public/12" }}
+              source={{
+                uri:
+                  user?.imageUrl || "https://avatar.iran.liara.run/public/12",
+              }}
               className="aspect-square w-[60px] rounded-full border border-primary"
             />
           </View>
           <View>
             <Text className="font-semibold text-xl text-background">
-              Krishnakant Kumar
+              {user?.fullName || "User"}
             </Text>
-            <Text className="mt-0.5 text-muted">kodewithkk@gmail.com</Text>
+            <Text className="mt-0.5 text-muted">
+              {user?.emailAddresses?.[0]?.emailAddress}
+            </Text>
           </View>
         </View>
       </View>
@@ -56,13 +65,19 @@ export default function SettingScreen() {
         <SettingItem label="Shipping Address" Icon={IconHome} />
         <SettingItem label="Payment Methods" Icon={IconPayment} />
         <SettingItem label="Settings" Icon={IconSetting} />
-        <SettingItem label="Logout" Icon={IconLogout} isADangerAction={true} />
+        <SettingItem
+          label="Logout"
+          Icon={IconLogout}
+          isADangerAction={true}
+          onPress={() => signOut()}
+        />
       </View>
     </View>
   );
 }
 
-interface SettingItemProps {
+interface SettingItemProps
+  extends React.ComponentProps<typeof TouchableOpacity> {
   label: string;
   Icon: React.FC<SvgProps>;
   isADangerAction?: boolean;
@@ -72,9 +87,14 @@ const SettingItem: React.FC<SettingItemProps> = ({
   label,
   Icon,
   isADangerAction = false,
+  ...restProps
 }) => {
   return (
-    <View className="flex-row items-center gap-3.5 border-b border-border/60 px-3 py-4">
+    <TouchableOpacity
+      className="flex-row items-center gap-3.5 border-b border-border/60 px-3 py-4"
+      activeOpacity={0.5}
+      {...restProps}
+    >
       <View className="rounded-full bg-primary/10 p-2.5">
         <Icon className="h-5 w-5 text-primary" />
       </View>
@@ -82,6 +102,6 @@ const SettingItem: React.FC<SettingItemProps> = ({
         {label}
       </Text>
       <ChevronDown className="ml-auto h-6 w-6 -rotate-90 text-muted-foreground" />
-    </View>
+    </TouchableOpacity>
   );
 };

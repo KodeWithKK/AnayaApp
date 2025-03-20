@@ -77,7 +77,7 @@ function InitialLayout() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    if (["/", "/profile"].includes(pathname)) setStatusBarStyle("light");
+    if (["/home", "/profile"].includes(pathname)) setStatusBarStyle("light");
     else setStatusBarStyle("dark");
   }, [isLoaded, pathname]);
 
@@ -101,7 +101,7 @@ function InitialLayout() {
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(authenticated)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
+      <Stack.Screen name="+not-found" options={{ headerShown: false }} />
     </Stack>
   );
 }

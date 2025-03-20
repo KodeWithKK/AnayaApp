@@ -35,7 +35,7 @@ const Layout = () => {
             </Text>
           ),
           headerRight: () => (
-            <View className="border-border-darker rounded-full border p-2 pl-1.5">
+            <View className="rounded-full border border-muted-foreground/30 p-2 pl-1.5">
               <IconShare className="h-6 w-6 text-foreground" />
             </View>
           ),

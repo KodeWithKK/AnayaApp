@@ -6,7 +6,7 @@ import {
   RefreshControl,
   SectionList,
 } from "react-native";
-import { Href, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useQueries } from "@tanstack/react-query";
 
@@ -27,7 +27,7 @@ const sectionQueryList = [
   {
     title: "New Arrivals",
     slug: "new-arrivals",
-    apiUrl: "/product/all?l=4&o=8",
+    apiUrl: "/product/all?l=4&o=1",
     seeAllApiUrl: "/product/all",
   },
   {

@@ -1,42 +1,75 @@
-import { Image, Pressable, ScrollView, TouchableOpacity } from "react-native";
+import { useMemo } from "react";
+import {
+  Image,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useRouter } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
 
 import { Button, Text, View } from "~/components/core";
+import Loader from "~/components/layout/loader";
 import { Input } from "~/components/ui/input";
-// import { sectionListData } from "~/lib/constants/home-data";
+import { api } from "~/lib/api";
 import { XIcon } from "~/lib/icons";
-
-const products = [] as any;
-
-const totalPrice = products.reduce(
-  (acc, product) =>
-    acc + parseInt(product.price.replace("₹", "").replace(" ", "")),
-  0,
-);
-
-const totalPriceString = `₹ ${new Intl.NumberFormat("en-IN", {
-  maximumSignificantDigits: 3,
-})
-  .format(totalPrice)
-  .replaceAll(",", " ")}`;
+import { findDiscountedPrice, formatPrice } from "~/lib/price";
+import { Product } from "~/types/product";
 
 const Cart: React.FC = () => {
   const router = useRouter();
 
+  const {
+    data: products,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["cart"],
+    queryFn: () =>
+      api.get<Product[]>("/product/all?l=4&o=1").then((res) => res.data),
+  });
+
+  const totalPrice = useMemo(() => {
+    if (!products) return 0;
+    return products.reduce(
+      (acc, product) =>
+        acc + findDiscountedPrice(product.mrp, product.discountPercentage || 0),
+      0,
+    );
+  }, [products]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <View className="flex-1">
-      <ScrollView className="px-4 pt-3">
-        <Text className="text-muted-foreground">4 items in cart</Text>
+      <ScrollView
+        className="px-4 pt-3"
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={refetch}
+            tintColor="#000" // iOS
+            colors={["#000"]} // Android
+          />
+        }
+      >
+        <Text className="text-muted-foreground">
+          {products?.length || 0} items in cart
+        </Text>
 
         <View className="mt-5 gap-3">
-          {products.map((p) => (
+          {products?.map((p) => (
             <Pressable
               key={`wishlist-${p.id}`}
               className="flex-row rounded-lg border border-border/60"
               onPress={() => router.push(`/product/${p.id}`)}
             >
               <Image
-                source={{ uri: p.images[0] }}
+                source={{ uri: p.medias[0].url }}
                 className="aspect-square w-[100px] rounded-l-lg"
               />
               <View className="flex-1 justify-between gap-1 p-3">
@@ -45,7 +78,11 @@ const Cart: React.FC = () => {
                   <XIcon className="h-5 text-muted-foreground" />
                 </View>
                 <View className="flex-row items-center justify-between">
-                  <Text className="font-semibold text-primary">{p.price}</Text>
+                  <Text className="font-semibold text-primary">
+                    {formatPrice(
+                      findDiscountedPrice(p.mrp, p.discountPercentage || 0),
+                    )}
+                  </Text>
                   <View className="flex-row items-center gap-4">
                     <Button
                       size="sm"
@@ -78,7 +115,9 @@ const Cart: React.FC = () => {
           <Text className="font-semibold text-lg">Order Summary</Text>
           <View className="flex-row justify-between">
             <Text className="text-muted-foreground">Subtotal</Text>
-            <Text className="text-muted-foreground">{totalPriceString}</Text>
+            <Text className="text-muted-foreground">
+              {formatPrice(totalPrice)}
+            </Text>
           </View>
           <View className="flex-row justify-between">
             <Text className="text-muted-foreground">Shipping</Text>
@@ -94,7 +133,7 @@ const Cart: React.FC = () => {
           <View className="flex-row justify-between">
             <Text className="font-semibold">Total</Text>
             <Text className="font-semibold text-primary">
-              {totalPriceString}
+              {formatPrice(totalPrice)}
             </Text>
           </View>
         </View>

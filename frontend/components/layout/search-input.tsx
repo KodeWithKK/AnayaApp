@@ -13,17 +13,17 @@ const SearchInput: React.FC<SearchInputProps> = ({ inputClassname }) => {
   return (
     <View className="relative">
       <Input
-        placeholder="Jewellery"
+        placeholder="Search..."
         className={cn(
           "h-8 rounded-lg border-0 bg-muted pl-14 pt-1",
           inputClassname,
         )}
       />
       <View className="absolute left-3.5 top-3.5">
-        <IconSearch className="h-7 w-7 text-muted-foreground/80" />
+        <IconSearch className="h-7 w-7 text-muted-foreground" />
       </View>
-      <View className="border-border-darker absolute right-3.5 top-3.5 border-l pl-2.5">
-        <IconOptions className="h-7 w-7 text-muted-foreground/80" />
+      <View className="absolute right-3.5 top-3.5 border-l border-muted-foreground/40 pl-2.5">
+        <IconOptions className="h-7 w-7 text-muted-foreground" />
       </View>
     </View>
   );
