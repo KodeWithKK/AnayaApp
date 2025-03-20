@@ -15,6 +15,13 @@
       "when": 1740662067456,
       "tag": "0001_great_magdalene",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742485968992,
+      "tag": "0002_sleepy_iron_patriot",
+      "breakpoints": true
     }
   ]
 }

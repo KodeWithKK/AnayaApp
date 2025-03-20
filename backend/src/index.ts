@@ -1,3 +1,4 @@
+import { clerkMiddleware } from "@clerk/express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
@@ -5,6 +6,7 @@ import express, { NextFunction, Request, Response } from "express";
 import BrandRouter from "./routes/brand.routes";
 import DatasetRouter from "./routes/dataset.routes";
 import ProductRouter from "./routes/product.routes";
+import WebhooksRouter from "./routes/webhooks.routes";
 import { ApiResponse } from "./utils/api-response";
 
 const app = express();
@@ -14,6 +16,7 @@ const PORT = process.env.PORT ?? 8000;
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: false, limit: "16kb" }));
 app.use(cookieParser());
+app.use(clerkMiddleware());
 
 app.use(
   cors({
@@ -26,6 +29,7 @@ app.use(
 
 app.use("/api/v1/product", ProductRouter);
 app.use("/api/v1/brand", BrandRouter);
+app.use("/api/v1/webhooks", WebhooksRouter);
 app.use("/api/v1/dataset", DatasetRouter);
 
 // Health check route
