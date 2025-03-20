@@ -1,21 +1,20 @@
 import { Image, ScrollView, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { useOAuth, useSSO } from "@clerk/clerk-expo";
+import { useSSO } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text, View } from "~/components/core";
 
 const LoginScreen = () => {
-  const router = useRouter();
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_apple" });
   const { startSSOFlow } = useSSO();
   const { top } = useSafeAreaInsets();
 
   const handleAppleLogin = async () => {
     try {
-      const { createdSessionId, setActive } = await startOAuthFlow();
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy: "oauth_apple",
+      });
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
