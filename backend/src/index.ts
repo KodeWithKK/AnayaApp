@@ -2,12 +2,15 @@ import { clerkMiddleware } from "@clerk/express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
+import morgan from "morgan";
 
 import BrandRouter from "./routes/brand.routes";
 import DatasetRouter from "./routes/dataset.routes";
 import ProductRouter from "./routes/product.routes";
 import WebhooksRouter from "./routes/webhooks.routes";
+import WishlistRouter from "./routes/wishlist.routes";
 import { ApiResponse } from "./utils/api-response";
+import { colorizeStatus } from "./utils/morgan-tokens";
 
 const app = express();
 
@@ -17,6 +20,9 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: false, limit: "16kb" }));
 app.use(cookieParser());
 app.use(clerkMiddleware());
+
+morgan.token("colored-status", (req, res) => colorizeStatus(res.statusCode));
+app.use(morgan(":colored-status :method :url :response-time ms"));
 
 app.use(
   cors({
@@ -29,6 +35,7 @@ app.use(
 
 app.use("/api/v1/product", ProductRouter);
 app.use("/api/v1/brand", BrandRouter);
+app.use("/api/v1/wishlist", WishlistRouter);
 app.use("/api/v1/webhooks", WebhooksRouter);
 app.use("/api/v1/dataset", DatasetRouter);
 

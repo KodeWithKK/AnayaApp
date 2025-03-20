@@ -1,7 +1,10 @@
 import { ImageBackground, Pressable } from "react-native";
 import { Href, useRouter } from "expo-router";
+import { useAuth } from "@clerk/clerk-expo";
+import { useMutation } from "@tanstack/react-query";
 
-import { Text, View } from "~/components/core";
+import { Text } from "~/components/core";
+import { api } from "~/lib/api";
 import { IconHeart } from "~/lib/icons";
 import { findDiscountedPrice } from "~/lib/price";
 import { Product } from "~/types/product";
@@ -12,6 +15,24 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
   const router = useRouter();
+  const { getToken } = useAuth();
+
+  const { mutate: toggleWishlist } = useMutation({
+    mutationKey: ["wishlist", item.id],
+    mutationFn: async () =>
+      api
+        .post(
+          `/wishlist/toggle/${item.id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${await getToken()}`,
+            },
+          },
+        )
+        .then((res) => res.data)
+        .then((data) => console.log(data)),
+  });
 
   return (
     <Pressable
@@ -27,9 +48,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
         className="aspect-[478/639] w-full overflow-hidden rounded-lg border border-border/50"
         resizeMode="cover"
       >
-        <View className="ml-auto mr-1.5 mt-1.5 rounded-full border border-border/50 bg-white p-1">
+        <Pressable
+          className="ml-auto mr-1.5 mt-1.5 rounded-full border border-border/50 bg-white p-1"
+          onPress={() => toggleWishlist()}
+        >
           <IconHeart className="h-6 w-6 text-primary" />
-        </View>
+        </Pressable>
       </ImageBackground>
       <Text className="my-1 text-left">{item.name}</Text>
       <Text className="font-semibold">

@@ -5,6 +5,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
@@ -41,6 +42,7 @@ export const wishlists = pgTable(
     foreignKey({ columns: [table.productId], foreignColumns: [products.id] })
       .onDelete("cascade")
       .onUpdate("cascade"),
+    uniqueIndex().on(table.userId, table.productId),
   ],
 );
 
@@ -67,6 +69,7 @@ export const carts = pgTable(
     foreignKey({ columns: [table.sizeId], foreignColumns: [sizes.id] })
       .onDelete("cascade")
       .onUpdate("cascade"),
+    uniqueIndex().on(table.userId, table.productId, table.sizeId),
   ],
 );
 
@@ -76,4 +79,12 @@ export const carts = pgTable(
 export const userRelations = relations(users, ({ many }) => ({
   wishlists: many(wishlists),
   carts: many(carts),
+}));
+
+export const wishlistRelations = relations(wishlists, ({ one }) => ({
+  users: one(users),
+  products: one(products, {
+    fields: [wishlists.productId],
+    references: [products.id],
+  }),
 }));

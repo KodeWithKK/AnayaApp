@@ -87,8 +87,14 @@ const wishlist: React.FC = () => {
           activeOpacity={0.75}
           className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
           onPress={async () => {
-            const token = await getToken();
-            console.log({ token });
+            api
+              .get("/wishlist/all", {
+                headers: {
+                  Authorization: `Bearer ${await getToken()}`,
+                },
+              })
+              .then((res) => res.data)
+              .then((data) => console.log(data));
           }}
         >
           <Text className="text-center font-semibold text-lg text-white">
