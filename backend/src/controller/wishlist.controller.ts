@@ -1,5 +1,5 @@
 import { getAuth } from "@clerk/express";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "../config/db";
 import { wishlists } from "../schemas";
@@ -14,6 +14,8 @@ export const getAllWishlists = asyncHandler(async (req, res) => {
     with: {
       products: {
         columns: {
+          id: true,
+          name: true,
           mrp: true,
           discountPercentage: true,
         },
@@ -26,15 +28,20 @@ export const getAllWishlists = asyncHandler(async (req, res) => {
         },
       },
     },
+    orderBy: [desc(wishlists.createdAt)],
   });
 
   const formattedWishlists = userWishlists.map((wishlist) => ({
     id: wishlist.id,
-    mrp: wishlist.products.mrp,
-    discountPercentage: wishlist.products.discountPercentage,
-    coverImgUrl: wishlist.products.medias[0].url,
     createdAt: wishlist.createdAt,
     updatedAt: wishlist.updatedAt,
+    productDetails: {
+      id: wishlist.products.id,
+      name: wishlist.products.name,
+      mrp: wishlist.products.mrp,
+      discountPercentage: wishlist.products.discountPercentage,
+      coverImgUrl: wishlist.products.medias[0].url,
+    },
   }));
 
   return res
@@ -42,7 +49,7 @@ export const getAllWishlists = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { wishlists: formattedWishlists },
+        formattedWishlists,
         "Wishlists fetched successfully.",
       ),
     );
@@ -90,7 +97,7 @@ export const toggleWishlist = asyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           201,
-          { wishlist: insertedWishlist },
+          insertedWishlist,
           "Product added to wishlist successfully.",
         ),
       );

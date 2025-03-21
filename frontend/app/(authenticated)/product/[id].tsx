@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import {
-  Dimensions,
   FlatList,
+  Pressable,
   RefreshControl,
   ScrollView,
   TouchableOpacity,
@@ -14,17 +14,22 @@ import HTMLViewer from "~/components/core/html-viewer";
 import ProductCarousel from "~/components/features/products-carousel";
 import Loader from "~/components/layout/loader";
 import { api } from "~/lib/api";
-import { IconCartFilled, IconHeart } from "~/lib/icons";
+import { IconCartFilled, IconHeart, IconHeartFilled } from "~/lib/icons";
 import { findDiscountedPrice } from "~/lib/price";
 import { cn } from "~/lib/utils";
 import { Product } from "~/types/product";
 import NotFoundScreen from "~/app/+not-found";
+import { useAppContext } from "~/context/app-provider";
 
 const ProductScreen: React.FC = memo(() => {
+  const { id } = useLocalSearchParams() as { id: string };
+  const { checkIsProductInWishlist, toggleWishlist } = useAppContext();
   const [activeSizeIdx, setActiveSizeIdx] = useState<number>(0);
   const [showFullSpecification, setShowSpecification] = useState(false);
 
-  const { id } = useLocalSearchParams() as { id: string };
+  const parsedProductId = parseInt(id);
+  const isInWishlist =
+    !isNaN(parsedProductId) && checkIsProductInWishlist(parsedProductId);
 
   const {
     data: product,
@@ -61,9 +66,15 @@ const ProductScreen: React.FC = memo(() => {
       >
         <View className="relative mt-3">
           <ProductCarousel images={product.medias.map((p) => p.url)} />
-          <View className="absolute right-2.5 top-2.5 rounded-full border border-border bg-white p-2.5">
-            <IconHeart className="h-8 w-8 text-primary" />
-          </View>
+          <Pressable
+            className="absolute right-2.5 top-2.5 rounded-full border border-border bg-white p-2.5"
+            onPress={() => toggleWishlist(product)}
+          >
+            {!isInWishlist && <IconHeart className="h-8 w-8 text-primary" />}
+            {isInWishlist && (
+              <IconHeartFilled className="h-8 w-8 text-primary" />
+            )}
+          </Pressable>
         </View>
 
         <View className="mb-5 mt-4">

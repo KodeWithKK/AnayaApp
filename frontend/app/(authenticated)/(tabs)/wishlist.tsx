@@ -6,30 +6,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useAuth } from "@clerk/clerk-expo";
-import { useQuery } from "@tanstack/react-query";
 
 import { Button, Text, View } from "~/components/core";
 import Loader from "~/components/layout/loader";
-import { api } from "~/lib/api";
 import { XIcon } from "~/lib/icons";
 import { findDiscountedPrice, formatPrice } from "~/lib/price";
-import { Product } from "~/types/product";
+import { useAppContext } from "~/context/app-provider";
 
-const wishlist: React.FC = () => {
-  const { getToken } = useAuth();
+const WishlistScreen: React.FC = () => {
   const router = useRouter();
 
-  const {
-    data: products,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useQuery({
-    queryKey: ["wishlist"],
-    queryFn: () =>
-      api.get<Product[]>("/product/all?l=4&o=1").then((res) => res.data),
-  });
+  const { wishlistQuery } = useAppContext();
+  const { data: wishlist, isLoading, isFetching, refetch } = wishlistQuery;
 
   if (isLoading) {
     return <Loader />;
@@ -51,25 +39,28 @@ const wishlist: React.FC = () => {
         <Text className="text-muted-foreground">4 items saved</Text>
 
         <View className="mb-[92px] mt-5 gap-3">
-          {products?.map((p) => (
+          {wishlist?.map((w) => (
             <Pressable
-              key={`wishlist-${p.id}`}
+              key={`wishlist-${w.id}`}
               className="flex-row rounded-lg border border-border/60"
-              onPress={() => router.push(`/product/${p.id}`)}
+              onPress={() => router.push(`/product/${w.productDetails.id}`)}
             >
               <Image
-                source={{ uri: p.medias[0].url }}
+                source={{ uri: w.productDetails.coverImgUrl }}
                 className="aspect-square w-[100px] rounded-l-lg"
               />
               <View className="flex-1 justify-between gap-1 p-3">
                 <View className="flex-row justify-between gap-2">
-                  <Text className="flex-1">{p.name}</Text>
+                  <Text className="flex-1">{w.productDetails.name}</Text>
                   <XIcon className="h-5 text-muted-foreground" />
                 </View>
                 <View className="flex-row items-center justify-between">
                   <Text className="font-semibold text-primary">
                     {formatPrice(
-                      findDiscountedPrice(p.mrp, p.discountPercentage || 0),
+                      findDiscountedPrice(
+                        w.productDetails.mrp,
+                        w.productDetails.discountPercentage || 0,
+                      ),
                     )}
                   </Text>
                   <Button size="sm">
@@ -86,16 +77,6 @@ const wishlist: React.FC = () => {
         <TouchableOpacity
           activeOpacity={0.75}
           className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
-          onPress={async () => {
-            api
-              .get("/wishlist/all", {
-                headers: {
-                  Authorization: `Bearer ${await getToken()}`,
-                },
-              })
-              .then((res) => res.data)
-              .then((data) => console.log(data));
-          }}
         >
           <Text className="text-center font-semibold text-lg text-white">
             Add all to Cart
@@ -106,4 +87,4 @@ const wishlist: React.FC = () => {
   );
 };
 
-export default wishlist;
+export default WishlistScreen;

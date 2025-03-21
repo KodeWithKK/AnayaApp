@@ -1,13 +1,11 @@
 import { ImageBackground, Pressable } from "react-native";
 import { Href, useRouter } from "expo-router";
-import { useAuth } from "@clerk/clerk-expo";
-import { useMutation } from "@tanstack/react-query";
 
 import { Text } from "~/components/core";
-import { api } from "~/lib/api";
-import { IconHeart } from "~/lib/icons";
+import { IconHeart, IconHeartFilled } from "~/lib/icons";
 import { findDiscountedPrice } from "~/lib/price";
 import { Product } from "~/types/product";
+import { useAppContext } from "~/context/app-provider";
 
 interface ProductCardProps {
   item: Product;
@@ -15,24 +13,9 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
   const router = useRouter();
-  const { getToken } = useAuth();
+  const { checkIsProductInWishlist, toggleWishlist } = useAppContext();
 
-  const { mutate: toggleWishlist } = useMutation({
-    mutationKey: ["wishlist", item.id],
-    mutationFn: async () =>
-      api
-        .post(
-          `/wishlist/toggle/${item.id}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${await getToken()}`,
-            },
-          },
-        )
-        .then((res) => res.data)
-        .then((data) => console.log(data)),
-  });
+  const isInWishlist = checkIsProductInWishlist(item.id);
 
   return (
     <Pressable
@@ -50,9 +33,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
       >
         <Pressable
           className="ml-auto mr-1.5 mt-1.5 rounded-full border border-border/50 bg-white p-1"
-          onPress={() => toggleWishlist()}
+          onPress={() => toggleWishlist(item)}
         >
-          <IconHeart className="h-6 w-6 text-primary" />
+          {!isInWishlist && <IconHeart className="h-6 w-6 text-primary" />}
+          {isInWishlist && <IconHeartFilled className="h-6 w-6 text-primary" />}
         </Pressable>
       </ImageBackground>
       <Text className="my-1 text-left">{item.name}</Text>

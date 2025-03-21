@@ -12,6 +12,7 @@ import {
 import { SvgProps } from "react-native-svg";
 
 import IconCartFilled from "~/assets/icons/filled/cart.svg";
+import IconHeartFilled from "~/assets/icons/filled/heart.svg";
 import IconHomeFilled from "~/assets/icons/filled/home.svg";
 import IconLocationFilled from "~/assets/icons/filled/location.svg";
 import IconProfileFilled from "~/assets/icons/filled/profile.svg";
@@ -51,6 +52,7 @@ iconWithClassName(IconHomeFilled);
 iconWithClassName(IconProfileFilled);
 iconWithClassName(IconSearchFilled);
 iconWithClassName(IconLocationFilled);
+iconWithClassName(IconHeartFilled);
 
 iconWithClassName(IconShare);
 iconWithClassName(IconUpload);
@@ -86,6 +88,7 @@ export {
   IconProfileFilled,
   IconSearchFilled,
   IconLocationFilled,
+  IconHeartFilled,
   IconShare,
   IconUpload,
   IconHome,
