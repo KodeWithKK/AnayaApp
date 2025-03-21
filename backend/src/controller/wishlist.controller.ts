@@ -16,13 +16,16 @@ export const getAllWishlists = asyncHandler(async (req, res) => {
         columns: {
           id: true,
           name: true,
-          mrp: true,
-          discountPercentage: true,
         },
         with: {
           medias: {
             columns: {
               url: true,
+            },
+          },
+          sizes: {
+            columns: {
+              productId: false,
             },
           },
         },
@@ -35,12 +38,11 @@ export const getAllWishlists = asyncHandler(async (req, res) => {
     id: wishlist.id,
     createdAt: wishlist.createdAt,
     updatedAt: wishlist.updatedAt,
-    productDetails: {
+    product: {
       id: wishlist.products.id,
       name: wishlist.products.name,
-      mrp: wishlist.products.mrp,
-      discountPercentage: wishlist.products.discountPercentage,
       coverImgUrl: wishlist.products.medias[0].url,
+      sizes: wishlist.products.sizes,
     },
   }));
 
@@ -79,7 +81,7 @@ export const toggleWishlist = asyncHandler(async (req, res) => {
     await db.delete(wishlists).where(eq(wishlists.id, wishlist.id));
 
     return res
-      .status(201)
+      .status(200)
       .json(
         new ApiResponse(200, {}, "Product removed from wishlist successfully."),
       );

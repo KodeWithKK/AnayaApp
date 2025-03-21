@@ -8,8 +8,6 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
-import * as z from "zod";
 
 import { products, sizes } from "./product.schema";
 
@@ -82,9 +80,27 @@ export const userRelations = relations(users, ({ many }) => ({
 }));
 
 export const wishlistRelations = relations(wishlists, ({ one }) => ({
-  users: one(users),
+  users: one(users, {
+    fields: [wishlists.userId],
+    references: [users.id],
+  }),
   products: one(products, {
     fields: [wishlists.productId],
     references: [products.id],
+  }),
+}));
+
+export const cartRelations = relations(carts, ({ one }) => ({
+  users: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+  products: one(products, {
+    fields: [carts.productId],
+    references: [products.id],
+  }),
+  sizes: one(sizes, {
+    fields: [carts.sizeId],
+    references: [sizes.id],
   }),
 }));

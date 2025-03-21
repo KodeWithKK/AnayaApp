@@ -9,17 +9,27 @@ interface IAppContext {
   wishlistQuery: UseQueryResult<WishlistItem[]>;
   checkIsProductInWishlist: (productId: number) => boolean;
   toggleWishlist: (product: Product) => void;
+  removeWishlist: (productId: number) => void;
 }
 
 const AppContext = createContext<IAppContext | null>(null);
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const { wishlistQuery, checkIsProductInWishlist, toggleWishlist } =
-    useWishlist();
+  const {
+    wishlistQuery,
+    checkIsProductInWishlist,
+    toggleWishlist,
+    removeWishlist,
+  } = useWishlist();
 
   return (
     <AppContext.Provider
-      value={{ wishlistQuery, checkIsProductInWishlist, toggleWishlist }}
+      value={{
+        wishlistQuery,
+        checkIsProductInWishlist,
+        toggleWishlist,
+        removeWishlist,
+      }}
     >
       {children}
     </AppContext.Provider>

@@ -15,7 +15,7 @@ import ProductCarousel from "~/components/features/products-carousel";
 import Loader from "~/components/layout/loader";
 import { api } from "~/lib/api";
 import { IconCartFilled, IconHeart, IconHeartFilled } from "~/lib/icons";
-import { findDiscountedPrice } from "~/lib/price";
+import { findDiscountedPrice, formatPrice } from "~/lib/price";
 import { cn } from "~/lib/utils";
 import { Product } from "~/types/product";
 import NotFoundScreen from "~/app/+not-found";
@@ -38,7 +38,12 @@ const ProductScreen: React.FC = memo(() => {
     refetch,
   } = useQuery({
     queryKey: ["product", id],
-    queryFn: () => api.get<Product>(`/product/${id}`).then((r) => r.data),
+    queryFn: () =>
+      api.get<Product>(`/product/${id}`).then((r) => {
+        const mediumSizeIdx = r.data.sizes.findIndex((s) => s.label === "M");
+        if (mediumSizeIdx != -1) setActiveSizeIdx(mediumSizeIdx);
+        return r.data;
+      }),
   });
 
   if (isLoading) {
@@ -83,16 +88,22 @@ const ProductScreen: React.FC = memo(() => {
           </Text>
           <View className="mt-2 flex-row items-center justify-between">
             <View className="flex-row items-baseline gap-3">
-              <Text className="font-semibold text-xl text-primary">
-                ₹{" "}
-                {product.discountPercentage
-                  ? findDiscountedPrice(product.mrp, product.discountPercentage)
-                  : product.mrp}
-              </Text>
-              {product.mrp && (
-                <Text className="font-semibold text-base text-muted-foreground line-through">
-                  ₹ {product.mrp}
-                </Text>
+              {product.sizes.length > 0 && (
+                <>
+                  <Text className="font-semibold text-xl text-primary">
+                    {formatPrice(
+                      findDiscountedPrice(
+                        product.sizes[activeSizeIdx].mrp,
+                        product.sizes[activeSizeIdx].discountPercentage,
+                      ),
+                    )}
+                  </Text>
+                  {product.sizes[activeSizeIdx].discountPercentage && (
+                    <Text className="font-semibold text-base text-muted-foreground line-through">
+                      {formatPrice(product.sizes[activeSizeIdx].mrp)}
+                    </Text>
+                  )}
+                </>
               )}
             </View>
             <View className="flex-row items-center gap-1">

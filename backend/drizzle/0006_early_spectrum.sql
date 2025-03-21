@@ -1,0 +1,1 @@
+ALTER TABLE "sizes" RENAME COLUMN "price" TO "mrp";

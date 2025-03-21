@@ -1,16 +1,17 @@
-export * from "./product";
+import { Product } from "./product";
 
 interface ProductDetails {
   id: number;
   name: string;
-  mrp: number;
-  discountPercentage: number | null;
   coverImgUrl: string;
+  sizes: Product["sizes"];
 }
 
 export interface WishlistItem {
   id: string;
-  productDetails: ProductDetails;
+  product: ProductDetails;
   createdAt: string;
   updatedAt: string;
 }
+
+export { Product };

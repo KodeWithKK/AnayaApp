@@ -10,13 +10,13 @@ import { useRouter } from "expo-router";
 import { Button, Text, View } from "~/components/core";
 import Loader from "~/components/layout/loader";
 import { XIcon } from "~/lib/icons";
-import { findDiscountedPrice, formatPrice } from "~/lib/price";
+import { formatPrice, getDiscountedPriceForProductCard } from "~/lib/price";
 import { useAppContext } from "~/context/app-provider";
 
 const WishlistScreen: React.FC = () => {
   const router = useRouter();
 
-  const { wishlistQuery } = useAppContext();
+  const { wishlistQuery, removeWishlist } = useAppContext();
   const { data: wishlist, isLoading, isFetching, refetch } = wishlistQuery;
 
   if (isLoading) {
@@ -36,32 +36,40 @@ const WishlistScreen: React.FC = () => {
           />
         }
       >
-        <Text className="text-muted-foreground">4 items saved</Text>
+        <Text className="text-muted-foreground">
+          {wishlist?.length || 0}{" "}
+          {(wishlist?.length || 0) > 1 ? "items" : "item"} saved
+        </Text>
 
         <View className="mb-[92px] mt-5 gap-3">
           {wishlist?.map((w) => (
             <Pressable
               key={`wishlist-${w.id}`}
               className="flex-row rounded-lg border border-border/60"
-              onPress={() => router.push(`/product/${w.productDetails.id}`)}
+              onPress={() => router.push(`/product/${w.product.id}`)}
             >
               <Image
-                source={{ uri: w.productDetails.coverImgUrl }}
+                source={{ uri: w.product.coverImgUrl }}
                 className="aspect-square w-[100px] rounded-l-lg"
               />
               <View className="flex-1 justify-between gap-1 p-3">
                 <View className="flex-row justify-between gap-2">
-                  <Text className="flex-1">{w.productDetails.name}</Text>
-                  <XIcon className="h-5 text-muted-foreground" />
+                  <Text className="flex-1">{w.product.name}</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    className="self-start"
+                    onPress={() => removeWishlist(w.product.id)}
+                  >
+                    <XIcon className="h-5 text-muted-foreground" />
+                  </TouchableOpacity>
                 </View>
                 <View className="flex-row items-center justify-between">
                   <Text className="font-semibold text-primary">
-                    {formatPrice(
-                      findDiscountedPrice(
-                        w.productDetails.mrp,
-                        w.productDetails.discountPercentage || 0,
-                      ),
-                    )}
+                    {getDiscountedPriceForProductCard(w.product.sizes)
+                      ? formatPrice(
+                          getDiscountedPriceForProductCard(w.product.sizes)!,
+                        )
+                      : "Out of Stock"}
                   </Text>
                   <Button size="sm">
                     <Text className="text-sm text-white">Add to Cart</Text>

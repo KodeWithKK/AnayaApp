@@ -8,7 +8,8 @@ interface Size {
   id: number;
   label: string;
   available: boolean;
-  price: number;
+  mrp: number;
+  discountPercentage: number;
   measurements: Measurement[];
 }
 
@@ -31,11 +32,9 @@ interface Analytic {
 export interface Product {
   id: number;
   name: string;
-  mrp: number;
   manufacturer: string | null;
   countryOfOrigin: string | null;
   baseColour: string | null;
-  discountPercentage: number | null;
   brandId: number;
   description: string | null;
   materialAndCare: string | null;

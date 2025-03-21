@@ -3,8 +3,8 @@ import { Href, useRouter } from "expo-router";
 
 import { Text } from "~/components/core";
 import { IconHeart, IconHeartFilled } from "~/lib/icons";
-import { findDiscountedPrice } from "~/lib/price";
-import { Product } from "~/types/product";
+import { formatPrice, getDiscountedPriceForProductCard } from "~/lib/price";
+import { Product } from "~/types";
 import { useAppContext } from "~/context/app-provider";
 
 interface ProductCardProps {
@@ -41,7 +41,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
       </ImageBackground>
       <Text className="my-1 text-left">{item.name}</Text>
       <Text className="font-semibold">
-        ₹ {findDiscountedPrice(item.mrp, item.discountPercentage || 0)}
+        {getDiscountedPriceForProductCard(item.sizes)
+          ? formatPrice(getDiscountedPriceForProductCard(item.sizes)!)
+          : "Out of Stock"}
       </Text>
     </Pressable>
   );

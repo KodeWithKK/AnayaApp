@@ -32,11 +32,9 @@ export const products = pgTable(
   {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
-    mrp: integer("mrp").notNull(),
     manufacturer: text("manufacturer"),
     countryOfOrigin: text("country_of_origin"),
     baseColour: text("base_colour"),
-    discountPercentage: integer("discount_percentage"),
     brandId: integer("brand_id").notNull(),
     description: text("description"),
     materialAndCare: text("material_and_care"),
@@ -77,7 +75,8 @@ export const sizes = pgTable(
     productId: integer("product_id").notNull(),
     label: text("label").notNull(),
     available: boolean("available").notNull(),
-    price: integer("price"),
+    mrp: integer("mrp").notNull(),
+    discountPercentage: integer("discount_percentage").default(0).notNull(),
     measurements: jsonb("measurements"),
   },
   (table) => [

@@ -14,7 +14,11 @@ import Loader from "~/components/layout/loader";
 import { Input } from "~/components/ui/input";
 import { api } from "~/lib/api";
 import { XIcon } from "~/lib/icons";
-import { findDiscountedPrice, formatPrice } from "~/lib/price";
+import {
+  findDiscountedPrice,
+  formatPrice,
+  getDiscountedPriceForProductCard,
+} from "~/lib/price";
 import { Product } from "~/types/product";
 
 const Cart: React.FC = () => {
@@ -35,7 +39,11 @@ const Cart: React.FC = () => {
     if (!products) return 0;
     return products.reduce(
       (acc, product) =>
-        acc + findDiscountedPrice(product.mrp, product.discountPercentage || 0),
+        acc +
+        findDiscountedPrice(
+          product.sizes[0].mrp,
+          product.sizes[0].discountPercentage,
+        ),
       0,
     );
   }, [products]);
@@ -79,9 +87,9 @@ const Cart: React.FC = () => {
                 </View>
                 <View className="flex-row items-center justify-between">
                   <Text className="font-semibold text-primary">
-                    {formatPrice(
-                      findDiscountedPrice(p.mrp, p.discountPercentage || 0),
-                    )}
+                    {getDiscountedPriceForProductCard(p.sizes)
+                      ? formatPrice(getDiscountedPriceForProductCard(p.sizes)!)
+                      : "Out of Stock"}
                   </Text>
                   <View className="flex-row items-center gap-4">
                     <Button

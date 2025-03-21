@@ -18,6 +18,13 @@ import {
 import { ApiResponse } from "../utils/api-response";
 import { asyncHandler } from "../utils/async-handler";
 
+function findMrp(price: number, discountPercentage?: number) {
+  const mrp = Math.trunc(price / ((100 - (discountPercentage || 0)) / 100));
+  const unitDigit = mrp % 10;
+  const adjustedMrp = mrp + (9 - unitDigit);
+  return adjustedMrp;
+}
+
 export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
   // Create Brands
   const uniqueBrands = Array.from(
@@ -48,13 +55,11 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
   const structuredDataset = productsDataset.data.map((p) => ({
     productData: {
       name: p.name,
-      mrp: p.mrp,
       manufacturer: p.manufacturer,
       countryOfOrigin: p.countryOfOrigin,
       baseColour: p.baseColour,
       brandId: insertedBrands.find((brand) => brand.name === p.brand.name)
         ?.id as number,
-      discountPercentage: p.discounts?.[0]?.percent,
       description: p.productDetails.description,
       materialAndCare: p.productDetails.materialAndCare,
       specifications: p.productDetails.specification,
@@ -66,7 +71,8 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     productSizes: p.sizes.map((s) => ({
       label: s.label,
       available: s.available,
-      price: s.price,
+      mrp: s.price ? findMrp(s.price, p.discounts?.[0]?.percent) : 2999,
+      discountPercentage: p.discounts?.[0]?.percent || 0,
       measurements: s.measurements,
     })),
     productAnalytics: {
