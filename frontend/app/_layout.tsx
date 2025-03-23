@@ -8,7 +8,7 @@ import {
   useRouter,
   useSegments,
 } from "expo-router";
-import { setStatusBarStyle, StatusBar } from "expo-status-bar";
+import { setStatusBarStyle } from "expo-status-bar";
 import { useAuth } from "@clerk/clerk-expo";
 import * as Sentry from "@sentry/react-native";
 
