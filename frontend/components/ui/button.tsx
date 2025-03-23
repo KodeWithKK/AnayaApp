@@ -1,8 +1,7 @@
 import * as React from "react";
-import { TouchableHighlight } from "react-native";
+import { TouchableHighlight, TouchableOpacity } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { useColorScheme } from "~/lib/use-color-scheme";
 import { cn } from "~/lib/utils";
 
 const buttonVariants = cva(
@@ -42,12 +41,9 @@ const Button = React.forwardRef<
   React.ElementRef<typeof TouchableHighlight>,
   ButtonProps
 >(({ className, variant, size, ...props }, ref) => {
-  const { colors } = useColorScheme();
-
   return (
-    <TouchableHighlight
-      activeOpacity={0.75}
-      underlayColor={variant == "default" ? colors.primary : "transparent"}
+    <TouchableOpacity
+      activeOpacity={0.5}
       className={cn(
         props.disabled && "opacity-50",
         buttonVariants({ variant, size, className }),

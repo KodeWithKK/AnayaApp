@@ -13,13 +13,11 @@ import Loader from "~/components/layout/loader";
 import { Input } from "~/components/ui/input";
 import { XIcon } from "~/lib/icons";
 import { findDiscountedPrice, formatPrice } from "~/lib/price";
+import { CartItem } from "~/types";
 import { useAppContext } from "~/context/app-provider";
 
 const Cart: React.FC = () => {
-  const router = useRouter();
-
-  const { cartQuery, removeCart, updateCartItemQuantity } = useAppContext();
-
+  const { cartQuery } = useAppContext();
   const { data: cartItems, isLoading, isFetching, refetch } = cartQuery;
 
   const totalPrice = useMemo(() => {
@@ -58,76 +56,17 @@ const Cart: React.FC = () => {
         </Text>
 
         <View className="mt-5 gap-3">
-          {cartItems?.map((c) => (
-            <Pressable
-              key={`cart-item-${c.id}`}
-              className="flex-row rounded-lg border border-border/60"
-              onPress={() => router.push(`/product/${c.product.id}`)}
-            >
-              <Image
-                source={{ uri: c.product.coverImgUrl }}
-                className="aspect-square w-[100px] rounded-l-lg"
-              />
-              <View className="flex-1 justify-between gap-1 p-3">
-                <View className="flex-row justify-between gap-2">
-                  <Text className="flex-1">{c.product.name}</Text>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    className="self-start"
-                    onPress={() => removeCart(c.product.id, c.product.size.id)}
-                  >
-                    <XIcon className="h-5 text-muted-foreground" />
-                  </TouchableOpacity>
-                </View>
-                <View className="flex-row items-center justify-between">
-                  <Text className="font-semibold text-primary">
-                    {formatPrice(
-                      findDiscountedPrice(
-                        c.product.size.mrp,
-                        c.product.size.discountPercentage,
-                      ),
-                    )}
-                  </Text>
-                  <View className="flex-row items-center gap-4">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="h-8 w-8 rounded-full p-0"
-                      onPress={() =>
-                        updateCartItemQuantity(
-                          c.product.id,
-                          c.product.size.id,
-                          c.quantity - 1,
-                        )
-                      }
-                    >
-                      <Text className="text-xl text-foreground">-</Text>
-                    </Button>
-                    <Text>{c.quantity}</Text>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="h-8 w-8 rounded-full p-0"
-                      onPress={() =>
-                        updateCartItemQuantity(
-                          c.product.id,
-                          c.product.size.id,
-                          c.quantity + 1,
-                        )
-                      }
-                    >
-                      <Text className="text-xl text-foreground">+</Text>
-                    </Button>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
+          {cartItems?.map((item) => (
+            <CartCard key={`cart-item-${item.id}`} item={item} />
           ))}
         </View>
         {cartItems && cartItems.length > 0 && (
           <>
             <View className="mt-4 flex-row gap-2">
-              <Input placeholder="Enter promo code" className="flex-1" />
+              <Input
+                placeholder="Enter promo code"
+                className="flex-1 rounded-md"
+              />
               <Button size={"sm"} className="rounded-lg px-4">
                 <Text className="text-background">Apply</Text>
               </Button>
@@ -179,5 +118,80 @@ const Cart: React.FC = () => {
     </View>
   );
 };
+
+interface CartItemProps {
+  item: CartItem;
+}
+
+function CartCard({ item }: CartItemProps) {
+  const router = useRouter();
+
+  const { removeCart, updateCartItemQuantity } = useAppContext();
+
+  return (
+    <Pressable
+      className="flex-row rounded-lg border border-border/60"
+      onPress={() => router.push(`/product/${item.product.id}`)}
+    >
+      <Image
+        source={{ uri: item.product.coverImgUrl }}
+        className="aspect-square w-[100px] rounded-l-lg"
+      />
+      <View className="flex-1 justify-between gap-1 p-3">
+        <View className="flex-row justify-between gap-2">
+          <Text className="flex-1">{item.product.name}</Text>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            className="self-start"
+            onPress={() => removeCart(item.product.id, item.product.size.id)}
+          >
+            <XIcon className="h-5 text-muted-foreground" />
+          </TouchableOpacity>
+        </View>
+        <View className="flex-row items-center justify-between">
+          <Text className="font-semibold text-primary">
+            {formatPrice(
+              findDiscountedPrice(
+                item.product.size.mrp,
+                item.product.size.discountPercentage,
+              ),
+            )}
+          </Text>
+          <View className="flex-row items-center gap-4">
+            <Button
+              size="sm"
+              variant="secondary"
+              className="h-8 w-8 rounded-full p-0"
+              onPress={() =>
+                updateCartItemQuantity(
+                  item.product.id,
+                  item.product.size.id,
+                  item.quantity - 1,
+                )
+              }
+            >
+              <Text className="text-xl text-foreground">-</Text>
+            </Button>
+            <Text>{item.quantity}</Text>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="h-8 w-8 rounded-full p-0"
+              onPress={() =>
+                updateCartItemQuantity(
+                  item.product.id,
+                  item.product.size.id,
+                  item.quantity + 1,
+                )
+              }
+            >
+              <Text className="text-xl text-foreground">+</Text>
+            </Button>
+          </View>
+        </View>
+      </View>
+    </Pressable>
+  );
+}
 
 export default Cart;

@@ -11,16 +11,8 @@ export function formatPrice(price: number) {
   }).format(price)}`;
 }
 
-export function getDiscountedPriceForProductCard(sizes: Product["sizes"]) {
+export function getDefaultSizeIdx(sizes: Product["sizes"]) {
   const mediumSizeIdx = sizes.findIndex((s) => s.label === "M");
-  if (mediumSizeIdx != -1) {
-    return findDiscountedPrice(
-      sizes[mediumSizeIdx].mrp,
-      sizes[mediumSizeIdx].discountPercentage,
-    );
-  } else {
-    return sizes[0]
-      ? findDiscountedPrice(sizes[0].mrp, sizes[0].discountPercentage)
-      : null;
-  }
+  if (mediumSizeIdx != -1) return mediumSizeIdx;
+  return 0;
 }

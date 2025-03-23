@@ -4,7 +4,7 @@ import { useAuth } from "@clerk/clerk-expo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "~/lib/api";
-import { CartItem, Product } from "~/types";
+import { CartItem } from "~/types";
 
 function useCart() {
   const queryClient = useQueryClient();
@@ -34,10 +34,14 @@ function useCart() {
   );
 
   const addToCart = useCallback(
-    async (product: Product, quantity: number, sizeIdx: number) => {
+    async (cartItemProduct: CartItem["product"], quantity: number) => {
       api.post(
         "/cart/add",
-        { productId: product.id, sizeId: product.sizes[sizeIdx].id, quantity },
+        {
+          productId: cartItemProduct.id,
+          sizeId: cartItemProduct.size.id,
+          quantity,
+        },
         {
           headers: {
             Authorization: `Bearer ${await getToken()}`,
@@ -48,19 +52,16 @@ function useCart() {
       queryClient.setQueryData<CartItem[]>(["cart"], (prevCarts) => {
         if (!prevCarts) return [];
 
-        const isInCart = prevCarts.some((c) => c.product.id === product.id);
+        const isInCart = prevCarts.some(
+          (c) => c.product.id === cartItemProduct.id,
+        );
 
         const newCartItem: CartItem = {
           id: Crypto.randomUUID(),
           quantity: quantity,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          product: {
-            id: product.id,
-            name: product.name,
-            coverImgUrl: product.medias[0].url,
-            size: product.sizes[sizeIdx],
-          },
+          product: cartItemProduct,
         };
 
         if (!isInCart) {

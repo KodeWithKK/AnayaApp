@@ -3,7 +3,11 @@ import { Href, useRouter } from "expo-router";
 
 import { Text } from "~/components/core";
 import { IconHeart, IconHeartFilled } from "~/lib/icons";
-import { formatPrice, getDiscountedPriceForProductCard } from "~/lib/price";
+import {
+  findDiscountedPrice,
+  formatPrice,
+  getDefaultSizeIdx,
+} from "~/lib/price";
 import { Product } from "~/types";
 import { useAppContext } from "~/context/app-provider";
 
@@ -16,6 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
   const { checkIsProductInWishlist, toggleWishlist } = useAppContext();
 
   const isInWishlist = checkIsProductInWishlist(item.id);
+  const defaultSizeIdx = getDefaultSizeIdx(item.sizes);
 
   return (
     <Pressable
@@ -41,9 +46,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
       </ImageBackground>
       <Text className="my-1 text-left">{item.name}</Text>
       <Text className="font-semibold">
-        {getDiscountedPriceForProductCard(item.sizes)
-          ? formatPrice(getDiscountedPriceForProductCard(item.sizes)!)
-          : "Out of Stock"}
+        {formatPrice(
+          findDiscountedPrice(
+            item.sizes[defaultSizeIdx].mrp,
+            item.sizes[defaultSizeIdx].discountPercentage,
+          ),
+        )}
       </Text>
     </Pressable>
   );

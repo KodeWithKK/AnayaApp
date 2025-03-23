@@ -13,7 +13,7 @@ interface IAppContext {
   removeWishlist: (productId: number) => void;
   cartQuery: UseQueryResult<CartItem[]>;
   checkIsProductInCart: (productId: number, sizeId: number) => boolean;
-  addToCart: (product: Product, quantity: number, sizeIdx: number) => void;
+  addToCart: (cartItemProduct: CartItem["product"], quantity: number) => void;
   updateCartItemQuantity: (
     productId: number,
     sizeId: number,

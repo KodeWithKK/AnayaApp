@@ -17,7 +17,7 @@ import { api } from "~/lib/api";
 import { IconCartFilled, IconHeart, IconHeartFilled } from "~/lib/icons";
 import { findDiscountedPrice, formatPrice } from "~/lib/price";
 import { cn } from "~/lib/utils";
-import { Product } from "~/types/product";
+import { CartItem, Product } from "~/types";
 import NotFoundScreen from "~/app/+not-found";
 import { useAppContext } from "~/context/app-provider";
 
@@ -202,7 +202,14 @@ const ProductScreen: React.FC = memo(() => {
           className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
           onPress={() => {
             if (!isInCart) {
-              addToCart(product, 1, activeSizeIdx);
+              const cartItemProduct: CartItem["product"] = {
+                id: product.id,
+                name: product.name,
+                coverImgUrl: product.medias[0].url,
+                size: product.sizes[activeSizeIdx],
+              };
+
+              addToCart(cartItemProduct, 1);
             } else {
               router.push("/(authenticated)/(tabs)/cart");
             }

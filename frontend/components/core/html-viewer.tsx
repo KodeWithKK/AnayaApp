@@ -17,7 +17,7 @@ const HTMLViewer: React.FC<HTMLViewerProps> = React.memo(
         contentWidth={contentWidth}
         baseStyle={{
           fontFamily: "Poppins-Regular",
-          color: NAV_THEME.light.mutedForeground,
+          color: NAV_THEME.light.mutedText,
           margin: 0,
           padding: 0,
         }}
