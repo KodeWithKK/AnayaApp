@@ -27,7 +27,7 @@ const sectionQueryList = [
   {
     title: "New Arrivals",
     slug: "new-arrivals",
-    apiUrl: "/product/all?l=4&o=1",
+    apiUrl: "/product/all?l=4&o=0",
     seeAllApiUrl: "/product/all",
   },
   {

@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { Text, View } from "~/components/core";
@@ -22,14 +22,17 @@ import NotFoundScreen from "~/app/+not-found";
 import { useAppContext } from "~/context/app-provider";
 
 const ProductScreen: React.FC = memo(() => {
+  const router = useRouter();
   const { id } = useLocalSearchParams() as { id: string };
-  const { checkIsProductInWishlist, toggleWishlist } = useAppContext();
   const [activeSizeIdx, setActiveSizeIdx] = useState<number>(0);
   const [showFullSpecification, setShowSpecification] = useState(false);
 
-  const parsedProductId = parseInt(id);
-  const isInWishlist =
-    !isNaN(parsedProductId) && checkIsProductInWishlist(parsedProductId);
+  const {
+    checkIsProductInWishlist,
+    toggleWishlist,
+    checkIsProductInCart,
+    addToCart,
+  } = useAppContext();
 
   const {
     data: product,
@@ -45,6 +48,16 @@ const ProductScreen: React.FC = memo(() => {
         return r.data;
       }),
   });
+
+  const parsedProductId = parseInt(id);
+
+  const isInWishlist =
+    !isNaN(parsedProductId) && checkIsProductInWishlist(parsedProductId);
+
+  const isInCart =
+    !isNaN(parsedProductId) &&
+    product &&
+    checkIsProductInCart(parsedProductId, product.sizes[activeSizeIdx].id);
 
   if (isLoading) {
     return <Loader />;
@@ -187,12 +200,19 @@ const ProductScreen: React.FC = memo(() => {
         <TouchableOpacity
           activeOpacity={0.75}
           className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
+          onPress={() => {
+            if (!isInCart) {
+              addToCart(product, 1, activeSizeIdx);
+            } else {
+              router.push("/(authenticated)/(tabs)/cart");
+            }
+          }}
         >
           <View className="-translate-y-0.5">
             <IconCartFilled className="h-7 w-7 text-white" />
           </View>
           <Text className="text-center font-semibold text-lg text-white">
-            Add to Cart
+            {isInCart ? "Go to Cart" : "Add to Cart"}
           </Text>
         </TouchableOpacity>
       </View>

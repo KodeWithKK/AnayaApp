@@ -5,6 +5,7 @@ import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 
 import BrandRouter from "./routes/brand.routes";
+import CartRouter from "./routes/cart.routes";
 import DatasetRouter from "./routes/dataset.routes";
 import ProductRouter from "./routes/product.routes";
 import WebhooksRouter from "./routes/webhooks.routes";
@@ -37,6 +38,7 @@ app.use("/api/v1/product", ProductRouter);
 app.use("/api/v1/brand", BrandRouter);
 app.use("/api/v1/wishlist", WishlistRouter);
 app.use("/api/v1/webhooks", WebhooksRouter);
+app.use("/api/v1/cart", CartRouter);
 app.use("/api/v1/dataset", DatasetRouter);
 
 // Health check route

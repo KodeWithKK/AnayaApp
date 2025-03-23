@@ -85,8 +85,9 @@ const api = {
 
   delete: <TData = DefaultRecord, TError = DefaultRecord>(
     url: string,
+    body?: any,
     config?: AxiosRequestConfig,
-  ) => request<TData, TError>(url, { method: "DELETE", ...config }),
+  ) => request<TData, TError>(url, { method: "DELETE", data: body, ...config }),
 };
 
 export { api };
