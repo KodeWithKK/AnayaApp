@@ -26,7 +26,7 @@ function useCart() {
     (productId: number, sizeId: number) => {
       const cart = cartQuery.data;
       if (!cart) return false;
-      return cart.some(
+      return cart?.some(
         (c) => c.product.id === productId && c.product.size.id === sizeId,
       );
     },

@@ -9,17 +9,20 @@ import {
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useQueries } from "@tanstack/react-query";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import CategoryChip from "~/components/layout/category-chip";
 import ProductSkelton from "~/components/layout/product-skelton";
 import SearchInput from "~/components/layout/search-input";
-import useHomePageHeader from "~/hooks/use-home-page-header";
 import { api } from "~/lib/api";
 import { encodeStringToUrlSafeBase64 } from "~/lib/base64-transformers";
 import { categoriesMap } from "~/lib/constants/categories-map";
-import { ChevronDown, IconLocationFilled, IconNotification } from "~/lib/icons";
+import { IconNotification, IconSearch } from "~/lib/icons";
 import { range } from "~/lib/range";
 import { Product } from "~/types/product";
 
@@ -56,14 +59,7 @@ interface SectionData {
 
 const HomeScreen: React.FC = memo(() => {
   const router = useRouter();
-
-  const {
-    scrollY,
-    headerHeight,
-    locationOpacity,
-    searchBarTranslateY,
-    HEADER_MAX_HEIGHT,
-  } = useHomePageHeader();
+  const insets = useSafeAreaInsets();
 
   const sectionListData: SectionData[] = useQueries({
     queries: sectionQueryList.map((section) => ({
@@ -82,37 +78,23 @@ const HomeScreen: React.FC = memo(() => {
   });
 
   return (
-    <View className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-background">
       <StatusBar style="light" />
 
-      {/* Animated Header */}
-      <Animated.View
-        style={{ height: headerHeight }}
-        className="absolute left-0 right-0 top-0 z-[1000] bg-[hsl(350_89%_60%)] px-4 pt-12"
-      >
-        <Animated.View style={{ opacity: locationOpacity }}>
-          <View className="flex-row items-center justify-between">
-            <View>
-              <Text className="text-sm text-background">Location</Text>
-              <View className="mt-1 flex-row gap-2">
-                <IconLocationFilled className="h-6 w-6 text-background" />
-                <Text className="text-background">Prayagraj, UP</Text>
-                <ChevronDown className="h-6 w-6 text-background" />
-              </View>
-            </View>
-            <View className="rounded-lg border border-border/80 p-2">
-              <IconNotification className="h-6 w-6 text-background" />
-            </View>
-          </View>
-        </Animated.View>
-      </Animated.View>
-
       {/* Search Bar */}
-      <Animated.View
-        style={{ transform: [{ translateY: searchBarTranslateY }] }}
-        className="absolute left-0 right-0 top-[110px] z-[1000] h-[62px] justify-center bg-[hsl(350_89%_60%)] px-4"
-      >
-        <SearchInput />
+      <Animated.View className="absolute left-0 right-0 top-[0px] z-[1000] bg-white">
+        <View
+          className="flex-1 flex-row items-center bg-primary/90 px-4"
+          style={{ paddingTop: insets.top }}
+        >
+          <View className="py-4">
+            <Text className="font-semibold text-3xl text-white">Acme</Text>
+          </View>
+          <View className="ml-auto flex-row gap-3">
+            <IconSearch className="h-7 w-7 text-white" />
+            <IconNotification className="h-7 w-7 text-white" />
+          </View>
+        </View>
       </Animated.View>
 
       {/* Section List */}
@@ -120,12 +102,8 @@ const HomeScreen: React.FC = memo(() => {
         sections={sectionListData}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false },
-        )}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: HEADER_MAX_HEIGHT }}
+        contentContainerStyle={{ paddingTop: 32 + 8 }}
         ListHeaderComponent={() => (
           <View className="mb-3 mt-7 px-4">
             <View className="mb-3 flex-row items-center justify-between">
@@ -194,11 +172,11 @@ const HomeScreen: React.FC = memo(() => {
             }}
             tintColor="#000" // iOS
             colors={["#000"]} // Android
-            progressViewOffset={HEADER_MAX_HEIGHT}
+            progressViewOffset={insets.top + 22}
           />
         }
       />
-    </View>
+    </SafeAreaView>
   );
 });
 

@@ -26,7 +26,7 @@ function useWishlist() {
     (productId: number) => {
       const wishlist = wishlistQuery.data;
       if (!wishlist) return false;
-      return wishlist.some((w) => w.product.id === productId);
+      return wishlist?.some((w) => w.product.id === productId);
     },
     [wishlistQuery.data],
   );
