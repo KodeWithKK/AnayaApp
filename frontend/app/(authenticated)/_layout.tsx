@@ -41,6 +41,7 @@ const Layout = () => {
           ),
         })}
       />
+      <Stack.Screen name="search/[query]" options={{ headerShown: false }} />
     </Stack>
   );
 };

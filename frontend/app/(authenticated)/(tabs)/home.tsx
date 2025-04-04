@@ -5,6 +5,7 @@ import {
   Pressable,
   RefreshControl,
   SectionList,
+  TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -18,7 +19,6 @@ import { Text, View } from "~/components/core";
 import ProductCard from "~/components/features/product-card";
 import CategoryChip from "~/components/layout/category-chip";
 import ProductSkelton from "~/components/layout/product-skelton";
-import SearchInput from "~/components/layout/search-input";
 import { api } from "~/lib/api";
 import { encodeStringToUrlSafeBase64 } from "~/lib/base64-transformers";
 import { categoriesMap } from "~/lib/constants/categories-map";
@@ -91,7 +91,12 @@ const HomeScreen: React.FC = memo(() => {
             <Text className="font-semibold text-3xl text-white">Acme</Text>
           </View>
           <View className="ml-auto flex-row gap-3">
-            <IconSearch className="h-7 w-7 text-white" />
+            <TouchableOpacity
+              activeOpacity={0.75}
+              onPress={() => router.push("../search/[query]")}
+            >
+              <IconSearch className="h-7 w-7 text-white" />
+            </TouchableOpacity>
             <IconNotification className="h-7 w-7 text-white" />
           </View>
         </View>

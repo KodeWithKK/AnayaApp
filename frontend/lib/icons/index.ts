@@ -28,6 +28,7 @@ import IconNotification from "~/assets/icons/outline/notification.svg";
 import IconOptions from "~/assets/icons/outline/options.svg";
 import IconPayment from "~/assets/icons/outline/payment.svg";
 import IconProfile from "~/assets/icons/outline/profile.svg";
+import IconRecent from "~/assets/icons/outline/recent.svg";
 import IconSearch from "~/assets/icons/outline/search.svg";
 import IconSetting from "~/assets/icons/outline/setting.svg";
 import IconShare from "~/assets/icons/outline/share.svg";
@@ -55,7 +56,6 @@ iconWithClassName(IconLocationFilled);
 iconWithClassName(IconHeartFilled);
 
 iconWithClassName(IconShare);
-iconWithClassName(IconUpload);
 iconWithClassName(IconHome);
 iconWithClassName(IconOptions);
 iconWithClassName(IconSearch);
@@ -65,14 +65,16 @@ iconWithClassName(IconProfile);
 iconWithClassName(IconNotification);
 iconWithClassName(IconClipboard);
 iconWithClassName(IconLogout);
+iconWithClassName(IconSetting);
 iconWithClassName(IconPayment);
 iconWithClassName(IconMen);
 iconWithClassName(IconWomen);
 iconWithClassName(IconTopwear);
 iconWithClassName(IconBottomwear);
+iconWithClassName(IconRecent);
 
-iconWithClassName(IconSetting);
 iconWithClassName(IconLoader);
+iconWithClassName(IconUpload);
 
 export {
   MoonStar,
@@ -90,7 +92,6 @@ export {
   IconLocationFilled,
   IconHeartFilled,
   IconShare,
-  IconUpload,
   IconHome,
   IconOptions,
   IconSearch,
@@ -100,13 +101,15 @@ export {
   IconNotification,
   IconClipboard,
   IconLogout,
+  IconSetting,
   IconPayment,
   IconMen,
   IconWomen,
   IconTopwear,
   IconBottomwear,
-  IconSetting,
+  IconRecent,
   IconLoader,
+  IconUpload,
 };
 
 export type IconFC = React.FC<SvgProps> | LucideIcon;
