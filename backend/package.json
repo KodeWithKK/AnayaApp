@@ -11,6 +11,7 @@
     "db:pull": "npx drizzle-kit pull",
     "db:push": "npx drizzle-kit push",
     "db:studio": "npx drizzle-kit studio",
+    "format": "prettier --write .",
     "ngrok": "ngrok http 8000"
   },
   "author": "",
