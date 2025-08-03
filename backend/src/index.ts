@@ -2,6 +2,7 @@ import { clerkMiddleware } from "@clerk/express";
 import serverlessExpress from "@vendia/serverless-express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import * as dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 
@@ -14,8 +15,9 @@ import WishlistRouter from "./routes/wishlist.routes";
 import { ApiResponse } from "./utils/api-response";
 import { colorizeStatus } from "./utils/morgan-tokens";
 
-const app = express();
+dotenv.config();
 
+const app = express();
 const PORT = process.env.PORT ?? 8000;
 
 app.use(express.json({ limit: "16kb" }));
@@ -28,8 +30,7 @@ app.use(morgan(":colored-status :method :url :response-time ms"));
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URI,
-    methods: ["GET", "POST"],
+    origin: process.env.FRONTEND_URI || "*",
     optionsSuccessStatus: 200,
     credentials: true,
   }),
@@ -70,8 +71,10 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`HTTP Server started at PORT: ${PORT}`);
-});
+if (process.env.NODE_ENV === "dev") {
+  app.listen(PORT, () => {
+    console.log(`HTTP Server started at PORT: ${PORT}`);
+  });
+}
 
 export const handler = serverlessExpress({ app });

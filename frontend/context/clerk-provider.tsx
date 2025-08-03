@@ -1,6 +1,9 @@
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
+import * as dotenv from "dotenv";
 
 import { tokenCache } from "~/lib/token-cache";
+
+dotenv.config();
 
 interface ProviderProps {
   children: React.ReactNode;

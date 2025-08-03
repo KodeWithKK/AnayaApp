@@ -1,5 +1,8 @@
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 let isConfigured = false;
 
