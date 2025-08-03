@@ -1,9 +1,11 @@
 name: Deploy Express Backend
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - "backend/**"
   workflow_dispatch:
-  # push:
-  #   branches: [main]
 
 env:
   AWS_REGION: ap-south-1
