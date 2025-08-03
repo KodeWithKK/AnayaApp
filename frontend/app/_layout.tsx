@@ -73,7 +73,7 @@ function InitialLayout() {
     } else if (!isSignedIn && pathname !== "/") {
       router.replace("/");
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, segments?.[0]]);
 
   useEffect(() => {
     if (!isLoaded) return;

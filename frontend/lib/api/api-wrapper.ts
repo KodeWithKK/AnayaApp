@@ -6,6 +6,8 @@ import { ApiError, ApiResponse, DefaultRecord } from "./types";
 const BASE_URL =
   process.env.EXPO_PUBLIC_BACKEND_BASE_URL || "http://localhost:8000/api/v1";
 
+console.log({ baseUrl: BASE_URL });
+
 // Axios instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

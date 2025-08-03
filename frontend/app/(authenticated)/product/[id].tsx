@@ -106,7 +106,7 @@ const ProductScreen: React.FC = memo(() => {
                       ),
                     )}
                   </Text>
-                  {product.sizes[activeSizeIdx].discountPercentage && (
+                  {product.sizes[activeSizeIdx].discountPercentage > 0 && (
                     <Text className="font-semibold text-base text-muted-foreground line-through">
                       {formatPrice(product.sizes[activeSizeIdx].mrp)}
                     </Text>
@@ -176,13 +176,13 @@ const ProductScreen: React.FC = memo(() => {
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <View
-                    key={item[0] + item[1]}
+                    key={`specification-${String(item[0])}`}
                     className="w-1/2 rounded-lg bg-muted p-3"
                   >
                     <Text className="mb-0.5 text-sm text-muted-foreground">
                       {item[0]}
                     </Text>
-                    <Text>{item[1] || "NA"}</Text>
+                    <Text>{String(item[1] || "NA")}</Text>
                   </View>
                 )}
               />
