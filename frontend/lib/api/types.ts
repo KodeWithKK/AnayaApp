@@ -1,4 +1,4 @@
-export type DefaultRecord = Record<string, any>;
+export type DefaultRecord = Record<string, any> | null;
 export class ApiResponse<TData = DefaultRecord, TError = DefaultRecord> {
   statusCode: number;
   data: TData;
@@ -8,13 +8,13 @@ export class ApiResponse<TData = DefaultRecord, TError = DefaultRecord> {
 
   constructor(
     statusCode: number = 200,
-    data: TData | TError = {} as TData,
+    data: TData | TError = null as TData,
     message: string = "Success",
   ) {
     this.isSuccess = statusCode < 400;
     this.statusCode = statusCode;
-    this.data = this.isSuccess ? (data as TData) : ({} as TData);
-    this.error = this.isSuccess ? ({} as TError) : (data as TError);
+    this.data = this.isSuccess ? (data as TData) : (null as TData);
+    this.error = this.isSuccess ? (null as TError) : (data as TError);
     this.message = message;
   }
 }
@@ -30,7 +30,7 @@ export class ApiError<
 
   constructor(
     statusCode: number = 400,
-    data: TData | TError = {} as TData | TError,
+    data: TData | TError = null as TData | TError,
     message: string = "Error",
   ) {
     super(message);
@@ -39,7 +39,7 @@ export class ApiError<
     }
     this.isSuccess = statusCode < 400;
     this.statusCode = statusCode;
-    this.data = this.isSuccess ? (data as TData) : ({} as TData);
-    this.error = this.isSuccess ? ({} as TError) : (data as TError);
+    this.data = this.isSuccess ? (data as TData) : (null as TData);
+    this.error = this.isSuccess ? (null as TError) : (data as TError);
   }
 }

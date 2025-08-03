@@ -64,7 +64,7 @@ export const toggleWishlist = asyncHandler(async (req, res) => {
   if (!productId || isNaN(parseInt(productId))) {
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Invalid product Id."));
+      .json(new ApiResponse(400, null, "Invalid product Id."));
   }
 
   const wishlist = await db.query.wishlists.findFirst({
@@ -83,7 +83,11 @@ export const toggleWishlist = asyncHandler(async (req, res) => {
     return res
       .status(200)
       .json(
-        new ApiResponse(200, {}, "Product removed from wishlist successfully."),
+        new ApiResponse(
+          200,
+          null,
+          "Product removed from wishlist successfully.",
+        ),
       );
   } else {
     const [insertedWishlist] = await db

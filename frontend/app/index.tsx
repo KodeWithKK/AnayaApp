@@ -51,7 +51,7 @@ const LoginScreen = () => {
       />
       <Image
         source={require("~/assets/images/login-banner.png")}
-        className="mt-6 h-[280px] self-center"
+        className="mt-6 h-[280px] scale-[1.25] self-center"
         resizeMode="contain"
       />
       <Text className="mx-[50px] mb-10 mt-8 text-center font-bold text-[25px]">
@@ -69,7 +69,7 @@ const LoginScreen = () => {
           <Text className="font-medium text-xl">Continue with Google</Text>
         </AuthButton>
 
-        <AuthButton onPress={handleAppleLogin}>
+        <AuthButton onPress={handleGoogleLogin}>
           <Ionicons name="mail" size={24} />
           <Text className="font-medium text-xl">Continue with Email</Text>
         </AuthButton>
@@ -102,7 +102,7 @@ function AuthButton({
 }: React.ComponentProps<typeof TouchableOpacity>) {
   return (
     <TouchableOpacity
-      className="flex-row items-center justify-center gap-[10px] rounded-lg border border-border p-3"
+      className="flex-row items-center justify-center gap-[10px] rounded-xl border border-border p-3"
       {...restProps}
     >
       {children}

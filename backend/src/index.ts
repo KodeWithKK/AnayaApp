@@ -43,7 +43,7 @@ app.use("/api/v1/dataset", DatasetRouter);
 
 // Health check route
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).json(new ApiResponse(200, {}, "Server is running!"));
+  res.status(200).json(new ApiResponse(200, null, "Server is running!"));
 });
 
 // Final error-handling middleware

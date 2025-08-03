@@ -17,6 +17,9 @@ module.exports = {
         medium: ["Poppins-Medium", "sans-serif"],
         semibold: ["Poppins-SemiBold", "sans-serif"],
         bold: ["Poppins-Bold", "sans-serif"],
+        serif: ["LibreBaskerville-Regular", "serif"],
+        "serif-italic": ["LibreBaskerville-Italic", "serif"],
+        "serif-bold": ["LibreBaskerville-Bold", "serif"],
       },
       colors: {
         border: {

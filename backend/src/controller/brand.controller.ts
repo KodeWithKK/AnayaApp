@@ -11,7 +11,7 @@ export const addBrand = asyncHandler(async (req: Request, res: Response) => {
   if (!success) {
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Invalid data provided!"));
+      .json(new ApiResponse(400, null, "Invalid data provided!"));
   }
 
   const [insertedBrand] = await db.insert(brands).values(data).returning();

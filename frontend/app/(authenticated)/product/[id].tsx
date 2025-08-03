@@ -59,13 +59,8 @@ const ProductScreen: React.FC = memo(() => {
     product &&
     checkIsProductInCart(parsedProductId, product.sizes[activeSizeIdx].id);
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (!product) {
-    return <NotFoundScreen />;
-  }
+  if (isLoading) return <Loader />;
+  if (!product) return <NotFoundScreen />;
 
   return (
     <>
@@ -202,14 +197,15 @@ const ProductScreen: React.FC = memo(() => {
           className="flex-1 flex-row items-center justify-center gap-3 rounded-full bg-primary py-3.5"
           onPress={() => {
             if (!isInCart) {
-              const cartItemProduct: CartItem["product"] = {
-                id: product.id,
-                name: product.name,
-                coverImgUrl: product.medias[0].url,
-                size: product.sizes[activeSizeIdx],
-              };
-
-              addToCart(cartItemProduct, 1);
+              addToCart(
+                {
+                  id: product.id,
+                  name: product.name,
+                  coverImgUrl: product.medias[0].url,
+                  size: product.sizes[activeSizeIdx],
+                },
+                1,
+              );
             } else {
               router.push("/(authenticated)/(tabs)/cart");
             }

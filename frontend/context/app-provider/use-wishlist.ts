@@ -24,8 +24,7 @@ function useWishlist() {
 
   const checkIsProductInWishlist = useCallback(
     (productId: number) => {
-      const wishlist = wishlistQuery.data;
-      if (!wishlist) return false;
+      const wishlist = wishlistQuery.data || [];
       return wishlist?.some((w) => w.product.id === productId);
     },
     [wishlistQuery.data],
@@ -33,16 +32,6 @@ function useWishlist() {
 
   const toggleWishlist = useCallback(
     async (product: Product) => {
-      api.post(
-        `/wishlist/toggle/${product.id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      );
-
       queryClient.setQueryData<WishlistItem[]>(
         ["wishlist"],
         (prevWishlists) => {
@@ -69,6 +58,16 @@ function useWishlist() {
           } else {
             return [newWishlistItem, ...prevWishlists];
           }
+        },
+      );
+
+      api.post(
+        `/wishlist/toggle/${product.id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
         },
       );
     },

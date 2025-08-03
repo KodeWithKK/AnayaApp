@@ -24,9 +24,8 @@ function useCart() {
 
   const checkIsProductInCart = useCallback(
     (productId: number, sizeId: number) => {
-      const cart = cartQuery.data;
-      if (!cart) return false;
-      return cart?.some(
+      const cart = cartQuery.data || [];
+      return cart.some(
         (c) => c.product.id === productId && c.product.size.id === sizeId,
       );
     },

@@ -84,11 +84,11 @@ const HomeScreen: React.FC = memo(() => {
       {/* Search Bar */}
       <Animated.View className="absolute left-0 right-0 top-[0px] z-[1000] bg-white">
         <View
-          className="flex-1 flex-row items-center bg-primary/90 px-4"
+          className="flex-1 flex-row items-center bg-primary px-4"
           style={{ paddingTop: insets.top }}
         >
           <View className="py-4">
-            <Text className="font-semibold text-3xl text-white">Acme</Text>
+            <Text className="font-semibold text-3xl text-white">Anaya</Text>
           </View>
           <View className="ml-auto flex-row gap-3">
             <TouchableOpacity
@@ -108,11 +108,11 @@ const HomeScreen: React.FC = memo(() => {
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: 32 + 8 }}
+        contentContainerStyle={{ paddingTop: 32 + 16 }}
         ListHeaderComponent={() => (
           <View className="mb-3 mt-7 px-4">
             <View className="mb-3 flex-row items-center justify-between">
-              <Text className="font-semibold text-xl">Categories</Text>
+              <Text className="font-semibold text-lg">Categories</Text>
               <Pressable>
                 <Text className="font-semibold text-primary">See all</Text>
               </Pressable>
@@ -133,7 +133,7 @@ const HomeScreen: React.FC = memo(() => {
         }) => (
           <View className="mt-5 px-4">
             <View className="mb-3 flex-row items-center justify-between">
-              <Text className="font-semibold text-xl">{title}</Text>
+              <Text className="font-semibold text-lg">{title}</Text>
               <Pressable
                 onPress={() =>
                   router.push(

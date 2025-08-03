@@ -65,7 +65,7 @@ export const addToCart = asyncHandler(async (req, res) => {
   if (!productId || !sizeId || typeof quantity != "number" || quantity < 1) {
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Invalid request body."));
+      .json(new ApiResponse(400, null, "Invalid request body."));
   }
 
   await db
@@ -80,7 +80,7 @@ export const addToCart = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, {}, "Product added to cart successfully."));
+    .json(new ApiResponse(200, null, "Product added to cart successfully."));
 });
 
 export const updateCartQuantity = asyncHandler(async (req, res) => {
@@ -92,7 +92,7 @@ export const updateCartQuantity = asyncHandler(async (req, res) => {
 
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Invalid request body."));
+      .json(new ApiResponse(400, null, "Invalid request body."));
   }
 
   if (quantity === 0) {
@@ -123,7 +123,7 @@ export const updateCartQuantity = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, {}, "Cart item updated successfully."));
+    .json(new ApiResponse(200, null, "Cart item updated successfully."));
 });
 
 export const removeFromCart = asyncHandler(async (req, res) => {
@@ -133,7 +133,7 @@ export const removeFromCart = asyncHandler(async (req, res) => {
   if (!productId || !sizeId) {
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Invalid request body."));
+      .json(new ApiResponse(400, null, "Invalid request body."));
   }
 
   await db
@@ -148,5 +148,5 @@ export const removeFromCart = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, {}, "Cart item removed successfully."));
+    .json(new ApiResponse(200, null, "Cart item removed successfully."));
 });

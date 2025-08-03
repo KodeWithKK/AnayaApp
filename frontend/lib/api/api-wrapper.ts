@@ -3,7 +3,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import { convertToFormData } from "./helpers";
 import { ApiError, ApiResponse, DefaultRecord } from "./types";
 
-const BASE_URL = "http://192.168.29.138:8000/api/v1";
+const BASE_URL =
+  process.env.EXPO_PUBLIC_BACKEND_BASE_URL || "http://localhost:8000/api/v1";
 
 // Axios instance
 const axiosInstance = axios.create({
@@ -58,7 +59,7 @@ async function request<TData, TError>(
 
     throw new ApiError<TData, TError>(
       400,
-      {} as TError,
+      null as TError,
       error?.message || "An unexpected error occurred",
     );
   }

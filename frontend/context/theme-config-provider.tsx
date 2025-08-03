@@ -36,6 +36,9 @@ const ThemeConfigProvider: React.FC<{ children: React.ReactNode }> = ({
     "Poppins-Medium": require("../assets/fonts/poppins/Poppins-Medium.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/poppins/Poppins-SemiBold.ttf"),
     "Poppins-Bold": require("../assets/fonts/poppins/Poppins-Bold.ttf"),
+    "LibreBaskerville-Regular": require("../assets/fonts/libre-baskerville/LibreBaskerville-Regular.ttf"),
+    "LibreBaskerville-Italic": require("../assets/fonts/libre-baskerville/LibreBaskerville-Italic.ttf"),
+    "LibreBaskerville-Bold": require("../assets/fonts/libre-baskerville/LibreBaskerville-Bold.ttf"),
   });
 
   useEffect(() => {

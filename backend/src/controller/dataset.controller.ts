@@ -42,7 +42,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     if (!success) {
       return res
         .status(500)
-        .json(new ApiResponse(500, {}, "Invalid brand dateset"));
+        .json(new ApiResponse(500, null, "Invalid brand dateset"));
     }
   }
 
@@ -95,7 +95,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
     if (!isProductParseSuccess) {
       return res
         .status(500)
-        .json(new ApiResponse(500, {}, "Invalid brand dateset"));
+        .json(new ApiResponse(500, null, "Invalid brand dateset"));
     }
 
     const [insertedProduct] = await db
@@ -115,7 +115,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
       if (!success) {
         return res
           .status(500)
-          .json(new ApiResponse(500, {}, "Invalid sizes dateset"));
+          .json(new ApiResponse(500, null, "Invalid sizes dateset"));
       }
     }
 
@@ -133,7 +133,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
       if (!success) {
         return res
           .status(500)
-          .json(new ApiResponse(500, {}, "Invalid images dateset"));
+          .json(new ApiResponse(500, null, "Invalid images dateset"));
       }
     }
 
@@ -160,7 +160,7 @@ export const loadDataset = asyncHandler(async (req: Request, res: Response) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(201, {}, "Dataset loaded successfully."));
+    .json(new ApiResponse(201, null, "Dataset loaded successfully."));
 });
 
 export const clearDataset = asyncHandler(
@@ -173,6 +173,6 @@ export const clearDataset = asyncHandler(
 
     return res
       .status(200)
-      .json(new ApiResponse(200, {}, "Dataset cleared successfully"));
+      .json(new ApiResponse(200, null, "Dataset cleared successfully"));
   },
 );

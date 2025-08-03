@@ -17,7 +17,7 @@ export const addProduct = asyncHandler(async (req: Request, res: Response) => {
   if (!success) {
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Invalid product data."));
+      .json(new ApiResponse(400, null, "Invalid product data."));
   }
 
   const productData = {
@@ -98,7 +98,7 @@ export const searchProducts = asyncHandler(
     if (!q) {
       return res
         .status(400)
-        .json(new ApiResponse(400, {}, "Search query not found"));
+        .json(new ApiResponse(400, null, "Search query not found"));
     }
 
     const analyticsSubquery = db
@@ -158,7 +158,7 @@ export const getProduct = asyncHandler(async (req: Request, res: Response) => {
   if (!productId) {
     return res
       .status(400)
-      .json(new ApiResponse(400, {}, "Product ID not found!"));
+      .json(new ApiResponse(400, null, "Product ID not found!"));
   }
 
   const product = await db.query.products.findFirst({
@@ -183,7 +183,9 @@ export const getProduct = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (!product) {
-    return res.status(404).json(new ApiResponse(404, {}, "Product not found."));
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "Product not found."));
   }
 
   return res
