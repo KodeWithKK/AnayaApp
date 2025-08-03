@@ -41,7 +41,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
 resource "aws_lambda_function" "express_func" {
   function_name = "anaya-express-lambda"
   role          = aws_iam_role.lambda_exec_role.arn
-  handler       = "lambda.handler"
+  handler       = "index.handler"
   runtime       = "nodejs18.x"
   filename      = "${path.module}/../build.zip"
   source_code_hash = filebase64sha256("${path.module}/../build.zip")
