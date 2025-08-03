@@ -1,0 +1,66 @@
+name: Deploy Express Backend
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+env:
+  AWS_REGION: ap-south-1
+  TF_VAR_node_env: prod
+  TF_VAR_database_url: ${{ secrets.DATABASE_URL }}
+  TF_VAR_clerk_secret_key: ${{ secrets.CLERK_SECRET_KEY }}
+  TF_VAR_clerk_publishable_key: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
+  TF_VAR_signing_secret: ${{ secrets.SIGNING_SECRET }}
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies & Build
+        working-directory: backend
+        run: |
+          npm ci
+          npm run build
+          cd build && zip -r ../build.zip .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.0
+
+      - name: Terraform Init
+        working-directory: backend/terraform
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: backend/terraform
+        run: terraform apply -auto-approve
+
+      - name: Output Lambda URL
+        id: tf_output
+        working-directory: backend/terraform
+        run: |
+          terraform output -raw lambda_url > lambda_url.txt
+          echo "lambda_url=$(cat lambda_url.txt)" >> $GITHUB_OUTPUT
+
+      - name: Deployment Summary
+        run: |
+          echo "### ✅ Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 Lambda URL: [${{ steps.tf_output.outputs.lambda_url }}](${{ steps.tf_output.outputs.lambda_url }})" >> $GITHUB_STEP_SUMMARY

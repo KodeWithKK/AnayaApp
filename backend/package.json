@@ -18,6 +18,7 @@
   "description": "",
   "dependencies": {
     "@clerk/express": "^1.3.54",
+    "@vendia/serverless-express": "^4.12.6",
     "bcryptjs": "^3.0.0",
     "chalk": "~4.0.0",
     "cloudinary": "^2.5.1",

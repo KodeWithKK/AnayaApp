@@ -1,4 +1,5 @@
 import { clerkMiddleware } from "@clerk/express";
+import serverlessExpress from "@vendia/serverless-express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
@@ -72,3 +73,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.listen(PORT, () => {
   console.log(`HTTP Server started at PORT: ${PORT}`);
 });
+
+export const handler = serverlessExpress({ app });
