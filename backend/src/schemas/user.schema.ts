@@ -11,9 +11,7 @@ import {
 
 import { products, sizes } from "./product.schema";
 
-/**
- * TABLES
- **/
+/* ------- TABLES ------- */
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").notNull(),
@@ -71,9 +69,7 @@ export const carts = pgTable(
   ],
 );
 
-/**
- * RELATIONS
- **/
+/* ------- RELATIONS ------- */
 export const userRelations = relations(users, ({ many }) => ({
   wishlists: many(wishlists),
   carts: many(carts),
