@@ -43,6 +43,6 @@ jobs:
 
       - name: Curl Lambda URL and show status
         run: |
-          url=$(terraform output -raw lambda_url)
+          url=$(terraform output -raw lambda_url | sed 's:/*$::')
           echo "Pinging $url..."
           curl -s -o /dev/null -w "HTTP status: %{http_code}\n" "$url/api/v1/product/all"
