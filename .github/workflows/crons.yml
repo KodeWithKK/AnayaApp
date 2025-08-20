@@ -41,8 +41,14 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Curl Lambda URL and show status
+      - name: Curl database endpoint and show status
         run: |
           url=$(terraform output -raw lambda_url | sed 's:/*$::')
-          echo "Pinging $url..."
-          curl -s -o /dev/null -w "HTTP status: %{http_code}\n" "$url/api/v1/product/all"
+          echo "Pinging database endpoint: $url..."
+          status=$(curl -s -o /dev/null -w "%{http_code}" "$url/api/v1/product/all")
+
+          echo "### Database Endpoint Health Check" >> $GITHUB_STEP_SUMMARY
+          echo "- **Endpoint:** [$url/api/v1/product/all]($url/api/v1/product/all)" >> $GITHUB_STEP_SUMMARY
+          echo "- **HTTP Status:** \`$status\`" >> $GITHUB_STEP_SUMMARY
+
+          echo "HTTP status: $status"
