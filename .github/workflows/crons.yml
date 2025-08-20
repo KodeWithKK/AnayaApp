@@ -1,0 +1,45 @@
+name: Cron Jobs
+
+on:
+  schedule:
+    # - cron: "0 0 * * *" # Run daily
+    - cron: "0 0 * * 0,3" # Run every Sunday and Wednesday at midnight UTC
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ap-south-1
+  TF_VAR_node_env: prod
+  TF_VAR_database_url: ${{ secrets.DATABASE_URL }}
+  TF_VAR_clerk_secret_key: ${{ secrets.CLERK_SECRET_KEY }}
+  TF_VAR_clerk_publishable_key: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
+  TF_VAR_signing_secret: ${{ secrets.SIGNING_SECRET }}
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend/terraform
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Curl Lambda URL and show status
+        run: |
+          url=$(terraform output -raw lambda_url)
+          echo "Pinging $url..."
+          curl -s -o /dev/null -w "HTTP status: %{http_code}\n" "$url/api/v1/product/all"
