@@ -44,11 +44,27 @@ jobs:
       - name: Curl database endpoint and show status
         run: |
           url=$(terraform output -raw lambda_url | sed 's:/*$::')
-          echo "Pinging database endpoint: $url..."
-          status=$(curl -s -o /dev/null -w "%{http_code}" "$url/api/v1/product/all")
+          endpoint="$url/api/v1/product/all"
+          request_count=10
 
-          echo "### Database Endpoint Health Check" >> $GITHUB_STEP_SUMMARY
-          echo "- **Endpoint:** [$url/api/v1/product/all]($url/api/v1/product/all)" >> $GITHUB_STEP_SUMMARY
-          echo "- **HTTP Status:** \`$status\`" >> $GITHUB_STEP_SUMMARY
+          echo "Pinging DB endpoint ${request_count}x in parallel: $endpoint"
+          tmpdir=$(mktemp -d)
 
-          echo "HTTP status: $status"
+          export endpoint tmpdir
+          seq $request_count | xargs -n 1 -P $request_count -I {} bash -c 'curl -s -o /dev/null -w "%{http_code}" "$endpoint" > "$tmpdir/status_{}"'
+
+          echo "### Database Endpoint Health Check (${request_count} parallel requests)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Endpoint:** [$endpoint]($endpoint)" >> $GITHUB_STEP_SUMMARY
+
+          failed=0
+          for i in $(seq 1 $request_count); do
+            status=$(cat "$tmpdir/status_$i")
+            if [ "$status" -eq 200 ]; then
+              echo "- Attempt $i: ✅ HTTP $status" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- Attempt $i: ❌ HTTP $status" >> $GITHUB_STEP_SUMMARY
+              failed=1
+            fi
+          done
+
+          [ "$failed" -eq 0 ]
