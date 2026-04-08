@@ -28,6 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: "./assets/images/icon.png",
   },
   plugins: [
+    require("./plugins/withModularHeaders"),
     "expo-router",
     "react-native-bottom-tabs",
     [
