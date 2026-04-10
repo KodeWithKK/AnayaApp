@@ -9,7 +9,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: "./assets/images/icon.png",
   scheme: "k3projects",
   userInterfaceStyle: "light",
-  newArchEnabled: false,
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.kodewithkk.k3projects",
@@ -28,7 +27,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: "./assets/images/icon.png",
   },
   plugins: [
-    require("./plugins/withModularHeaders"),
     "expo-router",
     "react-native-bottom-tabs",
     [
