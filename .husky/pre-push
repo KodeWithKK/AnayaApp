@@ -1,6 +1,6 @@
 # Build all packages and apps
 echo "🏗️ Building all packages and apps..."
-bun build
+bun run build
 
 # Run tests
 # echo "🧪 Running tests..."
