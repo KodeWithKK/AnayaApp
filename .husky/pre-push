@@ -4,6 +4,6 @@ bun run build
 
 # Run tests
 # echo "🧪 Running tests..."
-# bun test
+# bun run test
 
 echo "✅ All pre-push checks passed!"
