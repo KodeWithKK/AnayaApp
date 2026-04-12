@@ -20,7 +20,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend/terraform
+        working-directory: infra
 
     steps:
       - name: Checkout code

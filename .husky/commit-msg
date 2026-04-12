@@ -1,0 +1,2 @@
+# Optional: Add commit message linting
+bunx --no -- commitlint --edit $1

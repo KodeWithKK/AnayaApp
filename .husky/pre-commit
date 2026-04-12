@@ -1,0 +1,12 @@
+# Format all files first
+echo "🎨 Formatting all files..."
+bun format
+
+# Run lint check
+echo ""
+echo "🔍 Running lint check..."
+bun lint
+
+# Run type check
+echo "📝 Running type check..."
+bun typecheck

@@ -1,0 +1,37 @@
+{
+  "name": "anaya",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "db:push": "turbo db:push -F @repo/db",
+    "db:generate": "turbo db:generate -F @repo/db",
+    "db:migrate": "turbo db:migrate -F @repo/db",
+    "db:studio": "turbo db:studio -F @repo/db",
+    "android": "turbo run android -F mobile",
+    "ios": "turbo run ios -F mobile",
+    "api": "turbo dev -F api",
+    "pb:ios": "turbo run pb:ios -F mobile",
+    "pb:android": "turbo run pb:android -F mobile",
+    "cpb:ios": "turbo run cpb:ios -F mobile",
+    "cpb:android": "turbo run cpb:android -F mobile",
+    "prepare": "husky"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "husky": "^9.1.7",
+    "prettier": "^3.8.2",
+    "turbo": "^2.9.6",
+    "typescript": "^5.8.2"
+  },
+  "packageManager": "bun@1.3.11"
+}

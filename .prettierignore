@@ -1,0 +1,13 @@
+.turbo
+node_modules
+dist
+build
+coverage
+*.tgz
+.expo
+.next
+.vercel
+package.json
+package-lock.json
+bun.lockb
+tsconfig.json

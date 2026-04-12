@@ -1,0 +1,9 @@
+# Build all packages and apps
+echo "🏗️ Building all packages and apps..."
+bun build
+
+# Run tests
+# echo "🧪 Running tests..."
+# bun test
+
+echo "✅ All pre-push checks passed!"
