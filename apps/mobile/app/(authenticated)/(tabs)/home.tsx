@@ -10,10 +10,7 @@ import {
 import { useQueries } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text, View } from "@/components/core";
 import ProductCard from "@/components/features/product-card";
@@ -78,11 +75,10 @@ const HomeScreen: React.FC = memo(() => {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
       <StatusBar style="light" />
 
-      {/* Search Bar */}
-      <Animated.View className="absolute left-0 right-0 top-[0px] z-[1000] bg-white">
+      <Animated.View className="absolute left-0 right-0 z-[1000] bg-white">
         <View
           className="flex-1 flex-row items-center bg-primary px-4"
           style={{ paddingTop: insets.top }}>
@@ -100,7 +96,6 @@ const HomeScreen: React.FC = memo(() => {
         </View>
       </Animated.View>
 
-      {/* Section List */}
       <SectionList
         sections={sectionListData}
         keyExtractor={(item) => item.id.toString()}
@@ -178,7 +173,7 @@ const HomeScreen: React.FC = memo(() => {
           />
         }
       />
-    </SafeAreaView>
+    </View>
   );
 });
 
