@@ -1,17 +1,10 @@
-const expoConfig = require("eslint-config-expo/flat");
-const prettierConfig = require("eslint-config-prettier");
+// https://docs.expo.dev/guides/using-eslint/
+const { defineConfig } = require('eslint/config');
+const expoConfig = require('eslint-config-expo/flat');
 
-/** @type {import('eslint').Linter.Config[]} */
-module.exports = [
-  ...expoConfig,
+module.exports = defineConfig([
+  expoConfig,
   {
-    ignores: ["dist/*", ".expo/*", "node_modules/*"],
+    ignores: ['dist/*'],
   },
-  {
-    rules: {
-      "react/display-name": "error",
-      "react/no-unescaped-entities": "error",
-    },
-  },
-  prettierConfig,
-];
+]);

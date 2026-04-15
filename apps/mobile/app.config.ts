@@ -3,15 +3,15 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Anaya",
-  slug: "k3projects",
+  slug: "anaya",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  scheme: "k3projects",
+  scheme: "anaya",
   userInterfaceStyle: "light",
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "com.kodewithkk.k3projects",
+    bundleIdentifier: "com.kodewithkk.anaya",
     icon: {
       light: "./assets/images/icon.png",
       dark: "./assets/images/icon.png",
@@ -19,26 +19,24 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     icon: "./assets/images/icon.png",
-    package: "com.kodewithkk.k3projects",
+    package: "com.kodewithkk.anaya",
+    predictiveBackGestureEnabled: false,
   },
   plugins: [
     "expo-router",
-    "react-native-bottom-tabs",
-    [
-      "@sentry/react-native/expo",
-      {
-        url: "https://sentry.io/",
-        project: "k3projects",
-        organization: "kodewithkk",
-      },
-    ],
     "expo-font",
-    [
-      "expo-dev-launcher",
-      {
-        launchMode: "most-recent",
-      },
-    ],
+    "expo-image",
+    "expo-web-browser",
+    // "react-native-bottom-tabs",
+    // [
+    //   "@sentry/react-native/expo",
+    //   {
+    //     url: "https://sentry.io/",
+    //     project: "k3projects",
+    //     organization: "kodewithkk",
+    //   },
+    // ],
+    ["expo-dev-launcher", { launchMode: "most-recent" }],
     [
       "expo-splash-screen",
       {
@@ -51,6 +49,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ],
   experiments: {
     typedRoutes: true,
+    reactCompiler: true,
   },
   extra: {
     eas: {

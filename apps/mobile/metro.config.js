@@ -1,22 +1,17 @@
-const { withNativeWind } = require("nativewind/metro");
-const { getSentryExpoConfig } = require("@sentry/react-native/metro");
-
-const config = getSentryExpoConfig(__dirname, {
-  enableSourceContextInDevelopment: true,
-  annotateReactComponents: true,
+const { getDefaultConfig } = require("expo/metro-config");
+const { withUniwindConfig } = require('uniwind/metro'); 
+ 
+const config = getDefaultConfig(__dirname)
+ 
+module.exports = withUniwindConfig(config, {  
+  cssEntryFile: './global.css',
+  dtsFile: './src/uniwind-types.d.ts',
+  extraThemes: [
+    'lavender-light',
+    'lavender-dark',
+    'mint-light',
+    'mint-dark',
+    'sky-light',
+    'sky-dark',
+  ],
 });
-
-const { transformer, resolver } = config;
-
-config.transformer = {
-  ...transformer,
-  babelTransformerPath: require.resolve("react-native-svg-transformer/expo"),
-};
-
-config.resolver = {
-  ...resolver,
-  assetExts: resolver.assetExts.filter((ext) => ext !== "svg"),
-  sourceExts: [...resolver.sourceExts, "svg"],
-};
-
-module.exports = withNativeWind(config, { input: "./global.css" });
