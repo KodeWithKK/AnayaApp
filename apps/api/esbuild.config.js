@@ -6,12 +6,21 @@ dotenv.config();
 
 esbuild
   .build({
-    entryPoints: ["src/index.ts"],
+    entryPoints: ["src/lambda.ts"],
     bundle: true,
     platform: "node",
-    target: "node18",
-    outfile: "build/index.js",
+    target: "node20",
+    format: "cjs",
+    outfile: "dist/index.js",
     sourcemap: true,
-    external: ["aws-sdk"], // avoid bundling AWS SDK (preinstalled in Lambda)
+    mainFields: ["main", "module"],
+    external: [
+      "@nestjs/websockets/socket-module",
+      "@nestjs/microservices/microservices-module",
+      "@nestjs/microservices",
+      "@nestjs/graphql",
+      "class-transformer/storage",
+      "aws-sdk",
+    ], // avoid bundling optional NestJS dependencies and AWS SDK
   })
   .catch(() => process.exit(1));

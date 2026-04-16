@@ -15,6 +15,16 @@ dist
 dist-ssr
 *.local
 
+# Build residue
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
+src/**/*.d.ts.map
+test/**/*.js
+test/**/*.js.map
+test/**/*.d.ts
+test/**/*.d.ts.map
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

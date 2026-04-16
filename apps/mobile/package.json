@@ -17,7 +17,6 @@
     "expo-update": "expo install expo@latest",
     "update-deps": "expo install --fix",
     "adb:log": "adb logcat *:E",
-    "test": "jest --watchAll",
     "lint": "expo lint",
     "build": "bunx expo export --platform android --platform ios",
     "clean": "bunx rimraf .expo node_modules",

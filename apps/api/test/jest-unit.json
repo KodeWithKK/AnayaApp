@@ -1,0 +1,35 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testRegex": ".*\\.spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "verbose": true,
+  "collectCoverage": true,
+  "coverageProvider": "v8",
+  "collectCoverageFrom": [
+    "src/**/*.service.(t|j)s",
+    "!src/**/*.spec.ts",
+    "!src/**/*.controller.spec.ts",
+    "!src/**/*.e2e-spec.ts",
+    "!src/main.ts",
+    "!src/modules/database/database.service.ts"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 100,
+      "functions": 100,
+      "lines": 100,
+      "statements": 100
+    }
+  },
+  "coverageDirectory": "./coverage",
+  "coverageReporters": ["text", "lcov", "html"],
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/src/$1"
+  },
+  "testTimeout": 20000,
+  "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"]
+}

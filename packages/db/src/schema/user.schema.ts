@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  boolean,
   foreignKey,
   integer,
   pgTable,
@@ -14,10 +15,10 @@ import { products, sizes } from "./product.schema";
 /* ------- TABLES ------- */
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
-  email: text("email").notNull(),
-  firstName: text("firstName").notNull(),
-  lastName: text("lastName").notNull(),
-  photo: text("photo").notNull(),
+  email: text("email").notNull().unique(),
+  name: text("name").notNull(),
+  emailVerified: boolean("emailVerified").notNull().default(false),
+  image: text("image"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
