@@ -7,7 +7,10 @@ const config = {
   semi: true,
   printWidth: 80,
   tabWidth: 2,
-  plugins: ["@ianvs/prettier-plugin-sort-imports"],
+  plugins: [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss",
+  ],
   importOrder: [
     "^(react/(.*)$)|^(react$)",
     "^(react-native/(.*)$)|^(react-native$)",
