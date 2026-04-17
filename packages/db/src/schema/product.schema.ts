@@ -137,7 +137,8 @@ export const analytics = pgTable(
     productId: integer("product_id").notNull(),
     articleType: text("article_type").notNull(),
     gender: genderType().notNull(),
-    category: text("category").notNull(),
+    masterCategory: text("master_category").notNull(),
+    subCategory: text("sub_category").notNull(),
   },
   (table) => [
     foreignKey({ columns: [table.productId], foreignColumns: [products.id] })

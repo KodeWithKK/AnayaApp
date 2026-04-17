@@ -5,13 +5,12 @@ import * as schema from "./schema/index";
 
 export * from "./schema/index";
 
-const connectionString =
-  process.env.DATABASE_URL || "postgres://localhost:5432/db";
-
 let dbInstance: PostgresJsDatabase<typeof schema>;
 
 export const connectDb = () => {
   if (!dbInstance) {
+    const connectionString =
+      process.env.DATABASE_URL || "postgres://localhost:5432/db";
     const client = postgres(connectionString, { prepare: false });
     dbInstance = drizzle(client, { schema });
   }

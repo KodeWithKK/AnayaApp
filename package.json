@@ -12,6 +12,7 @@
     "db:generate": "turbo db:generate -F @repo/db",
     "db:migrate": "turbo db:migrate -F @repo/db",
     "db:studio": "turbo db:studio -F @repo/db",
+    "db:reset": "turbo db:reset -F @repo/db",
     "android": "turbo run android -F mobile",
     "ios": "turbo run ios -F mobile",
     "api": "turbo dev -F api",
