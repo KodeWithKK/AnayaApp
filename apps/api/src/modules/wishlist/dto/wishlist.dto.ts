@@ -10,5 +10,5 @@ export class ToggleWishlistDto {
   @IsNotEmpty()
   @IsInt()
   @Type(() => Number)
-  productId: number;
+  productId!: number;
 }

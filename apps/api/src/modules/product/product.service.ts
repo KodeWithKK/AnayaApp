@@ -30,7 +30,7 @@ export class ProductService {
     gender?: GenderType,
   ) {
     const conditions: SQL[] = [];
-    if (category) conditions.push(eq(analytics.category, category));
+    if (category) conditions.push(eq(analytics.masterCategory, category));
     if (articleType) conditions.push(eq(analytics.articleType, articleType));
     if (gender) conditions.push(eq(analytics.gender, gender));
 
@@ -64,7 +64,7 @@ export class ProductService {
     articleType?: string,
   ) {
     const conditions: SQL[] = [];
-    if (category) conditions.push(eq(analytics.category, category));
+    if (category) conditions.push(eq(analytics.masterCategory, category));
     if (articleType) conditions.push(eq(analytics.articleType, articleType));
 
     const whereConditions: SQL[] = [ilike(products.name, `%${q}%`)];

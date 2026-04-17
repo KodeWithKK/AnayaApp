@@ -6,7 +6,7 @@ import { connectDb, type Database } from "@repo/db";
 @Injectable()
 export class DatabaseService implements OnModuleInit {
   private readonly logger = new Logger(DatabaseService.name);
-  private dbInstance: Database;
+  private dbInstance!: Database;
 
   get db(): Database {
     if (!this.dbInstance) {
