@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Heading, Section, Text } from "@react-email/components";
 
 import { EmailLayout } from "./EmailLayout";
@@ -11,7 +10,7 @@ interface OTPEmailProps {
 export const OTPEmail = ({ otp, name }: OTPEmailProps) => {
   return (
     <EmailLayout previewText="Your Anaya Verification Code">
-      <Heading className="mb-6 text-center text-2xl font-bold tracking-tight text-gray-900">
+      <Heading className="mb-6 text-center text-xl font-bold tracking-tight text-gray-900">
         Verify Your Identity
       </Heading>
 

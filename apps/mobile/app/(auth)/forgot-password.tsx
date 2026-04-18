@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -9,6 +9,7 @@ import {
   Spinner,
   TextField,
   useThemeColor,
+  useToast,
 } from "heroui-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,6 +20,7 @@ import { authClient } from "@/lib/auth-client";
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -26,7 +28,12 @@ export default function ForgotPasswordScreen() {
 
   const handleResetRequest = async () => {
     if (!email) {
-      Alert.alert("Error", "Please enter your email address");
+      toast.show({
+        variant: "warning",
+        label: "Required",
+        description: "Please enter your email address",
+        icon: <Ionicons name="warning" size={20} color={accentColor} />,
+      });
       return;
     }
 
@@ -41,16 +48,28 @@ export default function ForgotPasswordScreen() {
       });
 
       if (error) {
-        Alert.alert("Error", error.message || "Failed to send reset link");
+        toast.show({
+          variant: "danger",
+          label: "Request Failed",
+          description: error.message || "Something went wrong",
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       } else {
-        Alert.alert(
-          "Success",
-          "If an account exists with this email, you will receive a password reset link shortly.",
-          [{ text: "Back to Login", onPress: () => router.back() }],
-        );
+        toast.show({
+          variant: "success",
+          label: "Link Sent",
+          description: "Check your email for the reset link",
+          icon: <Ionicons name="checkmark-circle" size={20} color="#44bb44" />,
+        });
+        router.back();
       }
     } catch {
-      Alert.alert("Error", "An unexpected error occurred");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsLoading(false);
     }

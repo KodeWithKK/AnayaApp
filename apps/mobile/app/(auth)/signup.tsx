@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -10,6 +10,7 @@ import {
   Spinner,
   TextField,
   useThemeColor,
+  useToast,
 } from "heroui-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,13 +24,22 @@ export default function SignupScreen() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const accentColor = useThemeColor("accent");
 
   const handleSignup = async () => {
-    if (!email || !password || !name) return;
+    if (!email || !password || !name) {
+      toast.show({
+        variant: "warning",
+        label: "Required",
+        description: "Please fill in all fields",
+        icon: <Ionicons name="warning" size={20} color={accentColor} />,
+      });
+      return;
+    }
     setIsLoading(true);
     try {
       const { error } = await signUp.email({
@@ -39,31 +49,46 @@ export default function SignupScreen() {
       });
 
       if (!error) {
+        toast.show({
+          variant: "success",
+          label: "Success",
+          description: "Please verify your email",
+          icon: <Ionicons name="checkmark-circle" size={20} color="#44bb44" />,
+        });
         router.push({
           pathname: "/(auth)/verification",
           params: { email },
         });
       } else if (error.code === "USER_ALREADY_EXISTS") {
-        Alert.alert(
-          "Account Exists",
-          "This email is already registered. If you haven't verified it yet, would you like to verify now?",
-          [
-            { text: "Cancel", style: "cancel" },
-            {
-              text: "Verify Now",
-              onPress: () =>
-                router.push({
-                  pathname: "/(auth)/verification",
-                  params: { email },
-                }),
-            },
-          ],
-        );
+        toast.show({
+          variant: "warning",
+          label: "Account Exists",
+          description: "This email is already registered",
+          icon: <Ionicons name="warning" size={20} color={accentColor} />,
+          actionLabel: "Verify Now",
+          onActionPress: ({ hide }) => {
+            hide();
+            router.push({
+              pathname: "/(auth)/verification",
+              params: { email },
+            });
+          },
+        });
       } else {
-        Alert.alert("Error", error.message || "Failed to sign up");
+        toast.show({
+          variant: "danger",
+          label: "Signup Failed",
+          description: error.message || "Failed to create account",
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       }
     } catch {
-      Alert.alert("Error", "An unexpected error occurred");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsLoading(false);
     }

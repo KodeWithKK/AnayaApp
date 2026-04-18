@@ -10,6 +10,7 @@ import {
   Spinner,
   TextField,
   useThemeColor,
+  useToast,
 } from "heroui-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -24,6 +25,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -31,7 +33,15 @@ export default function LoginScreen() {
   const accentColor = useThemeColor("accent");
 
   const handleLogin = async () => {
-    if (!email || !password) return;
+    if (!email || !password) {
+      toast.show({
+        variant: "warning",
+        label: "Required",
+        description: "Please enter your email and password",
+        icon: <Ionicons name="warning" size={20} color={accentColor} />,
+      });
+      return;
+    }
     setIsEmailLoading(true);
     try {
       const { error } = await signIn.email({
@@ -41,10 +51,20 @@ export default function LoginScreen() {
       if (!error) {
         await refreshSession();
       } else {
-        alert(error.message || "Failed to sign in");
+        toast.show({
+          variant: "danger",
+          label: "Login Failed",
+          description: error.message || "Invalid credentials",
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       }
     } catch {
-      alert("An unexpected error occurred");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsEmailLoading(false);
     }
@@ -58,10 +78,20 @@ export default function LoginScreen() {
         callbackURL: "/",
       });
       if (error) {
-        alert(error.message || "Google Sign-In failed");
+        toast.show({
+          variant: "danger",
+          label: "Google Login Failed",
+          description: error.message || "Something went wrong",
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       }
     } catch {
-      alert("An unexpected error occurred during Google Sign-In");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsGoogleLoading(false);
     }

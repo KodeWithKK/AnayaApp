@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -9,6 +9,7 @@ import {
   Spinner,
   TextField,
   useThemeColor,
+  useToast,
 } from "heroui-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,6 +23,7 @@ export default function VerificationScreen() {
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -30,7 +32,12 @@ export default function VerificationScreen() {
 
   const handleVerify = async () => {
     if (otp.length < 6) {
-      Alert.alert("Error", "Please enter a valid 6-digit code");
+      toast.show({
+        variant: "warning",
+        label: "Invalid Code",
+        description: "Please enter a valid 6-digit code",
+        icon: <Ionicons name="warning" size={20} color={accentColor} />,
+      });
       return;
     }
 
@@ -42,13 +49,28 @@ export default function VerificationScreen() {
       });
 
       if (error) {
-        Alert.alert("Verification Failed", error.message || "Invalid code");
+        toast.show({
+          variant: "danger",
+          label: "Verification Failed",
+          description: error.message || "Invalid code",
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       } else {
         await refreshSession();
-        Alert.alert("Success", "Account verified successfully!");
+        toast.show({
+          variant: "success",
+          label: "Success",
+          description: "Account verified successfully!",
+          icon: <Ionicons name="checkmark-circle" size={20} color="#44bb44" />,
+        });
       }
     } catch {
-      Alert.alert("Error", "An unexpected error occurred");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -63,12 +85,27 @@ export default function VerificationScreen() {
       });
 
       if (error) {
-        Alert.alert("Error", error.message);
+        toast.show({
+          variant: "danger",
+          label: "Error",
+          description: error.message,
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       } else {
-        Alert.alert("Success", "A new code has been sent to your email.");
+        toast.show({
+          variant: "success",
+          label: "Success",
+          description: "A new code has been sent to your email.",
+          icon: <Ionicons name="checkmark-circle" size={20} color="#44bb44" />,
+        });
       }
     } catch {
-      Alert.alert("Error", "Failed to resend code");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsResending(false);
     }
@@ -137,15 +174,20 @@ export default function VerificationScreen() {
             <AppText className="text-muted text-base">
               {"Didn't"} receive a code?
             </AppText>
-            <TouchableOpacity onPress={handleResend} disabled={isResending}>
+            <Button
+              variant="ghost"
+              onPress={handleResend}
+              isDisabled={isResending}
+              size="sm"
+              className="px-2">
               {isResending ? (
-                <Spinner size="sm" color="accent" />
+                <Spinner size="sm" color={accentColor} />
               ) : (
-                <AppText className="text-accent text-base font-semibold">
-                  Resend Code
-                </AppText>
+                <Button.Label className="text-accent text-base font-semibold">
+                  Resend
+                </Button.Label>
               )}
-            </TouchableOpacity>
+            </Button>
           </View>
         </View>
       </ScrollView>

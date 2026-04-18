@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -8,6 +8,7 @@ import {
   Label,
   Spinner,
   useThemeColor,
+  useToast,
 } from "heroui-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,7 +21,9 @@ export default function ResetPasswordScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -28,17 +31,32 @@ export default function ResetPasswordScreen() {
 
   const handleResetPassword = async () => {
     if (!password || !confirmPassword) {
-      Alert.alert("Error", "Please fill in all fields");
+      toast.show({
+        variant: "warning",
+        label: "Required",
+        description: "Please fill in all fields",
+        icon: <Ionicons name="warning" size={20} color={accentColor} />,
+      });
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match");
+      toast.show({
+        variant: "warning",
+        label: "Mismatched",
+        description: "Passwords do not match",
+        icon: <Ionicons name="warning" size={20} color={accentColor} />,
+      });
       return;
     }
 
     if (!token) {
-      Alert.alert("Error", "Invalid or missing reset token");
+      toast.show({
+        variant: "danger",
+        label: "Invalid Token",
+        description: "Reset token missing or expired",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
       return;
     }
 
@@ -53,14 +71,28 @@ export default function ResetPasswordScreen() {
       });
 
       if (error) {
-        Alert.alert("Reset Failed", error.message || "Unknown error occurred");
+        toast.show({
+          variant: "danger",
+          label: "Reset Failed",
+          description: error.message || "Unknown error occurred",
+          icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+        });
       } else {
-        Alert.alert("Success", "Your password has been reset successfully.", [
-          { text: "OK", onPress: () => router.replace("/(auth)") },
-        ]);
+        toast.show({
+          variant: "success",
+          label: "Success",
+          description: "Your password has been reset successfully.",
+          icon: <Ionicons name="checkmark-circle" size={20} color="#44bb44" />,
+        });
+        router.replace("/(auth)");
       }
     } catch {
-      Alert.alert("Error", "An unexpected error occurred");
+      toast.show({
+        variant: "danger",
+        label: "Error",
+        description: "An unexpected error occurred",
+        icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -127,9 +159,20 @@ export default function ResetPasswordScreen() {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showConfirmPassword}
                 className="text-base"
               />
+              <InputGroup.Suffix>
+                <TouchableOpacity
+                  className="px-4"
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  <Ionicons
+                    name={showConfirmPassword ? "eye" : "eye-off"}
+                    size={22}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </InputGroup.Suffix>
             </InputGroup>
           </View>
 

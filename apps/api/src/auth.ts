@@ -51,7 +51,12 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp }) {
         if (mailServiceInstance) {
-          await mailServiceInstance.sendOTPEmail(email, "Anaya Member", otp);
+          const db = connectDb();
+          const user = await db.query.users.findFirst({
+            where: (users, { eq }) => eq(users.email, email),
+          });
+          const name = user?.name || "Anaya Member";
+          await mailServiceInstance.sendOTPEmail(email, name, otp);
         }
       },
       sendVerificationOnSignUp: true,
