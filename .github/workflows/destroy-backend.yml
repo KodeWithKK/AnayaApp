@@ -7,9 +7,15 @@ env:
   AWS_REGION: ap-south-1
   TF_VAR_node_env: prod
   TF_VAR_database_url: ${{ secrets.DATABASE_URL }}
-  TF_VAR_clerk_secret_key: ${{ secrets.CLERK_SECRET_KEY }}
-  TF_VAR_clerk_publishable_key: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
-  TF_VAR_signing_secret: ${{ secrets.SIGNING_SECRET }}
+  TF_VAR_better_auth_secret: ${{ secrets.BETTER_AUTH_SECRET }}
+  TF_VAR_better_auth_url: ${{ secrets.BETTER_AUTH_URL }}
+  TF_VAR_google_client_id: ${{ secrets.GOOGLE_CLIENT_ID }}
+  TF_VAR_google_client_secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  TF_VAR_smtp_host: ${{ secrets.SMTP_HOST }}
+  TF_VAR_smtp_port: ${{ secrets.SMTP_PORT }}
+  TF_VAR_smtp_user: ${{ secrets.SMTP_USER }}
+  TF_VAR_smtp_pass: ${{ secrets.SMTP_PASS }}
+  TF_VAR_smtp_from: ${{ secrets.SMTP_FROM }}
 
 jobs:
   destroy:

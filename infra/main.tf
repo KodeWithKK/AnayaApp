@@ -50,11 +50,17 @@ resource "aws_lambda_function" "express_func" {
 
   environment {
     variables = {
-      NODE_ENV              = var.node_env
-      DATABASE_URL          = var.database_url
-      CLERK_SECRET_KEY      = var.clerk_secret_key
-      CLERK_PUBLISHABLE_KEY = var.clerk_publishable_key
-      SIGNING_SECRET        = var.signing_secret
+      NODE_ENV             = var.node_env
+      DATABASE_URL         = var.database_url
+      BETTER_AUTH_SECRET   = var.better_auth_secret
+      BETTER_AUTH_URL      = var.better_auth_url
+      GOOGLE_CLIENT_ID     = var.google_client_id
+      GOOGLE_CLIENT_SECRET = var.google_client_secret
+      SMTP_HOST            = var.smtp_host
+      SMTP_PORT            = var.smtp_port
+      SMTP_USER            = var.smtp_user
+      SMTP_PASS            = var.smtp_pass
+      SMTP_FROM            = var.smtp_from
     }
   }
 }
