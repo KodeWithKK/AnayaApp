@@ -30,6 +30,15 @@ export default function VerificationScreen() {
   const refreshSession = useAuthStore((state) => state.refreshSession);
   const accentColor = useThemeColor("accent");
 
+  const maskEmail = (emailStr: string | undefined) => {
+    if (!emailStr) return "";
+    const [local, domain] = emailStr.split("@");
+    if (!domain) return emailStr;
+    const maskedLocal =
+      local.charAt(0) + "•••" + local.charAt(local.length - 1);
+    return `${maskedLocal}@${domain}`;
+  };
+
   const handleVerify = async () => {
     if (otp.length < 6) {
       toast.show({
@@ -137,7 +146,9 @@ export default function VerificationScreen() {
           </AppText>
           <AppText className="text-muted mt-2 text-center text-base font-medium">
             {"We've"} sent a 6-digit code to{"\n"}
-            <AppText className="text-foreground font-semibold">{email}</AppText>
+            <AppText className="text-foreground font-semibold">
+              {maskEmail(email)}
+            </AppText>
           </AppText>
         </View>
 

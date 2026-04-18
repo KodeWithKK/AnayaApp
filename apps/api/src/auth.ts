@@ -2,6 +2,7 @@ import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { emailOTP } from "better-auth/plugins";
+import { eq } from "drizzle-orm";
 
 import { connectDb } from "@repo/db";
 import * as schema from "@repo/db";
@@ -64,6 +65,29 @@ export const auth = betterAuth({
     }),
     expo(),
   ],
+  hooks: {
+    before: async (context) => {
+      if (!context.request) return;
+      const url = new URL(context.request.url);
+      const isSignup = url.pathname.includes("/sign-up/email");
+      const isSocial = url.pathname.includes("/sign-in/social");
+
+      if (isSignup || isSocial) {
+        const body = context.body as { email?: string } | undefined;
+        const email = body?.email;
+        if (!email) return;
+
+        const db = connectDb();
+        const user = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.email, email.toLowerCase()),
+        });
+
+        if (user && !user.emailVerified) {
+          await db.delete(schema.users).where(eq(schema.users.id, user.id));
+        }
+      }
+    },
+  },
   trustedOrigins: [
     "anaya://*",
     "exp://*",

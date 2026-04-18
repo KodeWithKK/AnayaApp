@@ -59,21 +59,6 @@ export default function SignupScreen() {
           pathname: "/(auth)/verification",
           params: { email },
         });
-      } else if (error.code === "USER_ALREADY_EXISTS") {
-        toast.show({
-          variant: "warning",
-          label: "Account Exists",
-          description: "This email is already registered",
-          icon: <Ionicons name="warning" size={20} color={accentColor} />,
-          actionLabel: "Verify Now",
-          onActionPress: ({ hide }) => {
-            hide();
-            router.push({
-              pathname: "/(auth)/verification",
-              params: { email },
-            });
-          },
-        });
       } else {
         toast.show({
           variant: "danger",
