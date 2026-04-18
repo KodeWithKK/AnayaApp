@@ -8,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "anaya",
-  userInterfaceStyle: "light",
+  userInterfaceStyle: "automatic",
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.kodewithkk.anaya",
@@ -41,7 +41,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "expo-splash-screen",
       {
         backgroundColor: "#ffffff",
-        image: "./assets/images/splash-light.png",
+        image: "./assets/images/icon-light.png",
+        dark: {
+          backgroundColor: "#000000",
+          image: "./assets/images/icon.png",
+        },
         resizeMode: "contain",
         imageWidth: 200,
       },

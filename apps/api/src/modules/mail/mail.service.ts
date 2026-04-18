@@ -3,8 +3,8 @@ import { render } from "@react-email/render";
 import * as nodemailer from "nodemailer";
 
 import { envConfig } from "@/config/env.config";
+import { OTPEmail } from "./templates/OTPEmail";
 import { ResetPasswordEmail } from "./templates/ResetPasswordEmail";
-import { VerificationEmail } from "./templates/VerificationEmail";
 
 @Injectable()
 export class MailService {
@@ -21,29 +21,6 @@ export class MailService {
         pass: envConfig.smtpPass,
       },
     });
-  }
-
-  async sendVerificationEmail(
-    to: string,
-    name: string,
-    url: string,
-  ): Promise<void> {
-    try {
-      const emailHtml = await render(VerificationEmail({ url, name }));
-
-      const mailOptions = {
-        from: envConfig.smtpFrom,
-        to,
-        subject: "Verify your email for Anaya",
-        html: emailHtml,
-      };
-
-      await this.transporter.sendMail(mailOptions);
-      this.logger.log(`Verification email sent to ${to}`);
-    } catch (error) {
-      this.logger.error(`Failed to send verification email to ${to}`, error);
-      throw error;
-    }
   }
 
   async sendResetPasswordEmail(
@@ -65,6 +42,25 @@ export class MailService {
       this.logger.log(`Reset password email sent to ${to}`);
     } catch (error) {
       this.logger.error(`Failed to send reset password email to ${to}`, error);
+      throw error;
+    }
+  }
+
+  async sendOTPEmail(to: string, name: string, otp: string): Promise<void> {
+    try {
+      const emailHtml = await render(OTPEmail({ otp, name }));
+
+      const mailOptions = {
+        from: envConfig.smtpFrom,
+        to,
+        subject: `${otp} is your Anaya verification code`,
+        html: emailHtml,
+      };
+
+      await this.transporter.sendMail(mailOptions);
+      this.logger.log(`OTP email sent to ${to}`);
+    } catch (error) {
+      this.logger.error(`Failed to send OTP email to ${to}`, error);
       throw error;
     }
   }

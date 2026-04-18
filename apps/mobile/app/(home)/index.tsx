@@ -2,8 +2,7 @@ import type { FC } from "react";
 import { Image, Pressable, View, type ImageSourcePropType } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { Href, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { Card, Chip, cn } from "heroui-native";
+import { Button, Card, Chip, cn } from "heroui-native";
 import Animated, {
   Easing,
   FadeIn,
@@ -13,6 +12,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
+import { useAuthStore } from "@/store/auth-store";
 import HomeComponentsDark from "../../assets/images/home-components-dark.png";
 import HomeComponentsLight from "../../assets/images/home-components-light.png";
 import HomeShowcasesDark from "../../assets/images/home-showcases-dark.png";
@@ -153,8 +153,6 @@ const HomeCard: FC<HomeCardProps & { index: number }> = ({
 };
 
 export default function App() {
-  const { isDark } = useAppTheme();
-
   return (
     <ScreenScrollView>
       <AppText className="text-muted my-4 text-center text-base">
@@ -173,8 +171,16 @@ export default function App() {
             index={index}
           />
         ))}
+
+        <Button
+          variant="outline"
+          className="mt-4"
+          onPress={useAuthStore.getState().logout}>
+          <Button.Label className="font-semibold text-red-500">
+            Logout
+          </Button.Label>
+        </Button>
       </View>
-      <StatusBar style={isDark ? "light" : "dark"} />
     </ScreenScrollView>
   );
 }

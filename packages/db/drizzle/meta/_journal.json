@@ -8,6 +8,13 @@
       "when": 1776384352782,
       "tag": "0000_chubby_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776501062843,
+      "tag": "0001_eager_firedrake",
+      "breakpoints": true
     }
   ]
 }

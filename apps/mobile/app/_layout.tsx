@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import {
   Inter_400Regular,
@@ -7,26 +7,9 @@ import {
   Inter_700Bold,
   useFonts,
 } from "@expo-google-fonts/inter";
-import {
-  Saira_400Regular,
-  Saira_500Medium,
-  Saira_600SemiBold,
-  Saira_700Bold,
-} from "@expo-google-fonts/saira";
-import {
-  SNPro_400Regular,
-  SNPro_500Medium,
-  SNPro_600SemiBold,
-  SNPro_700Bold,
-} from "@expo-google-fonts/sn-pro";
-import {
-  SpaceGrotesk_400Regular,
-  SpaceGrotesk_500Medium,
-  SpaceGrotesk_600SemiBold,
-  SpaceGrotesk_700Bold,
-} from "@expo-google-fonts/space-grotesk";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { HeroUINativeProvider } from "heroui-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
@@ -34,14 +17,40 @@ import {
   KeyboardProvider,
 } from "react-native-keyboard-controller";
 
+import { useAuthStore } from "@/store/auth-store";
+import { AppThemeProvider, useAppTheme } from "../contexts/app-theme-context";
+
 import "../global.css";
 
-import { AppThemeProvider } from "../contexts/app-theme-context";
+SplashScreen.preventAutoHideAsync();
 
 SplashScreen.setOptions({
   duration: 300,
   fade: true,
 });
+
+function RootStack() {
+  const { session, user, isLoading } = useAuthStore();
+
+  if (isLoading) return null;
+
+  return (
+    <Stack>
+      <Stack.Protected guard={!!session && !!user?.emailVerified}>
+        <Stack.Screen name="(home)" options={{ headerShown: false }} />
+      </Stack.Protected>
+      <Stack.Protected guard={!session || !user?.emailVerified}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      </Stack.Protected>
+      <Stack.Screen name="+not-found" />
+    </Stack>
+  );
+}
+
+const ThemeManagedStatusBar = () => {
+  const { isDark } = useAppTheme();
+  return <StatusBar style={isDark ? "light" : "dark"} />;
+};
 
 /**
  * Component that wraps app content inside KeyboardProvider
@@ -75,35 +84,36 @@ function AppContent() {
             stylingPrinciples: false,
           },
         }}>
-        <Slot />
+        <ThemeManagedStatusBar />
+        <RootStack />
       </HeroUINativeProvider>
     </AppThemeProvider>
   );
 }
 
 export default function Layout() {
-  const fonts = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    SpaceGrotesk_400Regular,
-    SpaceGrotesk_500Medium,
-    SpaceGrotesk_600SemiBold,
-    SpaceGrotesk_700Bold,
-    Saira_400Regular,
-    Saira_500Medium,
-    Saira_600SemiBold,
-    Saira_700Bold,
-    SNPro_400Regular,
-    SNPro_500Medium,
-    SNPro_600SemiBold,
-    SNPro_700Bold,
+  const [loaded, error] = useFonts({
+    "Inter-Regular": Inter_400Regular,
+    "Inter-Medium": Inter_500Medium,
+    "Inter-SemiBold": Inter_600SemiBold,
+    "Inter-Bold": Inter_700Bold,
   });
 
-  if (!fonts) {
-    return null;
-  }
+  const refreshSession = useAuthStore((state) => state.refreshSession);
+
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    refreshSession();
+  }, [refreshSession]);
+
+  useEffect(() => {
+    if (loaded) SplashScreen.hideAsync();
+  }, [loaded]);
+
+  if (!loaded) return null;
 
   return (
     <GestureHandlerRootView style={styles.root}>

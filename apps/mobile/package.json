@@ -11,7 +11,7 @@
     "pb:ios": "expo prebuild -p ios",
     "pb:android": "expo prebuild -p android",
     "cpb:ios": "expo prebuild -p ios --clean",
-    "cpb:android": "expo prebuild --clean",
+    "cpb:android": "expo prebuild -p android --clean",
     "doctor": "expo-doctor",
     "doctor:fix": "bunx expo install --fix",
     "expo-update": "expo install expo@latest",
