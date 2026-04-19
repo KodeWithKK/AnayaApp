@@ -3,18 +3,27 @@ import { Type } from "class-transformer";
 import { IsInt, IsOptional, Max, Min } from "class-validator";
 
 export class PaginationDto {
-  @ApiPropertyOptional({ description: "Offset for pagination", default: 0 })
+  @ApiPropertyOptional({
+    description: "Offset for pagination (starting point)",
+    default: 0,
+    minimum: 0,
+  })
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(0)
-  @Type(() => Number)
-  o?: number = 0;
+  o: number = 0;
 
-  @ApiPropertyOptional({ description: "Limit for pagination", default: 20 })
+  @ApiPropertyOptional({
+    description: "Limit for pagination (number of items per page)",
+    default: 10,
+    minimum: 1,
+    maximum: 100,
+  })
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
-  @Type(() => Number)
-  l?: number = 20;
+  l: number = 10;
 }

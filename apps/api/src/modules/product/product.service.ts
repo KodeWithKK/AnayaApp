@@ -24,7 +24,7 @@ export class ProductService {
 
   async findAll(
     o = 0,
-    l = 20,
+    l = 10,
     category?: string,
     articleType?: string,
     gender?: GenderType,
@@ -59,7 +59,7 @@ export class ProductService {
   async search(
     q: string,
     o = 0,
-    l = 20,
+    l = 10,
     category?: string,
     articleType?: string,
   ) {
