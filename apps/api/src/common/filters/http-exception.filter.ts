@@ -27,6 +27,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getResponse()
         : "Internal server error";
 
+    // Direct console error for better visibility in CloudWatch in production
+    if (process.env.NODE_ENV === "prod") {
+      console.error(`[EXCEPTIONS] Status: ${status} Path: ${request.url}`);
+      if (exception instanceof Error) {
+        console.error(exception.stack);
+      } else {
+        console.error(JSON.stringify(exception));
+      }
+    }
+
     this.logger.error(
       `Http Status: ${status} Error Message: ${JSON.stringify(message)}`,
       exception instanceof Error ? exception.stack : "",

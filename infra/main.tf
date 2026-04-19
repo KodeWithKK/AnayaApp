@@ -20,7 +20,7 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "anaya-express-role"
+  name = "anaya-nest-api-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -39,10 +39,10 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
 }
 
 resource "aws_lambda_function" "express_func" {
-  function_name = "anaya-express-lambda"
+  function_name = "anaya-nest-api"
   role          = aws_iam_role.lambda_exec_role.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs20.x"
   filename      = "${path.module}/../build.zip"
   source_code_hash = filebase64sha256("${path.module}/../build.zip")
   timeout       = 30

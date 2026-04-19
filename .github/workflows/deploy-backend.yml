@@ -1,4 +1,4 @@
-name: Deploy Express Backend
+name: Deploy Backend
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
       - "apps/api/**"
       - "packages/db/**"
       - "infra/**"
-      - "package.json"
       - "turbo.json"
+      - ".github/workflows/deploy-backend.yml"
   workflow_dispatch:
 
 env:
@@ -26,30 +26,44 @@ env:
   TF_VAR_smtp_from: ${{ secrets.SMTP_FROM }}
 
 jobs:
-  build_and_deploy:
-    name: Build and Deploy
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
 
-      - name: Install dependencies
+      - name: Install Root Dependencies
         run: bun install
 
       - name: Build API
-        run: bunx turbo build:lambda -F api
+        run: |
+          cd apps/api
+          node esbuild.config.js
+          cd ../..
+
+      - name: Prepare Lambda Artifact
+        run: |
+          mkdir -p lambda-package
+          cp -r apps/api/dist/* lambda-package/
+
+      - name: Install Production Deps
+        run: |
+          cd lambda-package
+          npm install --omit=dev --no-package-lock --legacy-peer-deps
+          cd ..
 
       - name: Package for Lambda
+        id: package_lambda
         run: |
-          cd apps/api/dist
-          zip -r ../../../build.zip .
-          cd ../../..
+          cd lambda-package
+          zip -r ../build.zip .
+          cd ..
+          PACKAGE_SIZE=$(ls -lh build.zip | awk '{print $5}')
+          echo "size=$PACKAGE_SIZE" >> $GITHUB_OUTPUT
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -81,4 +95,5 @@ jobs:
       - name: Deployment Summary
         run: |
           echo "### ✅ Deployment Successful!" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 Lambda URL: [${{ steps.tf_output.outputs.lambda_url }}](${{ steps.tf_output.outputs.lambda_url }})" >> $GITHUB_STEP_SUMMARY
+          echo "📦 **Package Size**: ${{ steps.package_lambda.outputs.size }}" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **Lambda URL**: [${{ steps.tf_output.outputs.lambda_url }}](${{ steps.tf_output.outputs.lambda_url }})" >> $GITHUB_STEP_SUMMARY
