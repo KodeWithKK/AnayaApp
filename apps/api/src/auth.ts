@@ -65,12 +65,15 @@ export const auth = betterAuth({
     }),
     expo(),
   ],
+  basePath: "/api/v1/auth",
   hooks: {
     before: async (context) => {
       if (!context.request) return;
       const url = new URL(context.request.url);
-      const isSignup = url.pathname.includes("/sign-up/email");
-      const isSocial = url.pathname.includes("/sign-in/social");
+      const isSignup = url.pathname.includes("/api/v1/auth/sign-up/email");
+      const isSocial = url.pathname.includes("/api/v1/auth/sign-in/social");
+
+      console.log("Auth request URL: ", url.pathname);
 
       if (isSignup || isSocial) {
         const body = context.body as { email?: string } | undefined;
@@ -91,6 +94,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     "anaya://*",
     "exp://*",
+    envConfig.betterAuthUrl,
     "http://192.168.29.43:8000",
     ...(envConfig.nodeEnv === "dev"
       ? ["exp://192.168.*.*:*/**", "http://localhost:19006"]

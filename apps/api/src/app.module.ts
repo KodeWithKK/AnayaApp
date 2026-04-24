@@ -18,9 +18,7 @@ import { WishlistModule } from "./modules/wishlist/wishlist.module";
 
 @Module({
   imports: [
-    AuthModule.forRoot({
-      auth,
-    }),
+    AuthModule.forRoot({ auth }),
     DatabaseModule,
     ProductModule,
     CartModule,

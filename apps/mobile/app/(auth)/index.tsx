@@ -173,7 +173,7 @@ export default function LoginScreen() {
             isDisabled={isEmailLoading}
             size="lg">
             {isEmailLoading ? (
-              <Spinner size="sm" color="white" />
+              <Spinner size="sm" className="text-white" />
             ) : (
               <Button.Label className="font-semibold">Sign In</Button.Label>
             )}
@@ -190,7 +190,7 @@ export default function LoginScreen() {
             onPress={handleGoogleLogin}
             isDisabled={isGoogleLoading}>
             {isGoogleLoading ? (
-              <Spinner size="sm" color="accent" />
+              <Spinner size="sm" className="text-accent" />
             ) : (
               <View className="flex-row items-center gap-3">
                 <MaterialCommunityIcons
@@ -206,7 +206,7 @@ export default function LoginScreen() {
           </Button>
         </View>
 
-        <View className="mt-12 mb-8 flex-row justify-center gap-1">
+        <View className="mb-8 mt-12 flex-row justify-center gap-1">
           <AppText className="text-muted text-base font-medium">
             Don&apos;t have an account?
           </AppText>
