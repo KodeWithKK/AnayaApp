@@ -60,6 +60,9 @@ async function bootstrap() {
 }
 
 export const handler: Handler = (event, context, callback) => {
+  // Prevent Lambda from waiting for the event loop to be empty (needed for DB pools)
+  context.callbackWaitsForEmptyEventLoop = false;
+
   console.log(
     "📥 Incoming Event:",
     JSON.stringify(
