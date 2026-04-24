@@ -4,20 +4,35 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import * as serverlessExpressLib from "@vendia/serverless-express";
 import { Callback, Context, Handler } from "aws-lambda";
 import express from "express";
 
 import { AppModule } from "./app.module";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 
-const serverlessExpress =
-  (serverlessExpressLib as any).default || serverlessExpressLib;
-
 let cachedServer: Handler;
 
 async function bootstrap() {
   console.log("🚀 Lambda starting with Node version:", process.version);
+
+  // Dynamic require to handle problematic bundling of this specific module
+  const serverlessExpressLib = require("@vendia/serverless-express");
+  console.log(
+    "[Diagnostic] serverlessExpressLib type:",
+    typeof serverlessExpressLib,
+  );
+  console.log(
+    "[Diagnostic] serverlessExpressLib keys:",
+    Object.keys(serverlessExpressLib || {}),
+  );
+
+  const serverlessExpress =
+    serverlessExpressLib.default || serverlessExpressLib;
+  console.log(
+    "[Diagnostic] final serverlessExpress type:",
+    typeof serverlessExpress,
+  );
+
   if (!cachedServer) {
     const nestApp = await NestFactory.create(AppModule);
 
