@@ -59,7 +59,7 @@ async function bootstrap() {
   return cachedServer;
 }
 
-export const handler: Handler = async (event, context, callback) => {
+export const handler: Handler = (event, context, callback) => {
   console.log(
     "📥 Incoming Event:",
     JSON.stringify(
@@ -74,23 +74,14 @@ export const handler: Handler = async (event, context, callback) => {
     ),
   );
 
-  const server = await bootstrap();
-  try {
-    const result = await server(event, context, callback);
-    console.log(
-      "📤 Lambda Result:",
-      JSON.stringify(
-        {
-          statusCode: result?.statusCode,
-          headers: result?.headers,
-        },
-        null,
-        2,
-      ),
-    );
-    return result;
-  } catch (error) {
-    console.error("❌ Handler Error:", error);
-    throw error;
-  }
+  bootstrap()
+    .then((server) => {
+      // server is a Handler, so we call it with (event, context, callback)
+      // serverless-express will then handle the callback to AWS correctly.
+      server(event, context, callback);
+    })
+    .catch((error) => {
+      console.error("❌ Bootstrap Error:", error);
+      callback(error);
+    });
 };
