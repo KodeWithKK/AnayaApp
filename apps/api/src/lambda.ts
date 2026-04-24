@@ -16,10 +16,11 @@ let cachedServer: Handler;
 async function bootstrap() {
   console.log("🚀 Lambda starting with Node version:", process.version);
   if (!cachedServer) {
-    const expressApp = express();
+    const nestApp = await NestFactory.create(AppModule);
 
-    // Diagnostic middleware to track request/response lifecycle
-    expressApp.use((req, res, next) => {
+    // Diagnostic middleware - we'll add it to the underlying express instance
+    const expressApp = nestApp.getHttpAdapter().getInstance();
+    expressApp.use((req: any, res: any, next: any) => {
       console.log(`[Express] 📥 Incoming: ${req.method} ${req.url}`);
       const start = Date.now();
       const originalEnd = res.end;
@@ -34,11 +35,6 @@ async function bootstrap() {
       };
       next();
     });
-
-    const nestApp = await NestFactory.create(
-      AppModule,
-      new ExpressAdapter(expressApp),
-    );
 
     nestApp.setGlobalPrefix("api/v1");
     nestApp.useGlobalFilters(new AllExceptionsFilter());
