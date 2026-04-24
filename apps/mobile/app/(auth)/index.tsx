@@ -206,7 +206,7 @@ export default function LoginScreen() {
           </Button>
         </View>
 
-        <View className="mb-8 mt-12 flex-row justify-center gap-1">
+        <View className="mt-12 mb-8 flex-row justify-center gap-1">
           <AppText className="text-muted text-base font-medium">
             Don&apos;t have an account?
           </AppText>

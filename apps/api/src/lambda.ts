@@ -59,11 +59,38 @@ async function bootstrap() {
   return cachedServer;
 }
 
-export const handler: Handler = async (
-  event: any,
-  context: Context,
-  callback: Callback,
-) => {
+export const handler: Handler = async (event, context, callback) => {
+  console.log(
+    "📥 Incoming Event:",
+    JSON.stringify(
+      {
+        path: event.rawPath || event.path,
+        method: event.requestContext?.http?.method || event.httpMethod,
+        headers: event.headers,
+        requestId: context.awsRequestId,
+      },
+      null,
+      2,
+    ),
+  );
+
   const server = await bootstrap();
-  return server(event, context, callback);
+  try {
+    const result = await server(event, context, callback);
+    console.log(
+      "📤 Lambda Result:",
+      JSON.stringify(
+        {
+          statusCode: result?.statusCode,
+          headers: result?.headers,
+        },
+        null,
+        2,
+      ),
+    );
+    return result;
+  } catch (error) {
+    console.error("❌ Handler Error:", error);
+    throw error;
+  }
 };
