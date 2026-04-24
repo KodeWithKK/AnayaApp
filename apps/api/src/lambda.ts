@@ -17,6 +17,24 @@ async function bootstrap() {
   console.log("🚀 Lambda starting with Node version:", process.version);
   if (!cachedServer) {
     const expressApp = express();
+
+    // Diagnostic middleware to track request/response lifecycle
+    expressApp.use((req, res, next) => {
+      console.log(`[Express] 📥 Incoming: ${req.method} ${req.url}`);
+      const start = Date.now();
+      const originalEnd = res.end;
+      res.end = function (...args: any[]) {
+        console.log(
+          `[Express] 📤 Finished: ${req.method} ${req.url} - Status: ${
+            res.statusCode
+          } - Duration: ${Date.now() - start}ms`,
+        );
+        // @ts-ignore
+        return originalEnd.apply(this, args);
+      };
+      next();
+    });
+
     const nestApp = await NestFactory.create(
       AppModule,
       new ExpressAdapter(expressApp),
