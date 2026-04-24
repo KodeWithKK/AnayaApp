@@ -14,6 +14,7 @@ import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 let cachedServer: Handler;
 
 async function bootstrap() {
+  console.log("🚀 Lambda starting with Node version:", process.version);
   if (!cachedServer) {
     const expressApp = express();
     const nestApp = await NestFactory.create(

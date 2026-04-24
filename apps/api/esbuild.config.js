@@ -29,6 +29,7 @@ function prepareDeploymentPackage(sourcePkg, targetDir, externalList) {
   const deployPkg = {
     name: sourcePkg.name + "-deploy",
     version: sourcePkg.version,
+    type: "module",
     private: true,
     dependencies: {},
   };
