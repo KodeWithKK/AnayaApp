@@ -5,9 +5,11 @@ import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Callback, Context, Handler } from "aws-lambda";
+import { toNodeHandler } from "better-auth/node";
 import express from "express";
 
 import { AppModule } from "./app.module";
+import { auth } from "./auth";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 
 let cachedServer: Handler;
@@ -17,21 +19,8 @@ async function bootstrap() {
 
   // Dynamic require to handle problematic bundling of this specific module
   const serverlessExpressLib = require("@vendia/serverless-express");
-  console.log(
-    "[Diagnostic] serverlessExpressLib type:",
-    typeof serverlessExpressLib,
-  );
-  console.log(
-    "[Diagnostic] serverlessExpressLib keys:",
-    Object.keys(serverlessExpressLib || {}),
-  );
-
   const serverlessExpress =
     serverlessExpressLib.default || serverlessExpressLib;
-  console.log(
-    "[Diagnostic] final serverlessExpress type:",
-    typeof serverlessExpress,
-  );
 
   if (!cachedServer) {
     const nestApp = await NestFactory.create(AppModule, { bodyParser: false });
@@ -49,6 +38,13 @@ async function bootstrap() {
 
     expressApp.use((req: any, res: any, next: any) => {
       console.log(`[Express] 📥 Incoming: ${req.method} ${req.url}`);
+
+      // If it's an auth route, let Better Auth handle it directly to avoid any stream issues
+      if (req.url && req.url.includes("/api/v1/auth")) {
+        console.log(`[AuthDirect] Handling auth route directly: ${req.url}`);
+        return toNodeHandler(auth)(req, res);
+      }
+
       const start = Date.now();
       const originalEnd = res.end;
       res.end = function (...args: any[]) {
