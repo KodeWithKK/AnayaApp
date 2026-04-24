@@ -16,7 +16,7 @@ let cachedServer: Handler;
 async function bootstrap() {
   console.log("🚀 Lambda starting with Node version:", process.version);
   if (!cachedServer) {
-    const nestApp = await NestFactory.create(AppModule);
+    const nestApp = await NestFactory.create(AppModule, { bodyParser: false });
 
     // Diagnostic middleware - we'll add it to the underlying express instance
     const expressApp = nestApp.getHttpAdapter().getInstance();
