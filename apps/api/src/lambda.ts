@@ -21,7 +21,8 @@ async function bootstrap() {
     const serverlessExpress =
       serverlessExpressLib.default || serverlessExpressLib;
 
-    const expressApp = express();
+    const expressLib = require("express");
+    const expressApp = (expressLib.default || expressLib)();
 
     // EXACTLY AS THE ARTICLE: Use ExpressAdapter and default options (including bodyParser)
     const nestApp = await NestFactory.create(
