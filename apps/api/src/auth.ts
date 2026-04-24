@@ -68,27 +68,38 @@ export const auth = betterAuth({
   basePath: "/api/v1/auth",
   hooks: {
     before: async (context) => {
-      if (!context.request) return;
+      console.log("[AuthHook] 🏁 Hook started");
+      if (!context.request) {
+        console.log("[AuthHook] ⚠️ No request in context");
+        return;
+      }
       const url = new URL(context.request.url);
       const isSignup = url.pathname.includes("/api/v1/auth/sign-up/email");
       const isSocial = url.pathname.includes("/api/v1/auth/sign-in/social");
 
-      console.log("Auth request URL: ", url.pathname);
+      console.log("[AuthHook] 📍 Path:", url.pathname);
 
       if (isSignup || isSocial) {
+        console.log("[AuthHook] 👤 Handling Signup/Social");
         const body = context.body as { email?: string } | undefined;
         const email = body?.email;
-        if (!email) return;
+        if (!email) {
+          console.log("[AuthHook] ⚠️ No email in body");
+          return;
+        }
 
+        console.log("[AuthHook] 🔍 Checking user:", email);
         const db = connectDb();
         const user = await db.query.users.findFirst({
           where: (users, { eq }) => eq(users.email, email.toLowerCase()),
         });
 
         if (user && !user.emailVerified) {
+          console.log("[AuthHook] 🗑️ Deleting unverified user:", user.id);
           await db.delete(schema.users).where(eq(schema.users.id, user.id));
         }
       }
+      console.log("[AuthHook] ✅ Hook finished");
     },
   },
   trustedOrigins: [
