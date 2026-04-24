@@ -8,7 +8,7 @@
     "build": "nest build",
     "start": "node dist/main.js",
     "dev": "bun --watch src/main.ts",
-    "build:lambda": "node esbuild.config.js",
+    "build:lambda": "nest build --webpack --webpackPath webpack.config.js",
     "start:prod": "node dist/main",
     "test": "jest --config ./test/jest-unit.json",
     "test:watch": "jest --config ./test/jest-unit.json --watch",
@@ -60,7 +60,10 @@
     "jest": "^30.3.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.7",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "webpack": "^5.106.2",
+    "webpack-node-externals": "^3.0.0"
   }
 }

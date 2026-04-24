@@ -42,19 +42,13 @@ jobs:
       - name: Build API
         run: |
           cd apps/api
-          node esbuild.config.js
+          bun run build:lambda
           cd ../..
 
       - name: Prepare Lambda Artifact
         run: |
           mkdir -p lambda-package
-          cp -r apps/api/dist/* lambda-package/
-
-      - name: Install Production Deps
-        run: |
-          cd lambda-package
-          npm install --omit=dev --no-package-lock --legacy-peer-deps
-          cd ..
+          cp apps/api/dist/index.js lambda-package/
 
       - name: Package for Lambda
         id: package_lambda

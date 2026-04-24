@@ -20,6 +20,15 @@ async function bootstrap() {
 
     // Diagnostic middleware - we'll add it to the underlying express instance
     const expressApp = nestApp.getHttpAdapter().getInstance();
+
+    // Defensive check for deprecated app.router to avoid NestJS init errors
+    if (expressApp && !("router" in expressApp)) {
+      Object.defineProperty(expressApp, "router", {
+        get: () => undefined,
+        configurable: true,
+      });
+    }
+
     expressApp.use((req: any, res: any, next: any) => {
       console.log(`[Express] 📥 Incoming: ${req.method} ${req.url}`);
       const start = Date.now();
