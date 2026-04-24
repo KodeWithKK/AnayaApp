@@ -1,68 +1,30 @@
-import "reflect-metadata";
-
-import { ValidationPipe } from "@nestjs/common";
+import serverlessExpress from "@codegenie/serverless-express";
 import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import serverlessExpress from "@vendia/serverless-express";
-import { Callback, Context, Handler } from "aws-lambda";
 import express from "express";
 
 import { AppModule } from "./app.module";
-import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 
-let cachedServer: Handler;
+let cachedServer: any;
 
 async function bootstrap() {
-  if (!cachedServer) {
-    const expressApp = express();
-    const nestApp = await NestFactory.create(
-      AppModule,
-      new ExpressAdapter(expressApp),
-      { bodyParser: false },
-    );
+  if (cachedServer) return cachedServer;
 
-    nestApp.setGlobalPrefix("api/v1");
-    nestApp.useGlobalFilters(new AllExceptionsFilter());
-    nestApp.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
+  const expressApp = express();
 
-    // Swagger setup for Lambda
-    const config = new DocumentBuilder()
-      .setTitle("Anaya API")
-      .setDescription(
-        "Comprehensive E-commerce backend API built with NestJS and Better Auth. Provides endpoints for products, cart management, wishlist, and more.",
-      )
-      .setVersion("1.0")
-      .addBearerAuth()
-      .build();
-    const document = SwaggerModule.createDocument(nestApp, config);
-    SwaggerModule.setup("docs", nestApp, document, {
-      customCssUrl: [
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.4/swagger-ui.css",
-      ],
-      customJs: [
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.4/swagger-ui-bundle.js",
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.4/swagger-ui-standalone-preset.js",
-      ],
-    });
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressApp),
+  );
 
-    await nestApp.init();
-    cachedServer = serverlessExpress({ app: expressApp });
-  }
+  await app.init();
+
+  cachedServer = serverlessExpress({ app: expressApp });
+
   return cachedServer;
 }
 
-export const handler: Handler = async (
-  event: any,
-  context: Context,
-  callback: Callback,
-) => {
+export const handler = async (event: any, context: any) => {
   const server = await bootstrap();
-  return server(event, context, callback);
+  return server(event, context);
 };
