@@ -65,52 +65,32 @@ export const auth = betterAuth({
     }),
     expo(),
   ],
-  baseURL: envConfig.betterAuthUrl,
-  basePath: "/api/v1/auth",
   hooks: {
     before: async (context) => {
-      console.log("[AuthHook] 🏁 Hook started");
-      if (!context.request) {
-        console.log("[AuthHook] ⚠️ No request in context");
-        return;
-      }
+      if (!context.request) return;
       const url = new URL(context.request.url);
-      const isSignup = url.pathname.includes("/api/v1/auth/sign-up/email");
-      const isSocial = url.pathname.includes("/api/v1/auth/sign-in/social");
-
-      console.log("[AuthHook] 📍 Path:", url.pathname);
+      const isSignup = url.pathname.includes("/sign-up/email");
+      const isSocial = url.pathname.includes("/sign-in/social");
 
       if (isSignup || isSocial) {
-        console.log("[AuthHook] 👤 Handling Signup/Social");
         const body = context.body as { email?: string } | undefined;
         const email = body?.email;
-        if (!email) {
-          console.log("[AuthHook] ⚠️ No email in body");
-          return;
-        }
+        if (!email) return;
 
-        console.log("[AuthHook] 🔍 Checking user:", email);
         const db = connectDb();
         const user = await db.query.users.findFirst({
           where: (users, { eq }) => eq(users.email, email.toLowerCase()),
         });
 
         if (user && !user.emailVerified) {
-          console.log("[AuthHook] 🗑️ Deleting unverified user:", user.id);
           await db.delete(schema.users).where(eq(schema.users.id, user.id));
         }
       }
-      console.log("[AuthHook] ✅ Hook finished");
     },
-  },
-  logger: {
-    level: "debug",
   },
   trustedOrigins: [
     "anaya://*",
     "exp://*",
-    envConfig.betterAuthUrl,
-    "https://bpsigp5cd35izdeuljn7xzu76i0rvyfi.lambda-url.ap-south-1.on.aws",
     "http://192.168.29.43:8000",
     ...(envConfig.nodeEnv === "dev"
       ? ["exp://192.168.*.*:*/**", "http://localhost:19006"]

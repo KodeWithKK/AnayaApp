@@ -8,7 +8,6 @@ import { AuthModule } from "@thallesp/nestjs-better-auth";
 
 import { auth, setMailService } from "./auth";
 import { LoggerMiddleware } from "./common/middleware/logger.middleware";
-import { AuthDocsController } from "./modules/auth-docs.controller";
 import { BrandModule } from "./modules/brand/brand.module";
 import { CartModule } from "./modules/cart/cart.module";
 import { DatabaseModule } from "./modules/database/database.module";
@@ -19,7 +18,9 @@ import { WishlistModule } from "./modules/wishlist/wishlist.module";
 
 @Module({
   imports: [
-    AuthModule.forRoot({ auth }),
+    AuthModule.forRoot({
+      auth,
+    }),
     DatabaseModule,
     ProductModule,
     CartModule,
@@ -27,7 +28,7 @@ import { WishlistModule } from "./modules/wishlist/wishlist.module";
     WishlistModule,
     MailModule,
   ],
-  controllers: [AuthDocsController],
+  controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule, OnApplicationBootstrap {
