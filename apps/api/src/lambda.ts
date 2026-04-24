@@ -5,30 +5,31 @@ import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Callback, Context, Handler } from "aws-lambda";
-import { toNodeHandler } from "better-auth/node";
 import express from "express";
 
 import { AppModule } from "./app.module";
-import { auth } from "./auth";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 
 let cachedServer: Handler;
 
 async function bootstrap() {
-  console.log("🚀 Lambda starting with Node version:", process.version);
-
-  // Dynamic require to handle problematic bundling of this specific module
-  const serverlessExpressLib = require("@vendia/serverless-express");
-  const serverlessExpress =
-    serverlessExpressLib.default || serverlessExpressLib;
-
   if (!cachedServer) {
-    const nestApp = await NestFactory.create(AppModule, { bodyParser: false });
+    console.log("🚀 Lambda bootstrapping following the article pattern...");
 
-    // Diagnostic middleware - we'll add it to the underlying express instance
-    const expressApp = nestApp.getHttpAdapter().getInstance();
+    // Dynamic require for Webpack bundle compatibility
+    const serverlessExpressLib = require("@vendia/serverless-express");
+    const serverlessExpress =
+      serverlessExpressLib.default || serverlessExpressLib;
 
-    // Defensive check for deprecated app.router to avoid NestJS init errors
+    const expressApp = express();
+
+    // EXACTLY AS THE ARTICLE: Use ExpressAdapter and default options (including bodyParser)
+    const nestApp = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(expressApp),
+    );
+
+    // Defensive check for bundled express instance
     if (expressApp && !("router" in expressApp)) {
       Object.defineProperty(expressApp, "router", {
         get: () => undefined,
@@ -38,100 +39,36 @@ async function bootstrap() {
 
     expressApp.use((req: any, res: any, next: any) => {
       console.log(`[Express] 📥 Incoming: ${req.method} ${req.url}`);
-
-      // If it's an auth route, let Better Auth handle it directly to avoid any stream issues
-      if (req.url && req.url.includes("/api/v1/auth")) {
-        console.log(`[AuthDirect] Handling auth route directly: ${req.url}`);
-        return toNodeHandler(auth)(req, res);
-      }
-
-      const start = Date.now();
-      const originalEnd = res.end;
-      res.end = function (...args: any[]) {
-        console.log(
-          `[Express] 📤 Finished: ${req.method} ${req.url} - Status: ${
-            res.statusCode
-          } - Duration: ${Date.now() - start}ms`,
-        );
-        // @ts-ignore
-        return originalEnd.apply(this, args);
-      };
       next();
     });
 
     nestApp.setGlobalPrefix("api/v1");
     nestApp.useGlobalFilters(new AllExceptionsFilter());
-    nestApp.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
+    nestApp.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-    // Swagger setup for Lambda
     const config = new DocumentBuilder()
       .setTitle("Anaya API")
-      .setDescription(
-        "Comprehensive E-commerce backend API built with NestJS and Better Auth. Provides endpoints for products, cart management, wishlist, and more.",
-      )
       .setVersion("1.0")
-      .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(nestApp, config);
-    SwaggerModule.setup("docs", nestApp, document, {
-      customCssUrl: [
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.4/swagger-ui.css",
-      ],
-      customJs: [
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.4/swagger-ui-bundle.js",
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.4/swagger-ui-standalone-preset.js",
-      ],
-    });
+    SwaggerModule.setup("docs", nestApp, document);
+
+    nestApp.enableCors();
 
     await nestApp.init();
     cachedServer = serverlessExpress({ app: expressApp });
   }
+
   return cachedServer;
 }
 
-export const handler: Handler = async (event, context) => {
-  // Prevent Lambda from waiting for the event loop to be empty (needed for DB pools)
+export const handler: Handler = async (
+  event: any,
+  context: Context,
+  callback: Callback,
+) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  console.log(
-    "📥 Incoming Event:",
-    JSON.stringify(
-      {
-        path: event.rawPath || event.path,
-        method: event.requestContext?.http?.method || event.httpMethod,
-        headers: event.headers,
-        requestId: context.awsRequestId,
-      },
-      null,
-      2,
-    ),
-  );
-
   const server = await bootstrap();
-  try {
-    // Calling server without callback to get a Promise back
-    // @ts-expect-error: server (Handler) expects 3 arguments, but we pass 2 to return a Promise
-    const result = await server(event, context);
-    console.log(
-      "📤 Lambda Result:",
-      JSON.stringify(
-        {
-          statusCode: result?.statusCode,
-          headers: result?.headers,
-        },
-        null,
-        2,
-      ),
-    );
-    return result;
-  } catch (error) {
-    console.error("❌ Handler Error:", error);
-    throw error;
-  }
+  return server(event, context, callback);
 };

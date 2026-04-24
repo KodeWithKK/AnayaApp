@@ -67,7 +67,6 @@ export const auth = betterAuth({
   ],
   baseURL: envConfig.betterAuthUrl,
   basePath: "/api/v1/auth",
-  /*
   hooks: {
     before: async (context) => {
       console.log("[AuthHook] 🏁 Hook started");
@@ -104,7 +103,6 @@ export const auth = betterAuth({
       console.log("[AuthHook] ✅ Hook finished");
     },
   },
-  */
   logger: {
     level: "debug",
   },
