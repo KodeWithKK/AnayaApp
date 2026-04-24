@@ -4,12 +4,15 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import serverlessExpress from "@vendia/serverless-express";
+import * as serverlessExpressLib from "@vendia/serverless-express";
 import { Callback, Context, Handler } from "aws-lambda";
 import express from "express";
 
 import { AppModule } from "./app.module";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
+
+const serverlessExpress =
+  (serverlessExpressLib as any).default || serverlessExpressLib;
 
 let cachedServer: Handler;
 
