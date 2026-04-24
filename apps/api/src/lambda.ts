@@ -59,7 +59,7 @@ async function bootstrap() {
   return cachedServer;
 }
 
-export const handler: Handler = (event, context, callback) => {
+export const handler: Handler = async (event, context) => {
   // Prevent Lambda from waiting for the event loop to be empty (needed for DB pools)
   context.callbackWaitsForEmptyEventLoop = false;
 
@@ -77,14 +77,25 @@ export const handler: Handler = (event, context, callback) => {
     ),
   );
 
-  bootstrap()
-    .then((server) => {
-      // server is a Handler, so we call it with (event, context, callback)
-      // serverless-express will then handle the callback to AWS correctly.
-      server(event, context, callback);
-    })
-    .catch((error) => {
-      console.error("❌ Bootstrap Error:", error);
-      callback(error);
-    });
+  const server = await bootstrap();
+  try {
+    // Calling server without callback to get a Promise back
+    // @ts-expect-error: server (Handler) expects 3 arguments, but we pass 2 to return a Promise
+    const result = await server(event, context);
+    console.log(
+      "📤 Lambda Result:",
+      JSON.stringify(
+        {
+          statusCode: result?.statusCode,
+          headers: result?.headers,
+        },
+        null,
+        2,
+      ),
+    );
+    return result;
+  } catch (error) {
+    console.error("❌ Handler Error:", error);
+    throw error;
+  }
 };
