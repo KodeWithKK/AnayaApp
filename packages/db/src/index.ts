@@ -1,5 +1,5 @@
 import { drizzle, PostgresJsDatabase } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import * as postgres from "postgres";
 
 import * as schema from "./schema/index";
 
@@ -11,7 +11,9 @@ export const connectDb = () => {
   if (!dbInstance) {
     const connectionString =
       process.env.DATABASE_URL || "postgres://localhost:5432/db";
-    const client = postgres(connectionString, { prepare: false });
+    // @ts-ignore
+    const postgresFn = postgres.default || postgres;
+    const client = postgresFn(connectionString, { prepare: false });
     dbInstance = drizzle(client, { schema });
   }
   return dbInstance;
