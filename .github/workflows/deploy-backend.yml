@@ -49,8 +49,8 @@ jobs:
         run: |
           mkdir -p lambda-package
           cp apps/api/dist/index.js lambda-package/
-          # Remove local @repo dependencies from package.json before installing
-          jq '.dependencies |= with_entries(select(.key | startswith("@repo/") | not))' apps/api/package.json > lambda-package/package.json
+          # Remove local @repo dependencies and devDependencies before installing
+          jq 'del(.devDependencies) | .dependencies |= with_entries(select(.key | startswith("@repo/") | not))' apps/api/package.json > lambda-package/package.json
 
       - name: Install Production Deps
         run: |
