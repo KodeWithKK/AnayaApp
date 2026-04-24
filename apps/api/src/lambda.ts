@@ -38,7 +38,6 @@ async function bootstrap() {
     const nestApp = await NestFactory.create(
       AppModule,
       new ExpressAdapter(expressApp),
-      { bodyParser: false },
     );
 
     nestApp.setGlobalPrefix("api/v1");
