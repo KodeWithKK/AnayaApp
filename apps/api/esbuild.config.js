@@ -15,6 +15,7 @@ const outDir = "dist";
 const externals = [
   "express",
   "better-auth",
+  "drizzle-orm",
   "@thallesp/nestjs-better-auth",
   "@nestjs/websockets/socket-module",
   "@nestjs/microservices/microservices-module",
