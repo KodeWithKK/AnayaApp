@@ -34,7 +34,7 @@ async function bootstrap() {
   );
 
   if (!cachedServer) {
-    const nestApp = await NestFactory.create(AppModule);
+    const nestApp = await NestFactory.create(AppModule, { bodyParser: false });
 
     // Diagnostic middleware - we'll add it to the underlying express instance
     const expressApp = nestApp.getHttpAdapter().getInstance();
