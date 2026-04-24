@@ -103,6 +103,9 @@ export const auth = betterAuth({
       console.log("[AuthHook] ✅ Hook finished");
     },
   },
+  logger: {
+    level: "debug",
+  },
   trustedOrigins: [
     "anaya://*",
     "exp://*",
