@@ -65,6 +65,7 @@ export const auth = betterAuth({
     }),
     expo(),
   ],
+  baseURL: envConfig.betterAuthUrl,
   basePath: "/api/v1/auth",
   hooks: {
     before: async (context) => {
@@ -106,6 +107,7 @@ export const auth = betterAuth({
     "anaya://*",
     "exp://*",
     envConfig.betterAuthUrl,
+    "https://bpsigp5cd35izdeuljn7xzu76i0rvyfi.lambda-url.ap-south-1.on.aws",
     "http://192.168.29.43:8000",
     ...(envConfig.nodeEnv === "dev"
       ? ["exp://192.168.*.*:*/**", "http://localhost:19006"]
