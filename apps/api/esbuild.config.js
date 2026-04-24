@@ -13,6 +13,7 @@ const outDir = "dist";
 
 // Modules we want to keep external (not bundled)
 const externals = [
+  "express",
   "@nestjs/websockets/socket-module",
   "@nestjs/microservices/microservices-module",
   "@nestjs/microservices",
