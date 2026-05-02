@@ -104,6 +104,7 @@ jobs:
       - name: Deployment Summary
         run: |
           URL=$(cat infra/lambda_url.txt)
+          CLICKABLE_URL=$(echo $URL | sed 's/\.on\.aws/\.ON\.AWS/')
           echo "### ✅ Deployment Successful!" >> $GITHUB_STEP_SUMMARY
           echo "📦 **Package Size**: ${{ steps.package_lambda.outputs.size }}" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 **API Docs URL**: [Open API Swagger Documentation](${URL}docs)" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **API Docs URL**: <a href=\"${CLICKABLE_URL}docs\">Open API Swagger Documentation</a>" >> $GITHUB_STEP_SUMMARY
