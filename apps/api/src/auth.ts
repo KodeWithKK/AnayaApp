@@ -17,6 +17,7 @@ export const setMailService = (ms: MailService) => {
 };
 
 export const auth = betterAuth({
+  basePath: "/api/v1/auth",
   database: drizzleAdapter(connectDb(), {
     provider: "pg",
     schema: {
