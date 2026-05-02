@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import {
   Button,
@@ -16,7 +17,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppText } from "@/components/app-text";
-import { signIn } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useAuthStore } from "@/store/auth-store";
 
 export default function LoginScreen() {
@@ -44,7 +45,7 @@ export default function LoginScreen() {
     }
     setIsEmailLoading(true);
     try {
-      const { error } = await signIn.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
       });
@@ -73,9 +74,9 @@ export default function LoginScreen() {
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
     try {
-      const { error } = await signIn.social({
+      const { error } = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL: Linking.createURL("/"),
       });
       if (error) {
         toast.show({
@@ -84,6 +85,8 @@ export default function LoginScreen() {
           description: error.message || "Something went wrong",
           icon: <Ionicons name="alert-circle" size={20} color="#ff4444" />,
         });
+      } else {
+        await refreshSession();
       }
     } catch {
       toast.show({

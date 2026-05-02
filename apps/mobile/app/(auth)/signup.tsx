@@ -16,7 +16,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppText } from "@/components/app-text";
-import { signUp } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignupScreen() {
   const [email, setEmail] = useState("");
@@ -42,7 +42,7 @@ export default function SignupScreen() {
     }
     setIsLoading(true);
     try {
-      const { error } = await signUp.email({
+      const { error } = await authClient.signUp.email({
         email,
         password,
         name,

@@ -1,6 +1,7 @@
 import { expoClient } from "@better-auth/expo/client";
 import { emailOTPClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+import * as Linking from "expo-linking";
 import * as SecureStore from "expo-secure-store";
 
 export const authClient = createAuthClient({
@@ -8,18 +9,9 @@ export const authClient = createAuthClient({
   basePath: "/api/v1/auth",
   plugins: [
     expoClient({
-      scheme: "anaya",
+      scheme: Linking.parse(Linking.createURL("/")).scheme ?? "anaya",
       storage: SecureStore,
     }),
     emailOTPClient(),
   ],
 });
-
-export const {
-  useSession,
-  signIn,
-  signUp,
-  signOut,
-  forgetPassword,
-  resetPassword,
-} = authClient;
