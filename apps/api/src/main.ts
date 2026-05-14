@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { envConfig } from "@/config/env.config";
 import { AppModule } from "./app.module";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
+import { swaggerConfig } from "./common/swagger.config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,21 +25,7 @@ async function bootstrap() {
   );
 
   // Swagger setup
-  const config = new DocumentBuilder()
-    .setTitle("Anaya API")
-    .setDescription(
-      "Comprehensive E-commerce backend API built with NestJS and Better Auth. Provides endpoints for products, cart management, wishlist, and more.",
-    )
-    .setVersion("1.0")
-    .setContact("Anaya Support", "https://anaya.com", "support@anaya.com")
-    .setLicense("MIT", "https://opensource.org/licenses/MIT")
-    .addBearerAuth()
-    .addTag("products", "Product discovery and management")
-    .addTag("cart", "User shopping cart operations")
-    .addTag("wishlist", "Personal user wishlists")
-    .addTag("brand", "Product brands and identity")
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("docs", app, document);
 
   const port = envConfig.port;

@@ -36,11 +36,20 @@ const _envConfig = envSchema.safeParse({
 });
 
 if (!_envConfig.success) {
-  console.error(
-    "❌ Invalid environment variables:",
-    JSON.stringify(_envConfig.error.flatten().fieldErrors, null, 2),
-  );
-  throw new Error("Invalid environment variables");
+  const isCI = !!process.env.GITHUB_ACTIONS;
+
+  if (isCI) {
+    console.warn(
+      "⚠️  Missing environment variables in CI. Proceeding for build/swagger generation.",
+    );
+  } else {
+    console.error(
+      "❌ Invalid environment variables:",
+      JSON.stringify(_envConfig.error.flatten().fieldErrors, null, 2),
+    );
+    throw new Error("Invalid environment variables");
+  }
 }
 
-export const envConfig = _envConfig.data;
+export type EnvConfig = z.infer<typeof envSchema>;
+export const envConfig = _envConfig.data || ({} as EnvConfig);
