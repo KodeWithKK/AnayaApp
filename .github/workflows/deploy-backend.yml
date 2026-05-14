@@ -48,17 +48,7 @@ jobs:
           cp -r apps/api/dist/* lambda-package/
 
       - name: Build Lambda Layer
-        run: |
-          mkdir -p layer/nodejs
-          jq 'del(.devDependencies) | .dependencies |= with_entries(select(.key | startswith("@repo/") | not))' apps/api/package.json > layer/nodejs/package.json
-          npm install --prefix layer/nodejs --omit=dev
-          rm -rf layer/nodejs/package.json layer/nodejs/package-lock.json \
-                 layer/nodejs/node_modules/typescript \
-                 layer/nodejs/node_modules/prettier \
-                 layer/nodejs/node_modules/@esbuild \
-                 layer/nodejs/node_modules/@types \
-                 layer/nodejs/node_modules/.bin
-          find layer/nodejs/node_modules -type f \( -name "*.md" -o -name "*.ts" -o -name "*.map" \) | xargs rm -f
+        run: bun run build:layer
 
       - name: Package Layer
         run: |

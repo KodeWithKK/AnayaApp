@@ -5,6 +5,9 @@ node_modules
 out
 dist
 build
+layer/
+lambda-package/
+*.zip
 *.tgz
 
 # code coverage
