@@ -15,10 +15,12 @@ async function runBuild() {
     "@thallesp/nestjs-better-auth",
     "better-auth",
     "@better-auth/expo",
-    "@react-email/render",
   ];
   const external = Object.keys(pkg.dependencies || {}).filter(
-    (dep) => !dep.startsWith("@repo/") && !esmOnlyPackages.includes(dep),
+    (dep) =>
+      !dep.startsWith("@repo/") &&
+      !dep.startsWith("@react-email/") &&
+      !esmOnlyPackages.includes(dep),
   );
 
   await build({
